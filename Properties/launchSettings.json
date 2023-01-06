@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "WinUI3_SwapChainPanel_Layered (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "WinUI3_SwapChainPanel_Layered (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
