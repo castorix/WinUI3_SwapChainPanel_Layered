@@ -4,7 +4,8 @@
       "commandName": "MsixPackage"
     },
     "WinUI3_SwapChainPanel_Layered (Unpackaged)": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "nativeDebugging": true
     }
   }
 }

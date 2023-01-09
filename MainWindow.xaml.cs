@@ -140,6 +140,8 @@ namespace WinUI3_SwapChainPanel_Layered
         public static extern long GetWindowLongPtr64(IntPtr hWnd, int nIndex);
 
         public const int WS_EX_LAYERED = 0x00080000;
+        public const int WS_POPUP = unchecked((int)0x80000000L);
+        public const int WS_VISIBLE = 0x10000000;
 
         [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool GetCursorPos(out Windows.Graphics.PointInt32 lpPoint);
@@ -182,12 +184,70 @@ namespace WinUI3_SwapChainPanel_Layered
         public const int SWP_NOREPOSITION = SWP_NOOWNERZORDER;
         public const int SWP_DEFERERASE = 0x2000;
         public const int SWP_ASYNCWINDOWPOS = 0x4000;
-        
+
         //[DllImport("UXTheme.dll", SetLastError = true, EntryPoint = "#132")]
         //public static extern bool ShouldAppsUseDarkMode();
 
         //[DllImport("UXTheme.dll", SetLastError = true, EntryPoint = "#138")]
         //public static extern bool ShouldSystemUseDarkMode();
+
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+
+
+        public enum DWMWINDOWATTRIBUTE
+        {
+            DWMWA_NCRENDERING_ENABLED = 1,
+            DWMWA_NCRENDERING_POLICY,
+            DWMWA_TRANSITIONS_FORCEDISABLED,
+            DWMWA_ALLOW_NCPAINT,
+            DWMWA_CAPTION_BUTTON_BOUNDS,
+            DWMWA_NONCLIENT_RTL_LAYOUT,
+            DWMWA_FORCE_ICONIC_REPRESENTATION,
+            DWMWA_FLIP3D_POLICY,
+            DWMWA_EXTENDED_FRAME_BOUNDS,
+            DWMWA_HAS_ICONIC_BITMAP,
+            DWMWA_DISALLOW_PEEK,
+            DWMWA_EXCLUDED_FROM_PEEK,
+            DWMWA_CLOAK,
+            DWMWA_CLOAKED,
+            DWMWA_FREEZE_REPRESENTATION,
+            DWMWA_PASSIVE_UPDATE_MODE,
+            DWMWA_USE_HOSTBACKDROPBRUSH,
+            DWMWA_USE_IMMERSIVE_DARK_MODE = 20,
+            DWMWA_WINDOW_CORNER_PREFERENCE = 33,
+            DWMWA_BORDER_COLOR,
+            DWMWA_CAPTION_COLOR,
+            DWMWA_TEXT_COLOR,
+            DWMWA_VISIBLE_FRAME_BORDER_THICKNESS,
+            DWMWA_SYSTEMBACKDROP_TYPE,
+            DWMWA_LAST
+        };
+
+        public enum DWMNCRENDERINGPOLICY
+        {
+            DWMNCRP_USEWINDOWSTYLE, // Enable/disable non-client rendering based on window style
+            DWMNCRP_DISABLED,       // Disabled non-client rendering; window style is ignored
+            DWMNCRP_ENABLED,        // Enabled non-client rendering; window style is ignored
+            DWMNCRP_LAST
+        };
+
+        public enum DWM_WINDOW_CORNER_PREFERENCE
+        {
+            DWMWCP_DEFAULT = 0,
+            DWMWCP_DONOTROUND = 1,
+            DWMWCP_ROUND = 2,
+            DWMWCP_ROUNDSMALL = 3
+        }
+
+        [DllImport("Dwmapi.dll", SetLastError = true, CharSet = CharSet.Unicode, PreserveSig = false)]
+        public static extern HRESULT DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute, uint cbAttribute);
+
+        [DllImport("Dwmapi.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern HRESULT DwmSetWindowAttribute(IntPtr hwnd, int dwAttribute, ref int pvAttribute, int cbAttribute);
 
 
         private IntPtr hWndMain = IntPtr.Zero;
@@ -211,7 +271,9 @@ namespace WinUI3_SwapChainPanel_Layered
 
         public MainWindow()
         {
-            this.InitializeComponent();          
+            this.InitializeComponent();
+
+            HRESULT hr = HRESULT.S_OK;
 
             //Application.Current.Resources["ButtonBackground"] = new SolidColorBrush(Microsoft.UI.Colors.Blue);
             Application.Current.Resources["ButtonBackgroundPressed"] = new SolidColorBrush(Microsoft.UI.Colors.LightSteelBlue);
@@ -228,6 +290,14 @@ namespace WinUI3_SwapChainPanel_Layered
             _apw.Resize(new Windows.Graphics.SizeInt32(600, 400));
             _apw.Move(new Windows.Graphics.PointInt32(600, 300));
 
+            // Update for Windows 11 from michalleptuch comment : https://github.com/microsoft/microsoft-ui-xaml/issues/1247#issuecomment-1374474960
+            // otherwise there are borders + shadow from his test
+            // Returns logically 0x80070057 (E_INVALIDARG) on Windows 10
+            int nValue = (int)DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DEFAULT;
+            hr = DwmSetWindowAttribute(hWndMain, (int)DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE, ref nValue, Marshal.SizeOf(typeof(int)));
+
+            //SetWindowLong(hWndMain, GWL_STYLE, (IntPtr)(WS_POPUP | WS_VISIBLE));
+
             this.Closed += MainWindow_Closed;
 
             StartupInput input = StartupInput.GetDefault();
@@ -242,7 +312,7 @@ namespace WinUI3_SwapChainPanel_Layered
                 GdipDisposeImage(pImage);
             }
 
-            HRESULT hr = CreateD2D1Factory();
+            hr = CreateD2D1Factory();
             if (hr == HRESULT.S_OK)
             {
                 hr = CreateDeviceContext();
@@ -305,7 +375,7 @@ namespace WinUI3_SwapChainPanel_Layered
                 {                    
                     mainBorder.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
                     tb1.Margin = new Thickness(5, 100, 5, 5);
-                    myButton.Margin = new Thickness(10, 200, 10, 10);
+                    myButton.Margin = new Thickness(10, 180, 10, 10);
                     myButton.Content = "Bitmap set";
                     //RedrawWindow(hWndMain, IntPtr.Zero, IntPtr.Zero, RDW_ERASE | RDW_INVALIDATE | RDW_FRAME | RDW_ALLCHILDREN | RDW_UPDATENOW | RDW_ERASENOW);
                     RECT rectWnd;
@@ -364,7 +434,10 @@ namespace WinUI3_SwapChainPanel_Layered
         {
             HRESULT hr = HRESULT.S_OK;
             D2D1_FACTORY_OPTIONS options = new D2D1_FACTORY_OPTIONS();
+
+            // Needs "Enable native code Debugging"
             options.debugLevel = D2D1_DEBUG_LEVEL.D2D1_DEBUG_LEVEL_INFORMATION;
+
             hr = D2DTools.D2D1CreateFactory(D2D1_FACTORY_TYPE.D2D1_FACTORY_TYPE_SINGLE_THREADED, ref D2DTools.CLSID_D2D1Factory, ref options, out m_pD2DFactory);
             m_pD2DFactory1 = (ID2D1Factory1)m_pD2DFactory;
             return hr;
@@ -375,6 +448,7 @@ namespace WinUI3_SwapChainPanel_Layered
             HRESULT hr = HRESULT.S_OK;
             uint creationFlags = (uint)D3D11_CREATE_DEVICE_FLAG.D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
+            // Needs "Enable native code Debugging"
             creationFlags |= (uint)D3D11_CREATE_DEVICE_FLAG.D3D11_CREATE_DEVICE_DEBUG;
 
             int[] aD3D_FEATURE_LEVEL = new int[] { (int)D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_11_1, (int)D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_11_0,
@@ -387,7 +461,7 @@ namespace WinUI3_SwapChainPanel_Layered
                 IntPtr.Zero,
                 creationFlags,      // optionally set debug and Direct2D compatibility flags
                 aD3D_FEATURE_LEVEL, // list of feature levels this app can support
-                                    //(uint)Marshal.SizeOf(aD3D_FEATURE_LEVEL),   // number of possible feature levels
+                // (uint)Marshal.SizeOf(aD3D_FEATURE_LEVEL),   // number of possible feature levels
                 (uint)aD3D_FEATURE_LEVEL.Length, // number of possible feature levels
                 D2DTools.D3D11_SDK_VERSION,
                 out m_pD3D11DevicePtr,    // returns the Direct3D device created
