@@ -63,6 +63,11 @@ namespace GDIPlus
         {
             return (r) | ((g) << 8) | ((b) << 16);
         }
+
+        public static long MakeArgb(byte alpha, byte red, byte green, byte blue)
+        {
+            return (long)(((ulong)((((red << 0x10) | (green << 8)) | blue) | (alpha << 0x18))) & 0xffffffffL);
+        }
     }
  
     public enum GpStatus : int

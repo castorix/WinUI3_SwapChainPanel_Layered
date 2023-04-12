@@ -11,14 +11,36 @@
     mc:Ignorable="d">
 
     <SwapChainPanel x:Name="swapChainPanel1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-        <Border x:Name="mainBorder" BorderThickness="2" CornerRadius="45" BorderBrush="Red" Background="Transparent" Margin="5, 5, 5, 5">
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Border x:Name="mainBorder" BorderThickness="3" CornerRadius="45" BorderBrush="Red" Background="Transparent" Margin="5, 5, 5, 5">
+            <StackPanel x:Name="sp1" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <TextBlock x:Name="tb1" Text="Right-click to exit" Margin="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Yellow"/>
-                <Button x:Name="myButton" Click="myButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10, 140, 10, 10" Background="Blue">
-                    Set Bitmap
-                </Button>
+                <Grid Margin="5, 70, 5, 5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>                      
+                    </Grid.ColumnDefinitions>
+                    <Image x:Name="img1" Source="Assets/Butterfly.png" Grid.Column="0" Width="250" Height="250" Stretch="Uniform" Margin="15, 5, 5, 5">
+                    </Image>
+                    <TextBlock x:Name="tb2" Grid.Column="0" Text="Not Click Through" Margin="5,5,5,5" 
+                               HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Visibility="Collapsed"/>
+                    <Button x:Name="myButton" Click="myButton_Click" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10, 10, 10, 10" Background="Blue">
+                        Set Bitmap
+                    </Button>                   
+                    <Image x:Name="img2" Source="Assets/Butterfly.png" Grid.Column="2" Width="250" Height="250" Stretch="Uniform" Margin="5, 5, 15, 5" IsHitTestVisible="false">
+                    </Image>
+                    <TextBlock x:Name="tb3" Grid.Column="2" Text="Click Through" Margin="5,5,5,5"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"  Visibility="Collapsed" IsHitTestVisible="false"/>
+                </Grid>
+                <ToggleSwitch x:Name="tsClickThrough" Header="Click Through" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="65, 5, 0, 5"
+                          OffContent="No" OnContent="Yes" Toggled="tsClickThrough_Toggled" >
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Set Click Through On/Off&#x0a;when clicked on window background" Placement="Bottom" Background="LightYellow" Foreground="Black"/>
+                    </ToolTipService.ToolTip>
+                </ToggleSwitch>                       
+                <!--<Rectangle Width="100" Height="100" Fill="Blue" Stroke="Orange" Margin="5, 40, 5, 5" IsHitTestVisible="False"
+                            StrokeThickness="3" />-->              
             </StackPanel>
         </Border>
     </SwapChainPanel>
-    
 </Window>
