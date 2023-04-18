@@ -8,4 +8,6 @@ From https://github.com/microsoft/microsoft-ui-xaml/issues/1247, does not work f
 
 [Edit] Thanks to [michalleptuch](https://github.com/michalleptuch); I updated code for Windows 11 from his [comment](https://github.com/microsoft/microsoft-ui-xaml/issues/1247#issuecomment-1374474960)
 
-![WinUI3_SwapChainPanel_Layered](https://user-images.githubusercontent.com/22345506/211046259-2db0730f-35ff-4aec-80fa-ed53fc086e67.jpg)
+![image](https://user-images.githubusercontent.com/22345506/232746149-ffd42cfa-9003-4b1a-9041-3f58e10f42dc.png)
+
+
