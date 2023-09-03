@@ -411,10 +411,99 @@ namespace WinUI3_SwapChainPanel_Layered
 
         public const int WM_ERASEBKGND = 0x0014;
 
-        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern int SendInput(int nInputs, [MarshalAs(UnmanagedType.LPArray)] INPUT[] pInput, int cbSize);
 
+        public const int INPUT_MOUSE = 0;
+        public const int INPUT_KEYBOARD = 1;
+        public const int INPUT_HARDWARE = 2;
+
+        public const int KEYEVENTF_EXTENDEDKEY = 0x0001;
+        public const int KEYEVENTF_KEYUP = 0x0002;
+        public const int KEYEVENTF_UNICODE = 0x0004;
+
+        public const int MOUSEEVENTF_MOVE = 0x0001;
+        public const int MOUSEEVENTF_LEFTDOWN = 0x0002;
+        public const int MOUSEEVENTF_LEFTUP = 0x0004;
+        public const int MOUSEEVENTF_ABSOLUTE = 0x8000;
+
+        public const int MOUSEEVENTF_RIGHTDOWN = 0x0008;
+        public const int MOUSEEVENTF_RIGHTUP = 0x0010;
+
+        public const int WM_MOUSEMOVE = 0x0200;
+        public const int WM_LBUTTONDOWN = 0x0201;
+        public const int WM_LBUTTONUP = 0x0202;
+        public const int WM_RBUTTONDOWN = 0x0204;
+        public const int WM_RBUTTONUP = 0x0205;
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MOUSEINPUT
+        {
+            public int dx;
+            public int dy;
+            public int mouseData;
+            public int dwFlags;
+            public int time;
+            public IntPtr dwExtraInfo;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct KEYBDINPUT
+        {
+            public short wVk;
+            public short wScan;
+            public int dwFlags;
+            public int time;
+            public IntPtr dwExtraInfo;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct HARDWAREINPUT
+        {
+            public int uMsg;
+            public short wParamL;
+            public short wParamH;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct INPUT
+        {
+            public int type;
+            public INPUTUNION inputUnion;
+        }
+
+        [StructLayout(LayoutKind.Explicit)]
+        public struct INPUTUNION
+        {
+            [FieldOffset(0)]
+            public MOUSEINPUT mi;
+            [FieldOffset(0)]
+            public KEYBDINPUT ki;
+            [FieldOffset(0)]
+            public HARDWAREINPUT hi;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MSG
+        {
+            public IntPtr hwnd;
+            public uint message;
+            public int wParam;
+            public IntPtr lParam;
+            public uint time;
+            public System.Drawing.Point pt;
+        }
+
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool PeekMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax, uint wRemoveMsg);
+
+        public const int PM_NOREMOVE = 0x0000;
+        public const int PM_REMOVE = 0x0001;
+        public const int PM_NOYIELD = 0x0002;
 
         private SUBCLASSPROC SubClassDelegate;
 
@@ -461,6 +550,7 @@ namespace WinUI3_SwapChainPanel_Layered
             //_presenter.SetBorderAndTitleBar(true, false);
             //
             //this.ExtendsContentIntoTitleBar = true;
+            //_presenter.IsAlwaysOnTop = true;
 
             _apw.Resize(new Windows.Graphics.SizeInt32(800, 500));
             _apw.Move(new Windows.Graphics.PointInt32(500, 300));
@@ -541,7 +631,10 @@ namespace WinUI3_SwapChainPanel_Layered
             root.PointerReleased += Root_PointerReleased;
 
             //SubClassDelegate = new SUBCLASSPROC(WindowSubClass);
-            //bool bRet = SetWindowSubclass(hWndMain, SubClassDelegate, 0, 0);          
+            //bool bRet = SetWindowSubclass(hWndMain, SubClassDelegate, 0, 0);
+            
+            // Test TopMost
+            //_presenter.IsAlwaysOnTop = true;
         }
 
         private void tsClickThrough_Toggled(object sender, RoutedEventArgs e)
@@ -644,12 +737,37 @@ namespace WinUI3_SwapChainPanel_Layered
                         }
                     }
                     nCpt++;
-                }
-              
-                if (bOK && tsClickThrough.IsOn)
-                    SwitchToThisWindow(hWnd, true);
+                }                
 
-                bMoving = true;  
+                if (bOK && tsClickThrough.IsOn)
+                {
+                    bool bAlwaysOnTop = false;
+                    if (_presenter.IsAlwaysOnTop)
+                    {
+                        bAlwaysOnTop = true;
+                        _presenter.IsAlwaysOnTop = false;                       
+                    }
+                    System.Threading.Thread.Sleep(100);
+                    SwitchToThisWindow(hWnd, true);
+                    System.Threading.Thread.Sleep(100);
+                    INPUT[] mi = new INPUT[1];
+                    mi[0].type = INPUT_MOUSE;                   
+                    mi[0].inputUnion.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+                    SendInput(1, mi, Marshal.SizeOf(mi[0]));
+                    //System.Threading.Thread.Sleep(100);
+                    mi[0].inputUnion.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+                    SendInput(1, mi, Marshal.SizeOf(mi[0]));
+                    //Console.Beep(5000, 10);
+                    if (bAlwaysOnTop)
+                        _presenter.IsAlwaysOnTop = true;
+                }
+                else
+                    bMoving = true;
+                //((UIElement)sender).ReleasePointerCapture(e.Pointer);
+
+                //MSG msg = new MSG();
+                //while (PeekMessage(out msg, IntPtr.Zero, WM_LBUTTONDOWN, WM_LBUTTONUP, PM_REMOVE));
+                
             }
             else if (properties.IsRightButtonPressed)
             {
