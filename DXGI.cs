@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using System.Runtime.InteropServices;
 using GlobalStructures;
+using System.Reflection.Metadata;
+using System.Security.Permissions;
 
 namespace DXGI
 {  
@@ -14,10 +16,10 @@ namespace DXGI
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IDXGIObject
     {
-        HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
-        HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
-        HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
-        HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
     }
 
     [ComImport]
@@ -26,13 +28,13 @@ namespace DXGI
     public interface IDXGIDeviceSubObject : IDXGIObject
     {
         #region <IDXGIObject>
-        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
-        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
-        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
         #endregion
 
-        HRESULT GetDevice(ref Guid riid, out IntPtr ppDevice);
+        HRESULT GetDevice([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppDevice);
     }
 
     [ComImport]
@@ -41,16 +43,16 @@ namespace DXGI
     public interface IDXGIAdapter : IDXGIObject
     {
         #region IDXGIObject
-        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
-        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
-        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
         #endregion
 
         [PreserveSig]
         HRESULT EnumOutputs(uint Output, ref IDXGIOutput ppOutput);
         HRESULT GetDesc(out DXGI_ADAPTER_DESC pDesc);
-        HRESULT CheckInterfaceSupport(ref Guid InterfaceName, out LARGE_INTEGER pUMDVersion);
+        HRESULT CheckInterfaceSupport([MarshalAs(UnmanagedType.LPStruct)] Guid InterfaceName, out LARGE_INTEGER pUMDVersion);
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -81,11 +83,10 @@ namespace DXGI
     public interface IDXGIOutput : IDXGIObject
     {
         #region IDXGIObject
-        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
-        //HRESULT SetPrivateDataInterface(ref Guid Name, IUnknown* pUnknown);
-        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
-        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
-        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
         #endregion
 
         HRESULT GetDesc(out DXGI_OUTPUT_DESC pDesc);
@@ -354,13 +355,13 @@ namespace DXGI
         #region <IDXGIDeviceSubObject>
 
         #region <IDXGIObject>
-        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
-        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
-        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
         #endregion
 
-        new HRESULT GetDevice(ref Guid riid, out IntPtr ppDevice);
+        new HRESULT GetDevice([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppDevice);
         #endregion
 
         HRESULT GetDesc(out DXGI_SURFACE_DESC pDesc);
@@ -392,11 +393,10 @@ namespace DXGI
     public interface IDXGIFactory : IDXGIObject
     {
         #region <IDXGIObject>
-        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
-        //HRESULT SetPrivateDataInterface(ref Guid Name, IUnknown* pUnknown);
-        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
-        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
-        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
         #endregion
 
         HRESULT EnumAdapters(uint Adapter, out IDXGIAdapter ppAdapter);
@@ -442,19 +442,17 @@ namespace DXGI
     {
         #region IDXGIDeviceSubObject
         #region IDXGIObject
-        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
-        //HRESULT SetPrivateDataInterface(ref Guid Name, IUnknown* pUnknown);
-        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
-        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
-        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
         #endregion
 
-        new HRESULT GetDevice(ref Guid riid, out IntPtr ppDevice);
+        new HRESULT GetDevice([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppDevice);
         #endregion
 
         [PreserveSig]
         HRESULT Present(uint SyncInterval, uint Flags);
-        [PreserveSig]
         HRESULT GetBuffer(uint Buffer, ref Guid riid, out IntPtr ppSurface);
         HRESULT SetFullscreenState(bool Fullscreen, IDXGIOutput pTarget);
         HRESULT GetFullscreenState(out bool pFullscreen, out IDXGIOutput ppTarget);
@@ -472,11 +470,10 @@ namespace DXGI
     public interface IDXGIFactory1 : IDXGIFactory
     {
         #region <IDXGIObject>
-        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
-        //HRESULT SetPrivateDataInterface(ref Guid Name, IUnknown* pUnknown);
-        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
-        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
-        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
         #endregion
 
         #region <IDXGIFactory>
@@ -499,16 +496,16 @@ namespace DXGI
     {
         #region IDXGIAdapter
         #region IDXGIObject
-        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
-        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
-        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
         #endregion
 
         [PreserveSig]
         new HRESULT EnumOutputs(uint Output, ref IDXGIOutput ppOutput);
         new HRESULT GetDesc(out DXGI_ADAPTER_DESC pDesc);
-        new HRESULT CheckInterfaceSupport(ref Guid InterfaceName, out LARGE_INTEGER pUMDVersion);
+        new HRESULT CheckInterfaceSupport([MarshalAs(UnmanagedType.LPStruct)] Guid InterfaceName, out LARGE_INTEGER pUMDVersion);
         #endregion
 
         HRESULT GetDesc1(DXGI_ADAPTER_DESC1 pDesc);
@@ -537,11 +534,10 @@ namespace DXGI
     {
         #region <IDXGIFactory1>
         #region <IDXGIObject>
-        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
-        //HRESULT SetPrivateDataInterface(ref Guid Name, IUnknown* pUnknown);
-        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
-        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
-        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
         #endregion
 
         #region <IDXGIFactory>
@@ -582,19 +578,17 @@ namespace DXGI
         #region IDXGISwapChain
         #region IDXGIDeviceSubObject
         #region IDXGIObject
-        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
-        //HRESULT SetPrivateDataInterface(ref Guid Name, IUnknown* pUnknown);
-        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
-        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
-        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
         #endregion
 
-        new HRESULT GetDevice(ref Guid riid, out IntPtr ppDevice);
+        new HRESULT GetDevice([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppDevice);
         #endregion
 
         [PreserveSig]
         new HRESULT Present(uint SyncInterval, uint Flags);
-        [PreserveSig]
         new HRESULT GetBuffer(uint Buffer, ref Guid riid, out IntPtr ppSurface);
         new HRESULT SetFullscreenState(bool Fullscreen, IDXGIOutput pTarget);
         new HRESULT GetFullscreenState(out bool pFullscreen, out IDXGIOutput ppTarget);
@@ -705,11 +699,10 @@ namespace DXGI
     public interface IDXGIDevice : IDXGIObject
     {
         #region IDXGIObject
-        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
-        //HRESULT SetPrivateDataInterface(ref Guid Name, IUnknown* pUnknown);
-        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
-        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
-        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
         #endregion
 
         HRESULT GetAdapter(out IDXGIAdapter pAdapter);
@@ -726,11 +719,10 @@ namespace DXGI
     {
         #region IDXGIDevice
         #region IDXGIObject
-        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
-        //HRESULT SetPrivateDataInterface(ref Guid Name, IUnknown* pUnknown);
-        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
-        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
-        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
         #endregion
 
         new HRESULT GetAdapter(out IDXGIAdapter pAdapter);
@@ -791,14 +783,13 @@ namespace DXGI
         #region IDXGISwapChain
         #region IDXGIDeviceSubObject
         #region IDXGIObject
-        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
-        //HRESULT SetPrivateDataInterface(ref Guid Name, IUnknown* pUnknown);
-        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
-        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
-        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
         #endregion
 
-        new HRESULT GetDevice(ref Guid riid, out IntPtr ppDevice);
+        new HRESULT GetDevice([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppDevice);
         #endregion
 
         [PreserveSig]
@@ -835,6 +826,7 @@ namespace DXGI
         HRESULT GetSourceSize(out uint pWidth, out uint pHeight);
         HRESULT SetMaximumFrameLatency(uint MaxLatency);
         HRESULT GetMaximumFrameLatency(out uint pMaxLatency);
+        [PreserveSig]
         IntPtr GetFrameLatencyWaitableObject();
         [PreserveSig]
         HRESULT SetMatrixTransform(ref DXGI_MATRIX_3X2_F pMatrix);
@@ -860,12 +852,12 @@ namespace DXGI
         #region <IDXGISurface>
         #region <IDXGIDeviceSubObject>
         #region <IDXGIObject>
-        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
-        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
-        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
         #endregion
-        new HRESULT GetDevice(ref Guid riid, out IntPtr ppDevice);
+        new HRESULT GetDevice([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppDevice);
         #endregion
         new HRESULT GetDesc(out DXGI_SURFACE_DESC pDesc);
         new HRESULT Map(out DXGI_MAPPED_RECT pLockedRect, uint MapFlags);
@@ -887,12 +879,12 @@ namespace DXGI
         #region <IDXGISurface>
         #region <IDXGIDeviceSubObject>
         #region <IDXGIObject>
-        new HRESULT SetPrivateData(ref Guid Name, uint DataSize, IntPtr pData);
-        new HRESULT SetPrivateDataInterface(ref Guid Name, IntPtr pUnknown);
-        new HRESULT GetPrivateData(ref Guid Name, ref uint pDataSize, out IntPtr pData);
-        new HRESULT GetParent(ref Guid riid, out IntPtr ppParent);
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
         #endregion
-        new HRESULT GetDevice(ref Guid riid, out IntPtr ppDevice);
+        new HRESULT GetDevice([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppDevice);
         #endregion
         new HRESULT GetDesc(out DXGI_SURFACE_DESC pDesc);
         new HRESULT Map(out DXGI_MAPPED_RECT pLockedRect, uint MapFlags);
@@ -1003,11 +995,217 @@ namespace DXGI
         HRESULT GetUnknown(ref Guid guid, ref Guid riid, out IntPtr ppvObject);
         HRESULT SetUnknown(ref Guid guid, IntPtr pUnkData);
     }
- 
+
+    [ComImport]
+    [Guid("035f3ab4-482e-4e50-b41f-8a7f8bd8960b")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IDXGIResource : IDXGIDeviceSubObject
+    {
+        #region <IDXGIDeviceSubObject>
+        #region <IDXGIObject>
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
+        #endregion
+
+        new HRESULT GetDevice([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppDevice);
+        #endregion
+
+        [PreserveSig]
+        HRESULT GetSharedHandle(out IntPtr pSharedHandle);
+        HRESULT GetUsage(out uint pUsage);
+        HRESULT SetEvictionPriority(uint EvictionPriority);
+        HRESULT GetEvictionPriority(out uint pEvictionPriority);
+    }
+
+    [ComImport]
+    [Guid("30961379-4609-4a41-998e-54fe567ee0c1")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IDXGIResource1 : IDXGIResource
+    {
+        #region <IDXGIResource>
+        #region <IDXGIDeviceSubObject>
+
+        #region <IDXGIObject>
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
+        #endregion
+
+        new HRESULT GetDevice([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppDevice);
+        #endregion
+
+        new HRESULT GetSharedHandle(out IntPtr pSharedHandle);
+        new HRESULT GetUsage(out uint pUsage);
+        new HRESULT SetEvictionPriority(uint EvictionPriority);
+        new HRESULT GetEvictionPriority(out uint pEvictionPriority);
+        #endregion 
+
+        HRESULT CreateSubresourceSurface(uint index, out IDXGISurface2 ppSurface);        
+        //HRESULT CreateSharedHandle(SECURITY_ATTRIBUTES pAttributes, uint dwAccess, string lpName, out IntPtr pHandle);
+        HRESULT CreateSharedHandle(IntPtr pAttributes, uint dwAccess, string lpName, out IntPtr pHandle);
+    }
+
+    [ComImport]
+    [Guid("9d8e1289-d7b3-465f-8126-250e349af85d")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IDXGIKeyedMutex : IDXGIDeviceSubObject
+    {
+        #region <IDXGIDeviceSubObject>
+
+        #region <IDXGIObject>
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
+        #endregion
+
+        new HRESULT GetDevice([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppDevice);
+        #endregion
+
+        HRESULT AcquireSync(UInt64 Key, uint dwMilliseconds);        
+        HRESULT ReleaseSync(UInt64 Key);
+    }
+
+#nullable enable
+    [ComImport]
+    [Guid("41e7d1f2-a591-4f7b-a2e5-fa9c843e1c12")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IDXGIFactoryMedia
+    {
+        [PreserveSig]
+        HRESULT CreateSwapChainForCompositionSurfaceHandle(IntPtr pDevice, IntPtr hSurface, ref DXGI_SWAP_CHAIN_DESC1 pDesc, IDXGIOutput? pRestrictToOutput, out IDXGISwapChain1 ppSwapChain);
+        [PreserveSig]
+        HRESULT CreateDecodeSwapChainForCompositionSurfaceHandle(IntPtr pDevice, IntPtr hSurface, ref DXGI_DECODE_SWAP_CHAIN_DESC pDesc, IDXGIResource pYuvDecodeBuffers, IDXGIOutput? pRestrictToOutput, out IDXGIDecodeSwapChain ppSwapChain);
+    }
+#nullable disable
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct DXGI_DECODE_SWAP_CHAIN_DESC
+    {
+        public uint Flags;
+    }
+
+    [ComImport]
+    [Guid("2633066b-4514-4c7a-8fd8-12ea98059d18")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IDXGIDecodeSwapChain
+    {
+        HRESULT PresentBuffer(uint BufferToPresent, uint SyncInterval, uint Flags);
+        HRESULT SetSourceRect(RECT pRect);
+        HRESULT SetTargetRect(RECT pRect);
+        HRESULT SetDestSize(uint Width, uint Height);
+        HRESULT GetSourceRect(out RECT pRect);
+        HRESULT GetTargetRect(out RECT pRect);
+        HRESULT GetDestSize(out uint pWidth, out uint pHeight);
+        HRESULT SetColorSpace(DXGI_MULTIPLANE_OVERLAY_YCbCr_FLAGS ColorSpace);
+        [PreserveSig]
+        DXGI_MULTIPLANE_OVERLAY_YCbCr_FLAGS GetColorSpace();
+    }
+
+    public enum DXGI_MULTIPLANE_OVERLAY_YCbCr_FLAGS
+    {
+        DXGI_MULTIPLANE_OVERLAY_YCbCr_FLAG_NOMINAL_RANGE = 0x1,
+        DXGI_MULTIPLANE_OVERLAY_YCbCr_FLAG_BT709 = 0x2,
+        DXGI_MULTIPLANE_OVERLAY_YCbCr_FLAG_xvYCC = 0x4
+    }
+
+    public enum DXGI_FRAME_PRESENTATION_MODE
+    {
+        DXGI_FRAME_PRESENTATION_MODE_COMPOSED = 0,
+        DXGI_FRAME_PRESENTATION_MODE_OVERLAY = 1,
+        DXGI_FRAME_PRESENTATION_MODE_NONE = 2,
+        DXGI_FRAME_PRESENTATION_MODE_COMPOSITION_FAILURE = 3
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct DXGI_FRAME_STATISTICS_MEDIA
+    {
+        public uint PresentCount;
+        public uint PresentRefreshCount;
+        public uint SyncRefreshCount;
+        public LARGE_INTEGER SyncQPCTime;
+        public LARGE_INTEGER SyncGPUTime;
+        public DXGI_FRAME_PRESENTATION_MODE CompositionMode;
+        public uint ApprovedPresentDuration;
+    }
+
+    [ComImport]
+    [Guid("dd95b90b-f05f-4f6a-bd65-25bfb264bd84")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IDXGISwapChainMedia
+    {
+        HRESULT GetFrameStatisticsMedia(out DXGI_FRAME_STATISTICS_MEDIA pStats);
+        HRESULT SetPresentDuration(uint Duration);
+        HRESULT CheckPresentDurationSupport(uint DesiredPresentDuration, out uint pClosestSmallerPresentDuration, out uint pClosestLargerPresentDuration);
+    }
+
+    public enum DXGI_OVERLAY_SUPPORT_FLAG
+    {
+        DXGI_OVERLAY_SUPPORT_FLAG_DIRECT = 0x1,
+        DXGI_OVERLAY_SUPPORT_FLAG_SCALING = 0x2
+    }
+
+
+    [ComImport]
+    [Guid("25483823-cd46-4c7d-86ca-47aa95b837bd")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IDXGIFactory3 : IDXGIFactory2
+    {
+        #region <IDXGIFactory2>
+        #region <IDXGIFactory1>
+        #region <IDXGIObject>
+        new HRESULT SetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, uint DataSize, IntPtr pData);
+        new HRESULT SetPrivateDataInterface([MarshalAs(UnmanagedType.LPStruct)] Guid Name, IntPtr pUnknown);
+        new HRESULT GetPrivateData([MarshalAs(UnmanagedType.LPStruct)] Guid Name, ref uint pDataSize, out IntPtr pData);
+        new HRESULT GetParent([MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppParent);
+        #endregion
+
+        #region <IDXGIFactory>
+        new HRESULT EnumAdapters(uint Adapter, out IDXGIAdapter ppAdapter);
+        new HRESULT MakeWindowAssociation(IntPtr WindowHandle, uint Flags);
+        new HRESULT GetWindowAssociation(out IntPtr pWindowHandle);
+        [PreserveSig]
+        new HRESULT CreateSwapChain(IntPtr pDevice, DXGI_SWAP_CHAIN_DESC pDesc, out IDXGISwapChain ppSwapChain);
+        new HRESULT CreateSoftwareAdapter(IntPtr Module, out IDXGIAdapter ppAdapter);
+        #endregion
+
+        new HRESULT EnumAdapters1(uint Adapter, out IDXGIAdapter1 ppAdapter);
+        new bool IsCurrent();
+        #endregion
+
+        new bool IsWindowedStereoEnabled();
+        //HRESULT CreateSwapChainForHwnd(IntPtr pDevice, IntPtr hWnd, DXGI_SWAP_CHAIN_DESC1 pDesc, DXGI_SWAP_CHAIN_FULLSCREEN_DESC pFullscreenDesc, IDXGIOutput pRestrictToOutput, out IDXGISwapChain1 ppSwapChain);
+        [PreserveSig]
+        new HRESULT CreateSwapChainForHwnd(IntPtr pDevice, IntPtr hWnd, ref DXGI_SWAP_CHAIN_DESC1 pDesc, IntPtr pFullscreenDesc, IDXGIOutput pRestrictToOutput, out IDXGISwapChain1 ppSwapChain);
+        [PreserveSig]
+        new HRESULT CreateSwapChainForCoreWindow(IntPtr pDevice, IntPtr pWindow, ref DXGI_SWAP_CHAIN_DESC1 pDesc, IDXGIOutput pRestrictToOutput, out IDXGISwapChain1 ppSwapChain);
+        new HRESULT GetSharedResourceAdapterLuid(IntPtr hResource, out LUID pLuid);
+        new HRESULT RegisterStereoStatusWindow(IntPtr WindowHandle, uint wMsg, out uint pdwCookie);
+        new HRESULT RegisterStereoStatusEvent(IntPtr hEvent, out uint pdwCookie);
+        new void UnregisterStereoStatus(uint dwCookie);
+        new HRESULT RegisterOcclusionStatusWindow(IntPtr WindowHandle, uint wMsg, out uint pdwCookie);
+        new HRESULT RegisterOcclusionStatusEvent(IntPtr hEvent, out uint pdwCookie);
+        new void UnregisterOcclusionStatus(uint dwCookie);
+        [PreserveSig]
+        new HRESULT CreateSwapChainForComposition(IntPtr pDevice, ref DXGI_SWAP_CHAIN_DESC1 pDesc, IDXGIOutput pRestrictToOutput, out IDXGISwapChain1 ppSwapChain);
+        #endregion
+
+        [PreserveSig]
+        uint GetCreationFlags();
+    }
 
     public class DXGITools
     {
         public static Guid IID_ID3D11Texture2D = new Guid("6f15aaf2-d208-4e89-9ab4-489535d34f9c");
+
+        [DllImport("DXGI.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern HRESULT CreateDXGIFactory([In, MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IntPtr ppFactory);
+
+        [DllImport("DXGI.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern HRESULT CreateDXGIFactory1([In, MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IDXGIFactory1 ppFactory);
 
         [DllImport("DXGI.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern HRESULT CreateDXGIFactory2(uint Flags, [In, MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IDXGIFactory2 ppFactory);
@@ -1021,6 +1219,13 @@ namespace DXGI
         public static extern HRESULT D3D11CreateDevice(IDXGIAdapter pAdapter, D3D_DRIVER_TYPE DriverType, IntPtr Software, uint Flags, [MarshalAs(UnmanagedType.LPArray)] int[] pFeatureLevels,
             uint FeatureLevels, uint SDKVersion, out IntPtr ppDevice, out D3D_FEATURE_LEVEL pFeatureLevel, out IntPtr ppImmediateContext);
 
+        [ComImport, Guid("63aad0b8-7c24-40ff-85a8-640d944cc325"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface ISwapChainPanelNative
+        {
+            [PreserveSig]
+            HRESULT SetSwapChain(IDXGISwapChain swapChain);
+        }
+      
         public const int D3D11_SDK_VERSION = 7;
 
         public const int DXGI_MAP_READ = 1;

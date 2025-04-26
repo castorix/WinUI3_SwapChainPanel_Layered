@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Text;
+using Direct2D;
 using GlobalStructures;
+using Microsoft.UI.Xaml.Controls;
 
 namespace WIC
 {
@@ -8,7 +11,13 @@ namespace WIC
     {
         public static Guid CLSID_WICImagingFactory = new Guid("{cacaf262-9370-4615-a13b-9f5539da4c0a}");
         public static Guid GUID_WICPixelFormat32bppBGR = new Guid("6fddc324-4e03-4bfe-b185-3d77768dc90e");
+        public static Guid GUID_WICPixelFormat32bppBGRA = new Guid("6fddc324-4e03-4bfe-b185-3d77768dc90f");
         public static Guid GUID_WICPixelFormat32bppPBGRA = new Guid("6fddc324-4e03-4bfe-b185-3d77768dc910");
+        public static Guid GUID_ContainerFormatBmp = new Guid("0af1d87e-fcfe-4188-bdeb-a7906471cbe3");
+        public static Guid GUID_ContainerFormatJpeg = new Guid("19e4a5aa-5662-4fc5-a0c0-1758028e1057");
+        public static Guid GUID_ContainerFormatPng = new Guid("1b7cfaf4-713f-473c-bbcd-6137425faeaf");
+        public static Guid GUID_ContainerFormatGif = new Guid("1f8a5601-7d4d-4cbd-9c82-1bc8d4eeb9a5");
+        public static Guid GUID_ContainerFormatTiff = new Guid("163bcc30-e2e9-4f0b-961d-a3e9fdb788a3");
     } 
 
     [StructLayout(LayoutKind.Sequential)]
@@ -57,12 +66,59 @@ namespace WIC
         HRESULT CreateBitmapFromMemory(uint uiWidth, uint uiHeight, ref Guid pixelFormat, uint cbStride, uint cbBufferSize, IntPtr pbBuffer, out IWICBitmap ppIBitmap);
         HRESULT CreateBitmapFromHBITMAP(IntPtr hBitmap, IntPtr hPalette, WICBitmapAlphaChannelOption options, out IWICBitmap ppIBitmap);
         HRESULT CreateBitmapFromHICON(IntPtr hIcon, out IWICBitmap ppIBitmap);
-        //HRESULT CreateComponentEnumerator(int componentTypes, int options, out IEnumUnknown ppIEnumUnknown);
-        HRESULT CreateComponentEnumerator(int componentTypes, int options, out IntPtr ppIEnumUnknown);
+        HRESULT CreateComponentEnumerator(WICComponentType componentTypes, WICComponentEnumerateOptions options, out IEnumUnknown ppIEnumUnknown);
         HRESULT CreateFastMetadataEncoderFromDecoder(IWICBitmapDecoder pIDecoder, out IWICFastMetadataEncoder ppIFastEncoder);
         HRESULT CreateFastMetadataEncoderFromFrameDecode(IWICBitmapFrameDecode pIFrameDecoder, out IWICFastMetadataEncoder ppIFastEncoder);
         HRESULT CreateQueryWriter(ref Guid guidMetadataFormat, ref Guid pguidVendor, out IWICMetadataQueryWriter ppIQueryWriter);
         HRESULT CreateQueryWriterFromReader(IWICMetadataQueryReader pIQueryReader, ref Guid pguidVendor, out IWICMetadataQueryWriter ppIQueryWriter);
+    }
+
+    [Guid("00000100-0000-0000-C000-000000000046")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IEnumUnknown
+    {
+        HRESULT Next([In, MarshalAs(UnmanagedType.U4)] uint celt, [Out, MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.IUnknown, SizeParamIndex = 0)] object[] rgelt,
+            [MarshalAs(UnmanagedType.U4)] out uint pceltFetched);
+        HRESULT Skip(uint celt);
+        HRESULT Reset();
+        HRESULT Clone(out IEnumUnknown ppenum);
+    }
+
+    [ComImport]
+    [Guid("7B816B45-1996-4476-B132-DE9E247C8AF0")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IWICImagingFactory2 : IWICImagingFactory
+    {
+        #region <IWICImagingFactory>
+        new HRESULT CreateDecoderFromFilename(string wzFilename, ref Guid pguidVendor, int dwDesiredAccess, WICDecodeOptions metadataOptions, out IWICBitmapDecoder ppIDecoder);
+        new HRESULT CreateDecoderFromStream(System.Runtime.InteropServices.ComTypes.IStream pIStream, ref Guid pguidVendor, WICDecodeOptions metadataOptions, out IWICBitmapDecoder ppIDecoder);
+        new HRESULT CreateDecoderFromFileHandle(IntPtr hFile, ref Guid pguidVendor, WICDecodeOptions metadataOptions, out IWICBitmapDecoder ppIDecoder);
+        new HRESULT CreateComponentInfo(ref Guid clsidComponent, out IWICComponentInfo ppIInfo);
+        new HRESULT CreateDecoder(ref Guid guidContainerFormat, ref Guid pguidVendor, out IWICBitmapDecoder ppIDecoder);
+        new HRESULT CreateEncoder(ref Guid guidContainerFormat, ref Guid pguidVendor, out IWICBitmapEncoder ppIEncoder);
+        new HRESULT CreatePalette(out IWICPalette ppIPalette);
+        new HRESULT CreateFormatConverter(out IWICFormatConverter ppIFormatConverter);
+        new HRESULT CreateBitmapScaler(out IWICBitmapScaler ppIBitmapScaler);
+        new HRESULT CreateBitmapClipper(out IWICBitmapClipper ppIBitmapClipper);
+        new HRESULT CreateBitmapFlipRotator(out IWICBitmapFlipRotator ppIBitmapFlipRotator);
+        new HRESULT CreateStream(out IWICStream ppIWICStream);
+        new HRESULT CreateColorContext(out IWICColorContext ppIWICColorContext);
+        new HRESULT CreateColorTransformer(out IWICColorTransform ppIWICColorTransform);
+        new HRESULT CreateBitmap(uint uiWidth, uint uiHeight, ref Guid pixelFormat, WICBitmapCreateCacheOption option, out IWICBitmap ppIBitmap);
+        new HRESULT CreateBitmapFromSource(IWICBitmapSource pIBitmapSource, WICBitmapCreateCacheOption option, out IWICBitmap ppIBitmap);
+        new HRESULT CreateBitmapFromSourceRect(IWICBitmapSource pIBitmapSource, uint x, uint y, uint width, uint height, out IWICBitmap ppIBitmap);
+        [PreserveSig]
+        new HRESULT CreateBitmapFromMemory(uint uiWidth, uint uiHeight, ref Guid pixelFormat, uint cbStride, uint cbBufferSize, IntPtr pbBuffer, out IWICBitmap ppIBitmap);
+        new HRESULT CreateBitmapFromHBITMAP(IntPtr hBitmap, IntPtr hPalette, WICBitmapAlphaChannelOption options, out IWICBitmap ppIBitmap);
+        new HRESULT CreateBitmapFromHICON(IntPtr hIcon, out IWICBitmap ppIBitmap);
+        new HRESULT CreateComponentEnumerator(WICComponentType componentTypes, WICComponentEnumerateOptions options, out IEnumUnknown ppIEnumUnknown);
+        new HRESULT CreateFastMetadataEncoderFromDecoder(IWICBitmapDecoder pIDecoder, out IWICFastMetadataEncoder ppIFastEncoder);
+        new HRESULT CreateFastMetadataEncoderFromFrameDecode(IWICBitmapFrameDecode pIFrameDecoder, out IWICFastMetadataEncoder ppIFastEncoder);
+        new HRESULT CreateQueryWriter(ref Guid guidMetadataFormat, ref Guid pguidVendor, out IWICMetadataQueryWriter ppIQueryWriter);
+        new HRESULT CreateQueryWriterFromReader(IWICMetadataQueryReader pIQueryReader, ref Guid pguidVendor, out IWICMetadataQueryWriter ppIQueryWriter);
+        #endregion
+
+        HRESULT CreateImageEncoder(ID2D1Device pD2DDevice, out IWICImageEncoder ppWICImageEncoder);
     }
 
     public enum WICDecodeOptions
@@ -80,11 +136,11 @@ namespace WIC
         HRESULT GetComponentType(out WICComponentType pType);
         HRESULT GetCLSID(out Guid pclsid);
         HRESULT GetSigningStatus(out int pStatus);
-        HRESULT GetAuthor(uint cchAuthor, [Out, In] string wzAuthor, out uint pcchActual);
+        HRESULT GetAuthor(uint cchAuthor, StringBuilder wzAuthor, out uint pcchActual);
         HRESULT GetVendorGUID(out Guid pguidVendor);
-        HRESULT GetVersion(uint cchVersion, [Out, In] string wzVersion, out uint pcchActual);
-        HRESULT GetSpecVersion(uint cchSpecVersion, [Out, In] string wzSpecVersion, out uint pcchActual);
-        HRESULT GetFriendlyName(uint cchFriendlyName, [Out, In] string wzFriendlyName, out uint pcchActual);
+        HRESULT GetVersion(uint cchVersion, StringBuilder wzVersion, out uint pcchActual);
+        HRESULT GetSpecVersion(uint cchSpecVersion, StringBuilder wzSpecVersion, out uint pcchActual);
+        HRESULT GetFriendlyName(uint cchFriendlyName, StringBuilder wzFriendlyName, out uint pcchActual);
     }
 
     [ComImport]
@@ -117,6 +173,16 @@ namespace WIC
         WICCOMPONENTTYPE_FORCE_DWORD = 0x7FFFFFFF
     }
 
+    public enum WICComponentEnumerateOptions
+    {
+        WICComponentEnumerateDefault = 0,
+        WICComponentEnumerateRefresh = 0x1,
+        WICComponentEnumerateDisabled = unchecked((int)0x80000000),
+        WICComponentEnumerateUnsigned = 0x40000000,
+        WICComponentEnumerateBuiltInOnly = 0x20000000,
+        WICCOMPONENTENUMERATEOPTIONS_FORCE_DWORD = 0x7fffffff
+    }
+
     [ComImport]
     [Guid("D8CD007F-D08F-4191-9BFC-236EA7F0E4B5")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -127,20 +193,20 @@ namespace WIC
         new HRESULT GetComponentType(out WICComponentType pType);
         new HRESULT GetCLSID(out Guid pclsid);
         new HRESULT GetSigningStatus(out int pStatus);
-        new HRESULT GetAuthor(uint cchAuthor, [Out, In] string wzAuthor, out uint pcchActual);
+        new HRESULT GetAuthor(uint cchAuthor, StringBuilder wzAuthor, out uint pcchActual);
         new HRESULT GetVendorGUID(out Guid pguidVendor);
-        new HRESULT GetVersion(uint cchVersion, [Out, In] string wzVersion, out uint pcchActual);
-        new HRESULT GetSpecVersion(uint cchSpecVersion, [Out, In] string wzSpecVersion, out uint pcchActual);
-        new HRESULT GetFriendlyName(uint cchFriendlyName, [Out, In] string wzFriendlyName, out uint pcchActual);
+        new HRESULT GetVersion(uint cchVersion, StringBuilder wzVersion, out uint pcchActual);
+        new HRESULT GetSpecVersion(uint cchSpecVersion, StringBuilder wzSpecVersion, out uint pcchActual);
+        new HRESULT GetFriendlyName(uint cchFriendlyName, StringBuilder wzFriendlyName, out uint pcchActual);
         #endregion
 
         new HRESULT GetContainerFormat(out Guid pguidContainerFormat);
         new HRESULT GetPixelFormats(uint cFormats, ref Guid pguidPixelFormats, out uint pcActual);
-        new HRESULT GetColorManagementVersion(uint cchColorManagementVersion, string wzColorManagementVersion, out uint pcchActual);
-        new HRESULT GetDeviceManufacturer(uint cchDeviceManufacturer, string wzDeviceManufacturer, out uint pcchActual);
-        new HRESULT GetDeviceModels(uint cchDeviceModels, string wzDeviceModels, out uint pcchActual);
-        new HRESULT GetMimeTypes(uint cchMimeTypes, string wzMimeTypes, out uint pcchActual);
-        new HRESULT GetFileExtensions(uint cchFileExtensions, string wzFileExtensions, out uint pcchActual);
+        new HRESULT GetColorManagementVersion(uint cchColorManagementVersion, StringBuilder wzColorManagementVersion, out uint pcchActual);
+        new HRESULT GetDeviceManufacturer(uint cchDeviceManufacturer, StringBuilder wzDeviceManufacturer, out uint pcchActual);
+        new HRESULT GetDeviceModels(uint cchDeviceModels, StringBuilder wzDeviceModels, out uint pcchActual);
+        new HRESULT GetMimeTypes(uint cchMimeTypes, StringBuilder wzMimeTypes, out uint pcchActual);
+        new HRESULT GetFileExtensions(uint cchFileExtensions, StringBuilder wzFileExtensions, out uint pcchActual);
         new HRESULT DoesSupportAnimation(out bool pfSupportAnimation);
         new HRESULT DoesSupportChromakey(out bool pfSupportChromakey);
         new HRESULT DoesSupportLossless(out bool pfSupportLossless);
@@ -162,20 +228,20 @@ namespace WIC
         new HRESULT GetComponentType(out WICComponentType pType);
         new HRESULT GetCLSID(out Guid pclsid);
         new HRESULT GetSigningStatus(out int pStatus);
-        new HRESULT GetAuthor(uint cchAuthor, [Out, In] string wzAuthor, out uint pcchActual);
+        new HRESULT GetAuthor(uint cchAuthor, StringBuilder wzAuthor, out uint pcchActual);
         new HRESULT GetVendorGUID(out Guid pguidVendor);
-        new HRESULT GetVersion(uint cchVersion, [Out, In] string wzVersion, out uint pcchActual);
-        new HRESULT GetSpecVersion(uint cchSpecVersion, [Out, In] string wzSpecVersion, out uint pcchActual);
-        new HRESULT GetFriendlyName(uint cchFriendlyName, [Out, In] string wzFriendlyName, out uint pcchActual);
+        new HRESULT GetVersion(uint cchVersion, StringBuilder wzVersion, out uint pcchActual);
+        new HRESULT GetSpecVersion(uint cchSpecVersion, StringBuilder wzSpecVersion, out uint pcchActual);
+        new HRESULT GetFriendlyName(uint cchFriendlyName, StringBuilder wzFriendlyName, out uint pcchActual);
         #endregion
 
         HRESULT GetContainerFormat(out Guid pguidContainerFormat);
         HRESULT GetPixelFormats(uint cFormats, ref Guid pguidPixelFormats, out uint pcActual);
-        HRESULT GetColorManagementVersion(uint cchColorManagementVersion, string wzColorManagementVersion, out uint pcchActual);
-        HRESULT GetDeviceManufacturer(uint cchDeviceManufacturer, string wzDeviceManufacturer, out uint pcchActual);
-        HRESULT GetDeviceModels(uint cchDeviceModels, string wzDeviceModels, out uint pcchActual);
-        HRESULT GetMimeTypes(uint cchMimeTypes, string wzMimeTypes, out uint pcchActual);
-        HRESULT GetFileExtensions(uint cchFileExtensions, string wzFileExtensions, out uint pcchActual);        
+        HRESULT GetColorManagementVersion(uint cchColorManagementVersion, StringBuilder wzColorManagementVersion, out uint pcchActual);
+        HRESULT GetDeviceManufacturer(uint cchDeviceManufacturer, StringBuilder wzDeviceManufacturer, out uint pcchActual);
+        HRESULT GetDeviceModels(uint cchDeviceModels, StringBuilder wzDeviceModels, out uint pcchActual);
+        HRESULT GetMimeTypes(uint cchMimeTypes, StringBuilder wzMimeTypes, out uint pcchActual);
+        HRESULT GetFileExtensions(uint cchFileExtensions, StringBuilder wzFileExtensions, out uint pcchActual);        
         HRESULT DoesSupportAnimation(out bool pfSupportAnimation);
         HRESULT DoesSupportChromakey(out bool pfSupportChromakey);        
         HRESULT DoesSupportLossless(out bool pfSupportLossless);        
@@ -227,20 +293,20 @@ namespace WIC
         new HRESULT GetComponentType(out WICComponentType pType);
         new HRESULT GetCLSID(out Guid pclsid);
         new HRESULT GetSigningStatus(out int pStatus);
-        new HRESULT GetAuthor(uint cchAuthor, [Out, In] string wzAuthor, out uint pcchActual);
+        new HRESULT GetAuthor(uint cchAuthor, StringBuilder wzAuthor, out uint pcchActual);
         new HRESULT GetVendorGUID(out Guid pguidVendor);
-        new HRESULT GetVersion(uint cchVersion, [Out, In] string wzVersion, out uint pcchActual);
-        new HRESULT GetSpecVersion(uint cchSpecVersion, [Out, In] string wzSpecVersion, out uint pcchActual);
-        new HRESULT GetFriendlyName(uint cchFriendlyName, [Out, In] string wzFriendlyName, out uint pcchActual);
+        new HRESULT GetVersion(uint cchVersion, StringBuilder wzVersion, out uint pcchActual);
+        new HRESULT GetSpecVersion(uint cchSpecVersion, StringBuilder wzSpecVersion, out uint pcchActual);
+        new HRESULT GetFriendlyName(uint cchFriendlyName, StringBuilder wzFriendlyName, out uint pcchActual);
         #endregion
 
         new HRESULT GetContainerFormat(out Guid pguidContainerFormat);
         new HRESULT GetPixelFormats(uint cFormats, ref Guid pguidPixelFormats, out uint pcActual);
-        new HRESULT GetColorManagementVersion(uint cchColorManagementVersion, string wzColorManagementVersion, out uint pcchActual);
-        new HRESULT GetDeviceManufacturer(uint cchDeviceManufacturer, string wzDeviceManufacturer, out uint pcchActual);
-        new HRESULT GetDeviceModels(uint cchDeviceModels, string wzDeviceModels, out uint pcchActual);
-        new HRESULT GetMimeTypes(uint cchMimeTypes, string wzMimeTypes, out uint pcchActual);
-        new HRESULT GetFileExtensions(uint cchFileExtensions, string wzFileExtensions, out uint pcchActual);
+        new HRESULT GetColorManagementVersion(uint cchColorManagementVersion, StringBuilder wzColorManagementVersion, out uint pcchActual);
+        new HRESULT GetDeviceManufacturer(uint cchDeviceManufacturer, StringBuilder wzDeviceManufacturer, out uint pcchActual);
+        new HRESULT GetDeviceModels(uint cchDeviceModels, StringBuilder wzDeviceModels, out uint pcchActual);
+        new HRESULT GetMimeTypes(uint cchMimeTypes, StringBuilder wzMimeTypes, out uint pcchActual);
+        new HRESULT GetFileExtensions(uint cchFileExtensions, StringBuilder wzFileExtensions, out uint pcchActual);
         new HRESULT DoesSupportAnimation(out bool pfSupportAnimation);
         new HRESULT DoesSupportChromakey(out bool pfSupportChromakey);
         new HRESULT DoesSupportLossless(out bool pfSupportLossless);
@@ -321,18 +387,18 @@ namespace WIC
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IWICStream : System.Runtime.InteropServices.ComTypes.IStream
     {
-        #region IStream      
-        new void Clone(out System.Runtime.InteropServices.ComTypes.IStream ppstm);
-        new void Commit(int grfCommitFlags);
-        new void CopyTo(System.Runtime.InteropServices.ComTypes.IStream pstm, long cb, IntPtr pcbRead, IntPtr pcbWritten);
-        new void LockRegion(long libOffset, long cb, int dwLockType);
+        #region IStream
         new void Read(byte[] pv, int cb, IntPtr pcbRead);
-        new void Revert();
+        new void Write(byte[] pv, int cb, IntPtr pcbWritten);
         new void Seek(long dlibMove, int dwOrigin, IntPtr plibNewPosition);
         new void SetSize(long libNewSize);
-        new void Stat(out System.Runtime.InteropServices.ComTypes.STATSTG pstatstg, int grfStatFlag);
+        new void CopyTo(System.Runtime.InteropServices.ComTypes.IStream pstm, long cb, IntPtr pcbRead, IntPtr pcbWritten);
+        new void Commit(int grfCommitFlags);
+        new void Revert();
+        new void LockRegion(long libOffset, long cb, int dwLockType);
         new void UnlockRegion(long libOffset, long cb, int dwLockType);
-        new void Write(byte[] pv, int cb, IntPtr pcbWritten);
+        new void Stat(out System.Runtime.InteropServices.ComTypes.STATSTG pstatstg, int grfStatFlag);
+        new void Clone(out System.Runtime.InteropServices.ComTypes.IStream ppstm);       
         #endregion
 
         HRESULT InitializeFromIStream(System.Runtime.InteropServices.ComTypes.IStream pIStream);
@@ -536,7 +602,7 @@ namespace WIC
     {
         #region IWICMetadataQueryReader
         new HRESULT GetContainerFormat(out Guid pguidContainerFormat);
-        new HRESULT GetLocation(uint cchMaxLength, [Out, In] string wzNamespace, out uint pcchActualLength);
+        new HRESULT GetLocation(uint cchMaxLength, StringBuilder wzNamespace, out uint pcchActualLength);
         new HRESULT GetMetadataByName(string wzName, [Out, In] PROPVARIANT pvarValue);
         // new HRESULT GetEnumerator(out IEnumString ppIEnumString);
         new HRESULT GetEnumerator(out IntPtr ppIEnumString);
@@ -552,7 +618,7 @@ namespace WIC
     public interface IWICMetadataQueryReader
     {
         HRESULT GetContainerFormat(out Guid pguidContainerFormat);
-        HRESULT GetLocation(uint cchMaxLength, [Out, In] string wzNamespace, out uint pcchActualLength);
+        HRESULT GetLocation(uint cchMaxLength, StringBuilder wzNamespace, out uint pcchActualLength);
         HRESULT GetMetadataByName(string wzName, [Out, In] PROPVARIANT pvarValue);
         //HRESULT GetEnumerator(out IEnumString ppIEnumString);
         HRESULT GetEnumerator(out IntPtr ppIEnumString);
@@ -631,4 +697,29 @@ namespace WIC
         WICBitmapPaletteTypeFixedGray256 = 12,
         WICBITMAPPALETTETYPE_FORCE_DWORD = 0x7FFFFFFF
     }
+
+    [ComImport]
+    [Guid("04C75BF8-3CE1-473B-ACC5-3CC4F5E94999")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IWICImageEncoder
+    {
+        //HRESULT WriteFrame(ID2D1Image pImage, IWICBitmapFrameEncode pFrameEncode, WICImageParameters pImageParameters);
+        HRESULT WriteFrame(ID2D1Image pImage, IWICBitmapFrameEncode pFrameEncode, IntPtr pImageParameters);
+        //HRESULT WriteFrameThumbnail(ID2D1Image pImage, IWICBitmapFrameEncode pFrameEncode, WICImageParameters pImageParameters);
+        HRESULT WriteFrameThumbnail(ID2D1Image pImage, IWICBitmapFrameEncode pFrameEncode, IntPtr pImageParameters);
+        //HRESULT WriteThumbnail(ID2D1Image pImage, IWICBitmapEncoder pEncoder, WICImageParameters pImageParameters);
+        HRESULT WriteThumbnail(ID2D1Image pImage, IWICBitmapEncoder pEncoder, IntPtr pImageParameters);
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct WICImageParameters
+    {
+        public D2D1_PIXEL_FORMAT PixelFormat;
+        public float DpiX;
+        public float DpiY;
+        public float Top;
+        public float Left;
+        public uint PixelWidth;
+        public uint PixelHeight;
+    }    
 }

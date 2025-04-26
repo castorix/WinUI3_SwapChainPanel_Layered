@@ -12,7 +12,7 @@
 
     <SwapChainPanel x:Name="swapChainPanel1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
         <Border x:Name="mainBorder" BorderThickness="3" CornerRadius="45" BorderBrush="Red" Background="Transparent" Margin="5, 5, 5, 5">
-            <StackPanel x:Name="sp1" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <StackPanel x:Name="sp1" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
                 <TextBlock x:Name="tb1" Text="Right-click to exit" Margin="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Yellow"/>
                 <Grid Margin="5, 70, 5, 5">
                     <Grid.ColumnDefinitions>

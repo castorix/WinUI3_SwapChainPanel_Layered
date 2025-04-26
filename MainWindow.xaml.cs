@@ -141,8 +141,10 @@ namespace WinUI3_SwapChainPanel_Layered
         [DllImport("User32.dll", EntryPoint = "GetWindowLongPtr", CharSet = CharSet.Auto)]
         public static extern long GetWindowLongPtr64(IntPtr hWnd, int nIndex);
 
+        public const int WS_EX_APPWINDOW =0x00040000;
         public const int WS_EX_LAYERED = 0x00080000;
         public const int WS_EX_TRANSPARENT =0x00000020;
+        public const int WS_EX_NOACTIVATE = 0x08000000;
         //public const int WS_POPUP = unchecked((int)0x80000000L);
         //public const int WS_VISIBLE = 0x10000000;
         //public const int WS_SYSMENU = 0x00080000;
@@ -414,6 +416,9 @@ namespace WinUI3_SwapChainPanel_Layered
         [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
+        [DllImport("User32.dll", SetLastError = true)]
+        public static extern IntPtr GetParent(IntPtr hWnd);
+
         [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern int SendInput(int nInputs, [MarshalAs(UnmanagedType.LPArray)] INPUT[] pInput, int cbSize);
 
@@ -622,8 +627,20 @@ namespace WinUI3_SwapChainPanel_Layered
                     // myButton.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
                 }
                 //bool bReturn = SetLayeredWindowAttributes(hWndMain, nColorBackground, 55, LWA_COLORKEY | LWA_ALPHA);
+
+                // For click-through
                 bool bReturn = SetLayeredWindowAttributes(hWndMain, nColorBackground, 255, LWA_COLORKEY );
+
+                //SystemBackdrop = new TransparentBackdrop();
             }
+
+            //nExStyle = GetWindowLong(hWndMain, GWL_EXSTYLE);
+            //SetWindowLong(hWndMain, GWL_EXSTYLE, (IntPtr)(nExStyle | (WS_EX_NOACTIVATE | WS_EX_APPWINDOW)));
+
+            // From https://github.com/castorix/WinUI3_SwapChainPanel_Layered/issues/7
+            int nStyle = (int)GetWindowLong(hWndMain, GWL_STYLE);
+            nStyle = nStyle & ~(WS_CAPTION | WS_THICKFRAME); // or WS_DLGFRAME ?
+            SetWindowLong(hWndMain, GWL_STYLE, (IntPtr)nStyle);
 
             UIElement root = (UIElement)this.Content;         
             root.PointerMoved += Root_PointerMoved;
@@ -709,8 +726,12 @@ namespace WinUI3_SwapChainPanel_Layered
 
                 IntPtr hWnd = WindowFromPoint(pt);
 
-                //StringBuilder sbClass = new StringBuilder(260);
-                //GetClassName(hWnd, sbClass, (int)(sbClass.Capacity));
+                StringBuilder sbClass = new StringBuilder(260);
+                GetClassName(hWnd, sbClass, (int)(sbClass.Capacity));
+                IntPtr hWndParent = GetParent(hWnd);
+                StringBuilder sbParentClass = new StringBuilder(260);
+                GetClassName(hWndParent, sbParentClass, (int)(sbParentClass.Capacity));
+                
                 //System.Diagnostics.Debug.WriteLine(string.Format("Window = 0x{0:X8} - {1}", hWnd, sbClass.ToString()));
 
                 Microsoft.UI.Input.PointerPoint pp = e.GetCurrentPoint((UIElement)sender);
@@ -749,7 +770,7 @@ namespace WinUI3_SwapChainPanel_Layered
                     }
                     System.Threading.Thread.Sleep(100);
                     SwitchToThisWindow(hWnd, true);
-                    System.Threading.Thread.Sleep(100);
+                    System.Threading.Thread.Sleep(100);                    
                     INPUT[] mi = new INPUT[1];
                     mi[0].type = INPUT_MOUSE;                   
                     mi[0].inputUnion.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
@@ -757,6 +778,13 @@ namespace WinUI3_SwapChainPanel_Layered
                     //System.Threading.Thread.Sleep(100);
                     mi[0].inputUnion.mi.dwFlags = MOUSEEVENTF_LEFTUP;
                     SendInput(1, mi, Marshal.SizeOf(mi[0]));
+
+                    // Test Desktop (Windows 10)
+                    if (sbClass.ToString() == "SysListView32" && sbParentClass.ToString() == "SHELLDLL_DefView")
+                    {
+                        _presenter.Minimize();
+                    }
+
                     //Console.Beep(5000, 10);
                     if (bAlwaysOnTop)
                         _presenter.IsAlwaysOnTop = true;

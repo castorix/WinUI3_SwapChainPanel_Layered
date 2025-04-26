@@ -18,6 +18,7 @@ namespace GlobalStructures
         E_FAIL = unchecked((int)0x80004005),
         E_UNEXPECTED = unchecked((int)0x8000FFFF),
         E_OUTOFMEMORY = unchecked((int)0x8007000E),
+        E_INVALIDARG = unchecked((int)0x80070057),
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -197,9 +198,9 @@ namespace GlobalStructures
 
         public static readonly PROPERTYKEY PKEY_ItemNameDisplay = new PROPERTYKEY(new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC"), 10);
         public static readonly PROPERTYKEY PKEY_FileVersion = new PROPERTYKEY(new Guid("0CEF7D53-FA64-11D1-A203-0000F81FEDEE"), 4);
-    }
+    }  
 
-    public class GlobalTools
+    internal class GlobalTools
     {
         public static void SafeRelease<T>(ref T comObject) where T : class
         {
@@ -211,5 +212,28 @@ namespace GlobalStructures
                     Marshal.ReleaseComObject(t);
             }
         }
+
+        public const long DELETE = (0x00010000L);
+        public const long READ_CONTROL = (0x00020000L);
+        public const long WRITE_DAC = (0x00040000L);
+        public const long WRITE_OWNER = (0x00080000L);
+        public const long SYNCHRONIZE = (0x00100000L);
+
+        public const long GENERIC_READ = (0x80000000L);
+        public const long GENERIC_WRITE = (0x40000000L);
+        public const long GENERIC_EXECUTE = (0x20000000L);
+        public const long GENERIC_ALL = (0x10000000L);
+
+        public enum STGC :int
+        {
+            STGC_DEFAULT = 0,
+            STGC_OVERWRITE = 1,
+            STGC_ONLYIFCURRENT = 2,
+            STGC_DANGEROUSLYCOMMITMERELYTODISKCACHE = 4,
+            STGC_CONSOLIDATE = 8
+        }
+
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern uint GetDpiForWindow(IntPtr hwnd);
     }
 }
