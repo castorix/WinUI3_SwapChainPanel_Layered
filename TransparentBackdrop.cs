@@ -45,6 +45,7 @@ namespace WinUI3_SwapChainPanel_Layered
         [DllImport("CoreMessaging.dll")]
         private static extern int CreateDispatcherQueueController([In] DispatcherQueueOptions options, [In, Out, MarshalAs(UnmanagedType.IUnknown)] ref object dispatcherQueueController);
 
+#nullable enable
         static object? m_dispatcherQueueController = null;
         public static void EnsureWindowsSystemDispatcherQueueController()
         {
@@ -64,5 +65,6 @@ namespace WinUI3_SwapChainPanel_Layered
                 CreateDispatcherQueueController(options, ref m_dispatcherQueueController);
             }
         }
+#nullable disable
     }
 }

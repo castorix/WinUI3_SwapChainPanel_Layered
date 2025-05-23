@@ -202,16 +202,18 @@ namespace GlobalStructures
 
     internal class GlobalTools
     {
-        public static void SafeRelease<T>(ref T comObject) where T : class
+#nullable enable
+        public static void SafeRelease<T>(ref T? comObject) where T : class
         {
-            T t = comObject;
-            comObject = default(T);
-            if (null != t)
+            T? t = comObject;
+            comObject = default;
+            if (t != null)
             {
                 if (Marshal.IsComObject(t))
                     Marshal.ReleaseComObject(t);
             }
         }
+#nullable disable
 
         public const long DELETE = (0x00010000L);
         public const long READ_CONTROL = (0x00020000L);

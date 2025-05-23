@@ -510,7 +510,7 @@ namespace WinUI3_SwapChainPanel_Layered
         public const int PM_REMOVE = 0x0001;
         public const int PM_NOYIELD = 0x0002;
 
-        private SUBCLASSPROC SubClassDelegate;
+        //private SUBCLASSPROC SubClassDelegate;
 
         private IntPtr hWndMain = IntPtr.Zero;
         private IntPtr hWndDesktopChildSiteBridge = IntPtr.Zero;

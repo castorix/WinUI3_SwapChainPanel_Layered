@@ -6,6 +6,8 @@ using WIC;
 using GlobalStructures;
 using static DXGI.DXGITools;
 using System.Runtime.CompilerServices;
+using static Direct2D.D2DTools;
+using System.IO;
 
 #if DWRITE
 using DWrite;
@@ -150,6 +152,7 @@ namespace Direct2D
     public interface ID2D1Brush : ID2D1Resource
     {
         #region ID2D1Resource
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
@@ -161,10 +164,6 @@ namespace Direct2D
         float GetOpacity();
         [PreserveSig]
         void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
-        //void  SetTransform(D2D1_MATRIX_3X2_F &transform)
-        //{
-        //    SetTransform(&transform);
-        //}
     }
 
     [ComImport]
@@ -174,6 +173,7 @@ namespace Direct2D
     {
         #region ID2D1Brush
         #region ID2D1Resource
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
         [PreserveSig]
@@ -186,13 +186,21 @@ namespace Direct2D
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         #endregion
 
+        [PreserveSig]
         void SetExtendModeX(D2D1_EXTEND_MODE extendModeX);
+        [PreserveSig]
         void SetExtendModeY(D2D1_EXTEND_MODE extendModeY);
+        [PreserveSig]
         void SetInterpolationMode(D2D1_BITMAP_INTERPOLATION_MODE interpolationMode);
+        [PreserveSig]
         void SetBitmap(ID2D1Bitmap bitmap);
-        D2D1_EXTEND_MODE GetExtendModeX();
-        D2D1_EXTEND_MODE GetExtendModeY();
-        D2D1_BITMAP_INTERPOLATION_MODE GetInterpolationMode();
+        [PreserveSig]
+        void GetExtendModeX(out D2D1_EXTEND_MODE extendedModeX);
+        [PreserveSig]
+        void GetExtendModeY(out D2D1_EXTEND_MODE extendedModeY);
+        [PreserveSig]
+        void GetInterpolationMode(out D2D1_BITMAP_INTERPOLATION_MODE interpolationMode);
+        [PreserveSig]
         void GetBitmap(out ID2D1Bitmap bitmap);
     }
 
@@ -203,6 +211,7 @@ namespace Direct2D
     {
         #region ID2D1Brush
         #region ID2D1Resource
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
         [PreserveSig]
@@ -215,10 +224,15 @@ namespace Direct2D
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         #endregion
 
+        [PreserveSig]
         void SetStartPoint(D2D1_POINT_2F startPoint);
+        [PreserveSig]
         void SetEndPoint(D2D1_POINT_2F endPoint);
-        D2D1_POINT_2F GetStartPoint();
-        D2D1_POINT_2F GetEndPoint();
+        [PreserveSig]
+        void GetStartPoint(out D2D1_POINT_2F startPoint);
+        [PreserveSig]
+        void GetEndPoint(out D2D1_POINT_2F endPoint);
+        [PreserveSig]
         void GetGradientStopCollection(out ID2D1GradientStopCollection gradientStopCollection);
     }
 
@@ -241,16 +255,23 @@ namespace Direct2D
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         #endregion
 
+        [PreserveSig]
         void SetCenter(ref D2D1_POINT_2F center);
+        [PreserveSig]
         void SetGradientOriginOffset(ref D2D1_POINT_2F gradientOriginOffset);
+        [PreserveSig]
         void SetRadiusX(float radiusX);
-        void SetRadiusY(float radiusY);       
-        D2D1_POINT_2F GetCenter();       
-        D2D1_POINT_2F GetGradientOriginOffset();
+        [PreserveSig]
+        void SetRadiusY(float radiusY);
+        [PreserveSig]
+        void GetCenter(out D2D1_POINT_2F center);
+        [PreserveSig]
+        void GetGradientOriginOffset(out D2D1_POINT_2F gradientOriginOffset);
         [PreserveSig]
         float GetRadiusX();
         [PreserveSig]
         float GetRadiusY();
+        [PreserveSig]
         void GetGradientStopCollection(out ID2D1GradientStopCollection gradientStopCollection);
     }
 
@@ -264,19 +285,22 @@ namespace Direct2D
         #endregion
 
         [PreserveSig]
-        D2D1_CAP_STYLE GetStartCap();
+        void GetStartCap(out D2D1_CAP_STYLE capStyle);
         [PreserveSig]
-        D2D1_CAP_STYLE GetEndCap();
+        void GetEndCap(out D2D1_CAP_STYLE capStyle);
         [PreserveSig]
-        D2D1_CAP_STYLE GetDashCap();
+        void GetDashCap(out D2D1_CAP_STYLE capStyle);
         [PreserveSig]
         float GetMiterLimit();
-        D2D1_LINE_JOIN GetLineJoin();
+        [PreserveSig]
+        void GetLineJoin(out D2D1_LINE_JOIN lineJoin);
         [PreserveSig]
         float GetDashOffset();
-        D2D1_DASH_STYLE GetDashStyle();
+        [PreserveSig]
+        void GetDashStyle(out D2D1_DASH_STYLE dashStyle);
         [PreserveSig]
         uint GetDashesCount();
+        [PreserveSig]
         void GetDashes(out float dashes, uint dashesCount);
     }
 
@@ -370,12 +394,19 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ID2D1SimplifiedGeometrySink
     {
+        [PreserveSig]
         HRESULT SetFillMode(D2D1_FILL_MODE fillMode);
+        [PreserveSig]
         HRESULT SetSegmentFlags(D2D1_PATH_SEGMENT vertexFlags);
-        HRESULT BeginFigure(ref D2D1_POINT_2F startPoint, D2D1_FIGURE_BEGIN figureBegin);
-        HRESULT AddLines([MarshalAs(UnmanagedType.LPArray)] D2D1_POINT_2F[] points, uint pointsCount);
-        HRESULT AddBeziers(D2D1_BEZIER_SEGMENT beziers, uint beziersCount);
+        [PreserveSig]
+        HRESULT BeginFigure(D2D1_POINT_2F startPoint, D2D1_FIGURE_BEGIN figureBegin);
+        [PreserveSig]   
+        HRESULT AddLines([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_POINT_2F[] points, int pointsCount);
+        [PreserveSig]
+        HRESULT AddBeziers([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_BEZIER_SEGMENT[] beziers, int beziersCount);
+        [PreserveSig]
         HRESULT EndFigure(D2D1_FIGURE_END figureEnd);
+        [PreserveSig]
         HRESULT Close();
     }
 
@@ -415,7 +446,9 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ID2D1GdiInteropRenderTarget
     {
+        [PreserveSig]
         HRESULT GetDC(D2D1_DC_INITIALIZE_MODE mode, out IntPtr hdc);
+        [PreserveSig]
         HRESULT ReleaseDC(ref RECT update);
     }
 
@@ -439,20 +472,32 @@ namespace Direct2D
     public interface ID2D1GeometrySink : ID2D1SimplifiedGeometrySink
     {
         #region ID2D1SimplifiedGeometrySink
+        [PreserveSig]
         new HRESULT SetFillMode(D2D1_FILL_MODE fillMode);
+        [PreserveSig]
         new HRESULT SetSegmentFlags(D2D1_PATH_SEGMENT vertexFlags);
-        new HRESULT BeginFigure(ref D2D1_POINT_2F startPoint, D2D1_FIGURE_BEGIN figureBegin);
-        new HRESULT AddLines([MarshalAs(UnmanagedType.LPArray)] D2D1_POINT_2F[] points, uint pointsCount);
-        new HRESULT AddBeziers(D2D1_BEZIER_SEGMENT beziers, uint beziersCount);
+        [PreserveSig]
+        new HRESULT BeginFigure(D2D1_POINT_2F startPoint, D2D1_FIGURE_BEGIN figureBegin);
+        [PreserveSig]
+        new HRESULT AddLines([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_POINT_2F[] points, int pointsCount);
+        [PreserveSig]
+        new HRESULT AddBeziers([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_BEZIER_SEGMENT[] beziers, int beziersCount);
+        [PreserveSig]
         new HRESULT EndFigure(D2D1_FIGURE_END figureEnd);
+        [PreserveSig]
         new HRESULT Close();
         #endregion
 
-        HRESULT AddLine(ref D2D1_POINT_2F point);
-        HRESULT AddBezier(D2D1_BEZIER_SEGMENT bezier);
-        HRESULT AddQuadraticBezier(D2D1_QUADRATIC_BEZIER_SEGMENT bezier);
-        HRESULT AddQuadraticBeziers(D2D1_QUADRATIC_BEZIER_SEGMENT beziers, int beziersCount);
-        HRESULT AddArc(D2D1_ARC_SEGMENT arc);
+        [PreserveSig]
+        HRESULT AddLine(D2D1_POINT_2F point);
+        [PreserveSig]
+        HRESULT AddBezier(ref D2D1_BEZIER_SEGMENT bezier);
+        [PreserveSig]
+        HRESULT AddQuadraticBezier(ref D2D1_QUADRATIC_BEZIER_SEGMENT bezier);
+        [PreserveSig]
+        HRESULT AddQuadraticBeziers( [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_QUADRATIC_BEZIER_SEGMENT[] beziers, int beziersCount);
+        [PreserveSig]
+        HRESULT AddArc(ref D2D1_ARC_SEGMENT arc);
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -468,7 +513,9 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ID2D1TessellationSink
     {
+        [PreserveSig]
         void AddTriangles(D2D1_TRIANGLE triangles, uint trianglesCount);
+        [PreserveSig]
         void Close();
     }
 
@@ -478,21 +525,35 @@ namespace Direct2D
     public interface ID2D1Geometry : ID2D1Resource
     {
         #region ID2D1Resource
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         HRESULT GetBounds(D2D1_MATRIX_3X2_F worldTransform, out D2D1_RECT_F bounds);
+        [PreserveSig]
         HRESULT GetWidenedBounds(float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_RECT_F bounds);
+        [PreserveSig]
         HRESULT StrokeContainsPoint(ref D2D1_POINT_2F point, float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out bool contains);
+        [PreserveSig]
         HRESULT FillContainsPoint(ref D2D1_POINT_2F point, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out bool contains);
+        [PreserveSig]
         HRESULT CompareWithGeometry(ID2D1Geometry inputGeometry, D2D1_MATRIX_3X2_F inputGeometryTransform, float flatteningTolerance, out D2D1_GEOMETRY_RELATION relation);
+        [PreserveSig]
         HRESULT Simplify(D2D1_GEOMETRY_SIMPLIFICATION_OPTION simplificationOption, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         HRESULT Tessellate(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1TessellationSink tessellationSink);
+        [PreserveSig]
         HRESULT CombineWithGeometry(ID2D1Geometry inputGeometry, D2D1_COMBINE_MODE combineMode, D2D1_MATRIX_3X2_F inputGeometryTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         HRESULT Outline(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         HRESULT ComputeArea(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out float area);
+        [PreserveSig]
         HRESULT ComputeLength(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out float length);
+        [PreserveSig]
         HRESULT ComputePointAtLength(float length, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_POINT_2F point, out D2D1_POINT_2F unitTangentVector);
+        [PreserveSig]
         HRESULT Widen(float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
     }
 
@@ -503,25 +564,40 @@ namespace Direct2D
     {
         #region ID2D1Geometry
         #region ID2D1Resource
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new HRESULT GetBounds(D2D1_MATRIX_3X2_F worldTransform, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new HRESULT GetWidenedBounds(float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new HRESULT StrokeContainsPoint(ref D2D1_POINT_2F point, float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out bool contains);
+        [PreserveSig]
         new HRESULT FillContainsPoint(ref D2D1_POINT_2F point, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out bool contains);
+        [PreserveSig]
         new HRESULT CompareWithGeometry(ID2D1Geometry inputGeometry, D2D1_MATRIX_3X2_F inputGeometryTransform, float flatteningTolerance, out D2D1_GEOMETRY_RELATION relation);
+        [PreserveSig]
         new HRESULT Simplify(D2D1_GEOMETRY_SIMPLIFICATION_OPTION simplificationOption, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT Tessellate(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1TessellationSink tessellationSink);
+        [PreserveSig]
         new HRESULT CombineWithGeometry(ID2D1Geometry inputGeometry, D2D1_COMBINE_MODE combineMode, D2D1_MATRIX_3X2_F inputGeometryTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT Outline(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT ComputeArea(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out float area);
+        [PreserveSig]
         new HRESULT ComputeLength(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out float length);
+        [PreserveSig]
         new HRESULT ComputePointAtLength(float length, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_POINT_2F point, out D2D1_POINT_2F unitTangentVector);
+        [PreserveSig]
         new HRESULT Widen(float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
 
         #endregion
 
+        [PreserveSig]
         void GetRoundedRect(out D2D1_ROUNDED_RECT roundedRect);
     }
 
@@ -532,25 +608,40 @@ namespace Direct2D
     {
         #region ID2D1Geometry
         #region ID2D1Resource
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new HRESULT GetBounds(D2D1_MATRIX_3X2_F worldTransform, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new HRESULT GetWidenedBounds(float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new HRESULT StrokeContainsPoint(ref D2D1_POINT_2F point, float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out bool contains);
+        [PreserveSig]
         new HRESULT FillContainsPoint(ref D2D1_POINT_2F point, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out bool contains);
+        [PreserveSig]
         new HRESULT CompareWithGeometry(ID2D1Geometry inputGeometry, D2D1_MATRIX_3X2_F inputGeometryTransform, float flatteningTolerance, out D2D1_GEOMETRY_RELATION relation);
+        [PreserveSig]
         new HRESULT Simplify(D2D1_GEOMETRY_SIMPLIFICATION_OPTION simplificationOption, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT Tessellate(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1TessellationSink tessellationSink);
+        [PreserveSig]
         new HRESULT CombineWithGeometry(ID2D1Geometry inputGeometry, D2D1_COMBINE_MODE combineMode, D2D1_MATRIX_3X2_F inputGeometryTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT Outline(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT ComputeArea(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out float area);
+        [PreserveSig]
         new HRESULT ComputeLength(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out float length);
+        [PreserveSig]
         new HRESULT ComputePointAtLength(float length, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_POINT_2F point, out D2D1_POINT_2F unitTangentVector);
+        [PreserveSig]
         new HRESULT Widen(float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
 
         #endregion
 
+        [PreserveSig]
         void GetEllipse(out D2D1_ELLIPSE ellipse);
     }
 
@@ -561,29 +652,44 @@ namespace Direct2D
     {
         #region ID2D1Geometry
         #region ID2D1Resource
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new HRESULT GetBounds(D2D1_MATRIX_3X2_F worldTransform, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new HRESULT GetWidenedBounds(float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new HRESULT StrokeContainsPoint(ref D2D1_POINT_2F point, float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out bool contains);
+        [PreserveSig]
         new HRESULT FillContainsPoint(ref D2D1_POINT_2F point, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out bool contains);
+        [PreserveSig]
         new HRESULT CompareWithGeometry(ID2D1Geometry inputGeometry, D2D1_MATRIX_3X2_F inputGeometryTransform, float flatteningTolerance, out D2D1_GEOMETRY_RELATION relation);
+        [PreserveSig]
         new HRESULT Simplify(D2D1_GEOMETRY_SIMPLIFICATION_OPTION simplificationOption, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT Tessellate(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1TessellationSink tessellationSink);
+        [PreserveSig]
         new HRESULT CombineWithGeometry(ID2D1Geometry inputGeometry, D2D1_COMBINE_MODE combineMode, D2D1_MATRIX_3X2_F inputGeometryTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT Outline(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT ComputeArea(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out float area);
+        [PreserveSig]
         new HRESULT ComputeLength(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out float length);
+        [PreserveSig]
         new HRESULT ComputePointAtLength(float length, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_POINT_2F point, out D2D1_POINT_2F unitTangentVector);
+        [PreserveSig]
         new HRESULT Widen(float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
 
         #endregion
 
         [PreserveSig]
-        D2D1_FILL_MODE GetFillMode();
+        void GetFillMode(out D2D1_FILL_MODE fillMode);
         [PreserveSig]
         int GetSourceGeometryCount();
+        [PreserveSig]
         void GetSourceGeometries(out ID2D1Geometry geometries, int geometriesCount);
     }
 
@@ -594,26 +700,42 @@ namespace Direct2D
     {
         #region ID2D1Geometry
         #region ID2D1Resource
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new HRESULT GetBounds(D2D1_MATRIX_3X2_F worldTransform, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new HRESULT GetWidenedBounds(float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new HRESULT StrokeContainsPoint(ref D2D1_POINT_2F point, float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out bool contains);
+        [PreserveSig]
         new HRESULT FillContainsPoint(ref D2D1_POINT_2F point, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out bool contains);
+        [PreserveSig]
         new HRESULT CompareWithGeometry(ID2D1Geometry inputGeometry, D2D1_MATRIX_3X2_F inputGeometryTransform, float flatteningTolerance, out D2D1_GEOMETRY_RELATION relation);
+        [PreserveSig]
         new HRESULT Simplify(D2D1_GEOMETRY_SIMPLIFICATION_OPTION simplificationOption, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT Tessellate(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1TessellationSink tessellationSink);
+        [PreserveSig]
         new HRESULT CombineWithGeometry(ID2D1Geometry inputGeometry, D2D1_COMBINE_MODE combineMode, D2D1_MATRIX_3X2_F inputGeometryTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT Outline(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT ComputeArea(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out float area);
+        [PreserveSig]
         new HRESULT ComputeLength(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out float length);
+        [PreserveSig]
         new HRESULT ComputePointAtLength(float length, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_POINT_2F point, out D2D1_POINT_2F unitTangentVector);
+        [PreserveSig]
         new HRESULT Widen(float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
 
         #endregion
 
+        [PreserveSig]
         void GetSourceGeometry(out ID2D1Geometry sourceGeometry);
+        [PreserveSig]
         void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
     }
 
@@ -624,28 +746,46 @@ namespace Direct2D
     {
         #region ID2D1Geometry
         #region ID2D1Resource
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new HRESULT GetBounds(D2D1_MATRIX_3X2_F worldTransform, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new HRESULT GetWidenedBounds(float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new HRESULT StrokeContainsPoint(ref D2D1_POINT_2F point, float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out bool contains);
+        [PreserveSig]
         new HRESULT FillContainsPoint(ref D2D1_POINT_2F point, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out bool contains);
+        [PreserveSig]
         new HRESULT CompareWithGeometry(ID2D1Geometry inputGeometry, D2D1_MATRIX_3X2_F inputGeometryTransform, float flatteningTolerance, out D2D1_GEOMETRY_RELATION relation);
+        [PreserveSig]
         new HRESULT Simplify(D2D1_GEOMETRY_SIMPLIFICATION_OPTION simplificationOption, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT Tessellate(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1TessellationSink tessellationSink);
+        [PreserveSig]
         new HRESULT CombineWithGeometry(ID2D1Geometry inputGeometry, D2D1_COMBINE_MODE combineMode, D2D1_MATRIX_3X2_F inputGeometryTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT Outline(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT ComputeArea(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out float area);
+        [PreserveSig]
         new HRESULT ComputeLength(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out float length);
+        [PreserveSig]
         new HRESULT ComputePointAtLength(float length, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_POINT_2F point, out D2D1_POINT_2F unitTangentVector);
+        [PreserveSig]
         new HRESULT Widen(float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
 
         #endregion
 
+        [PreserveSig]
         HRESULT Open(out ID2D1GeometrySink geometrySink);
+        [PreserveSig]
         HRESULT Stream(ID2D1GeometrySink geometrySink);
+        [PreserveSig]
         HRESULT GetSegmentCount(out int count);
+        [PreserveSig]
         HRESULT GetFigureCount(out int count);
     }
 
@@ -655,12 +795,17 @@ namespace Direct2D
     public interface ID2D1DrawingStateBlock : ID2D1Resource
     {
         #region ID2D1Resource
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         void GetDescription(out D2D1_DRAWING_STATE_DESCRIPTION stateDescription);
+        [PreserveSig]
         void SetDescription(D2D1_DRAWING_STATE_DESCRIPTION stateDescription);
+        [PreserveSig]
         void SetTextRenderingParams(IDWriteRenderingParams textRenderingParams = null);
+        [PreserveSig]
         void GetTextRenderingParams(out IDWriteRenderingParams textRenderingParams);
     }  
 
@@ -672,32 +817,54 @@ namespace Direct2D
         #region <ID2D1RenderTarget>
 
         #region <ID2D1Resource>
-
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr srcData, uint pitch, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateSharedBitmap(ref Guid riid, [In, Out] IntPtr data, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateSolidColorBrush(D2D1_COLOR_F color, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1SolidColorBrush solidColorBrush);
+        [PreserveSig]
         //new HRESULT CreateSolidColorBrush(D2D1_COLOR_F color, IntPtr brushProperties, out ID2D1SolidColorBrush solidColorBrush);
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] gradientStops, uint gradientStopsCount, D2D1_GAMMA colorInterpolationGamma, D2D1_EXTEND_MODE extendMode, out ID2D1GradientStopCollection gradientStopCollection);
+        [PreserveSig]
         new HRESULT CreateLinearGradientBrush(ref D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES linearGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1LinearGradientBrush linearGradientBrush);
+        [PreserveSig]
         new HRESULT CreateRadialGradientBrush(ref D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES radialGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1RadialGradientBrush radialGradientBrush);
+        [PreserveSig]
         new HRESULT CreateCompatibleRenderTarget(ref D2D1_SIZE_F desiredSize, ref D2D1_SIZE_U desiredPixelSize, ref D2D1_PIXEL_FORMAT desiredFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS options, out ID2D1BitmapRenderTarget bitmapRenderTarget);
+        [PreserveSig]
         new HRESULT CreateLayer(ref D2D1_SIZE_F size, out ID2D1Layer layer);
+        [PreserveSig]
         new void CreateMesh(out ID2D1Mesh mesh);
-        new void DrawLine(ref D2D1_POINT_2F point0, ref D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
+        new void DrawLine(D2D1_POINT_2F point0, D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void DrawRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawGeometry(ID2D1Geometry geometry, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillGeometry(ID2D1Geometry geometry, ID2D1Brush brush, ID2D1Brush opacityBrush = null);
+        [PreserveSig]
         new void FillMesh(ID2D1Mesh mesh, ID2D1Brush brush);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, D2D1_OPACITY_MASK_CONTENT content, D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_BITMAP_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle);
@@ -707,37 +874,56 @@ namespace Direct2D
         new void DrawTextLayout(D2D1_POINT_2F origin, IDWriteTextLayout textLayout, ID2D1Brush defaultForegroundBrush, D2D1_DRAW_TEXT_OPTIONS options);
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
+        [PreserveSig]
         new void SetTransform(D2D1_MATRIX_3X2_F transform);
+        [PreserveSig]
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         [PreserveSig]
         new void SetAntialiasMode(D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
-        new D2D1_ANTIALIAS_MODE GetAntialiasMode();
+        new void GetAntialiasMode(out D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
         new void SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
         [PreserveSig]
-        new D2D1_TEXT_ANTIALIAS_MODE GetTextAntialiasMode();
+        new void GetTextAntialiasMode(out D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
+        [PreserveSig]
         new void SetTextRenderingParams(IDWriteRenderingParams textRenderingParams = null);
+        [PreserveSig]
         new void GetTextRenderingParams(out IDWriteRenderingParams textRenderingParams);
+        [PreserveSig]
         new void SetTags(UInt64 tag1, UInt64 tag2);
+        [PreserveSig]
         new void GetTags(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new void PopLayer();
+        [PreserveSig]
         new void Flush(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void SaveDrawingState([In, Out] ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void RestoreDrawingState(ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void PushAxisAlignedClip(D2D1_RECT_F clipRect, D2D1_ANTIALIAS_MODE antialiasMode);
+        [PreserveSig]
         new void PopAxisAlignedClip();
+        [PreserveSig]
         new void Clear(D2D1_COLOR_F clearColor);
         [PreserveSig]
         new void BeginDraw();
         [PreserveSig]
-        new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);       
-        new D2D1_PIXEL_FORMAT GetPixelFormat();
+        new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
+        new void GetPixelFormat(out D2D1_PIXEL_FORMAT format);
+        [PreserveSig]
         new void SetDpi(float dpiX, float dpiY);
-        new void GetDpi(out float dpiX, out float dpiY);       
-        new D2D1_SIZE_F GetSize();       
-        new D2D1_SIZE_U GetPixelSize();
+        [PreserveSig]
+        new void GetDpi(out float dpiX, out float dpiY);        
+        [PreserveSig]
+        new void GetSize(out D2D1_SIZE_F size);
+        [PreserveSig]
+        new void GetPixelSize(out D2D1_SIZE_U size);
         [PreserveSig]
         new uint GetMaximumBitmapSize();
         [PreserveSig]
@@ -782,7 +968,9 @@ namespace Direct2D
 
         #endregion
 
+        [PreserveSig]
         D2D1_WINDOW_STATE CheckWindowState();
+        [PreserveSig]
         HRESULT Resize(ref D2D1_SIZE_U pixelSize);
 
         //[return: MarshalAs(UnmanagedType.SysInt)]
@@ -844,8 +1032,6 @@ namespace Direct2D
         }
     }
 
-
-
     //D2D1_SIZE_U SizeU(UInt32 width = 0, UInt32 height = 0)
     //{
     //    return Size<UInt32>(width, height);
@@ -892,14 +1078,45 @@ namespace Direct2D
     [ComImport]
     [Guid("2cd906a2-12e2-11dc-9fed-001143a055f9")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface ID2D1RectangleGeometry
-    //ID2D1RectangleGeometry  : public ID2D1Geometry
+    public interface ID2D1RectangleGeometry : ID2D1Geometry   
     {
         #region <ID2D1Geometry>
 
-        // A faire
+        #region ID2D1Resource
+        [PreserveSig]
+        new void GetFactory(out ID2D1Factory factory);
+        #endregion
+
+        [PreserveSig]
+        new HRESULT GetBounds(D2D1_MATRIX_3X2_F worldTransform, out D2D1_RECT_F bounds);
+        [PreserveSig]
+        new HRESULT GetWidenedBounds(float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_RECT_F bounds);
+        [PreserveSig]
+        new HRESULT StrokeContainsPoint(ref D2D1_POINT_2F point, float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out bool contains);
+        [PreserveSig]
+        new HRESULT FillContainsPoint(ref D2D1_POINT_2F point, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out bool contains);
+        [PreserveSig]
+        new HRESULT CompareWithGeometry(ID2D1Geometry inputGeometry, D2D1_MATRIX_3X2_F inputGeometryTransform, float flatteningTolerance, out D2D1_GEOMETRY_RELATION relation);
+        [PreserveSig]
+        new HRESULT Simplify(D2D1_GEOMETRY_SIMPLIFICATION_OPTION simplificationOption, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
+        new HRESULT Tessellate(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1TessellationSink tessellationSink);
+        [PreserveSig]
+        new HRESULT CombineWithGeometry(ID2D1Geometry inputGeometry, D2D1_COMBINE_MODE combineMode, D2D1_MATRIX_3X2_F inputGeometryTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
+        new HRESULT Outline(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
+        new HRESULT ComputeArea(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out float area);
+        [PreserveSig]
+        new HRESULT ComputeLength(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out float length);
+        [PreserveSig]
+        new HRESULT ComputePointAtLength(float length, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_POINT_2F point, out D2D1_POINT_2F unitTangentVector);
+        [PreserveSig]
+        new HRESULT Widen(float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
 
         #endregion
+
+        [PreserveSig]
         void GetRect(out D2D1_RECT_F rect);
     }
 
@@ -1199,8 +1416,8 @@ namespace Direct2D
     public interface ID2D1Image : ID2D1Resource
     {
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
-
         #endregion
     }
 
@@ -1212,18 +1429,26 @@ namespace Direct2D
         #region <ID2D1Image>
 
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
 
         #endregion
 
-        D2D1_SIZE_F GetSize();
-        D2D1_SIZE_U GetPixelSize();
-        D2D1_PIXEL_FORMAT GetPixelFormat();
+        [PreserveSig]
+        void GetSize(out D2D1_SIZE_F size);
+        [PreserveSig]
+        void GetPixelSize(out D2D1_SIZE_U size);
+        [PreserveSig]
+        void GetPixelFormat(out D2D1_PIXEL_FORMAT format);
+        [PreserveSig]
         void GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
         void CopyFromBitmap(ref D2D1_POINT_2U destPoint, ID2D1Bitmap bitmap, D2D1_RECT_U srcRect);
+        [PreserveSig]
         void CopyFromRenderTarget(ref D2D1_POINT_2U destPoint, ID2D1RenderTarget renderTarget, D2D1_RECT_U srcRect);
+        [PreserveSig]
         void CopyFromMemory(ref D2D1_RECT_U dstRect, IntPtr srcData, uint pitch);
     }
 
@@ -1300,9 +1525,8 @@ namespace Direct2D
         public float r;
         public float g;
         public float b;
-        public float a;
-    }
-    
+        public float a;      
+    }    
 
     [StructLayout(LayoutKind.Sequential)]
     public struct D2D1_COLOR_F_STRUCT
@@ -1501,6 +1725,7 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ID2D1Resource
     {
+        [PreserveSig]
         void GetFactory(out ID2D1Factory factory);
     }
 
@@ -1511,6 +1736,7 @@ namespace Direct2D
     {
         #region ID2D1Brush
         #region ID2D1Resource
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
         [PreserveSig]
@@ -1523,13 +1749,10 @@ namespace Direct2D
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         #endregion
 
+        [PreserveSig]
         void SetColor(D2D1_COLOR_F color);
-
-        D2D1_COLOR_F_STRUCT GetColor();
-        //void SetColor(D2D1_COLOR_F &color)
-        //{
-        //    SetColor(&color);
-        //}
+        [PreserveSig]
+        void GetColor(out D2D1_COLOR_F_STRUCT color);
     }
 
     [ComImport]
@@ -1538,16 +1761,18 @@ namespace Direct2D
     public interface ID2D1GradientStopCollection : ID2D1Resource
     {
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
         [PreserveSig]
         uint GetGradientStopCount();
+        [PreserveSig]
         void GetGradientStops(out D2D1_GRADIENT_STOP gradientStops, uint gradientStopsCount);
         [PreserveSig]
-        D2D1_GAMMA GetColorInterpolationGamma();
+        void GetColorInterpolationGamma(out D2D1_GAMMA colorInterpolationGamma);
         [PreserveSig]
-        D2D1_EXTEND_MODE GetExtendMode();
+        void GetExtendMode(out D2D1_EXTEND_MODE extendedMode);
     }
 
     [ComImport]
@@ -1559,30 +1784,54 @@ namespace Direct2D
 
         #region <ID2D1Resource>
 
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
+
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr srcData, uint pitch, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateSharedBitmap(ref Guid riid, [In, Out] IntPtr data, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateSolidColorBrush(D2D1_COLOR_F color, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1SolidColorBrush solidColorBrush);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] gradientStops, uint gradientStopsCount, D2D1_GAMMA colorInterpolationGamma, D2D1_EXTEND_MODE extendMode, out ID2D1GradientStopCollection gradientStopCollection);
+        [PreserveSig]
         new HRESULT CreateLinearGradientBrush(ref D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES linearGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1LinearGradientBrush linearGradientBrush);
+        [PreserveSig]
         new HRESULT CreateRadialGradientBrush(ref D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES radialGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1RadialGradientBrush radialGradientBrush);
+        [PreserveSig]
         new HRESULT CreateCompatibleRenderTarget(ref D2D1_SIZE_F desiredSize, ref D2D1_SIZE_U desiredPixelSize, ref D2D1_PIXEL_FORMAT desiredFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS options, out ID2D1BitmapRenderTarget bitmapRenderTarget);
+        [PreserveSig]
         new HRESULT CreateLayer(ref D2D1_SIZE_F size, out ID2D1Layer layer);
+        [PreserveSig]
         new void CreateMesh(out ID2D1Mesh mesh);
-        new void DrawLine(ref D2D1_POINT_2F point0, ref D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
+        new void DrawLine(D2D1_POINT_2F point0, D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void DrawRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawGeometry(ID2D1Geometry geometry, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillGeometry(ID2D1Geometry geometry, ID2D1Brush brush, ID2D1Brush opacityBrush = null);
+        [PreserveSig]
         new void FillMesh(ID2D1Mesh mesh, ID2D1Brush brush);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, D2D1_OPACITY_MASK_CONTENT content, D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_BITMAP_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle);
@@ -1592,43 +1841,63 @@ namespace Direct2D
         new void DrawTextLayout(D2D1_POINT_2F origin, IDWriteTextLayout textLayout, ID2D1Brush defaultForegroundBrush, D2D1_DRAW_TEXT_OPTIONS options);
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
+        [PreserveSig]
         new void SetTransform(D2D1_MATRIX_3X2_F transform);
+        [PreserveSig]
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         [PreserveSig]
         new void SetAntialiasMode(D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
-        new D2D1_ANTIALIAS_MODE GetAntialiasMode();
+        new void GetAntialiasMode(out D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
         new void SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
         [PreserveSig]
-        new D2D1_TEXT_ANTIALIAS_MODE GetTextAntialiasMode();
+        new void GetTextAntialiasMode(out D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
+        [PreserveSig]
         new void SetTextRenderingParams(IDWriteRenderingParams textRenderingParams = null);
+        [PreserveSig]
         new void GetTextRenderingParams(out IDWriteRenderingParams textRenderingParams);
+        [PreserveSig]
         new void SetTags(UInt64 tag1, UInt64 tag2);
+        [PreserveSig]
         new void GetTags(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new void PopLayer();
+        [PreserveSig]
         new void Flush(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void SaveDrawingState([In, Out] ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void RestoreDrawingState(ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void PushAxisAlignedClip(D2D1_RECT_F clipRect, D2D1_ANTIALIAS_MODE antialiasMode);
+        [PreserveSig]
         new void PopAxisAlignedClip();
+        [PreserveSig]
         new void Clear(D2D1_COLOR_F clearColor);
         [PreserveSig]
         new void BeginDraw();
         [PreserveSig]
         new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);
-        new D2D1_PIXEL_FORMAT GetPixelFormat();
+        [PreserveSig]
+        new void GetPixelFormat(out D2D1_PIXEL_FORMAT pixelFormat);
+        [PreserveSig]
         new void SetDpi(float dpiX, float dpiY);
-        new void GetDpi(out float dpiX, out float dpiY);       
-        new D2D1_SIZE_F GetSize();      
-        new D2D1_SIZE_U GetPixelSize();
+        [PreserveSig]
+        new void GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
+        new void GetSize(out D2D1_SIZE_F size);
+        [PreserveSig]
+        new void GetPixelSize(out D2D1_SIZE_U size);
         [PreserveSig]
         new uint GetMaximumBitmapSize();
         [PreserveSig]
         new bool IsSupported(D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties);
         #endregion
 
+        [PreserveSig]
         HRESULT GetBitmap(out ID2D1Bitmap bitmap);
     }
 
@@ -1638,9 +1907,12 @@ namespace Direct2D
     public interface ID2D1Layer : ID2D1Resource
     {
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
-        D2D1_SIZE_F GetSize();
+
+        [PreserveSig]
+        void GetSize(out D2D1_SIZE_F size);
     }
 
     [ComImport]
@@ -1649,8 +1921,10 @@ namespace Direct2D
     public interface ID2D1Mesh : ID2D1Resource
     {
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
+        [PreserveSig]
         //void Open(out ID2D1TessellationSink tessellationSink);
         void Open(out IntPtr tessellationSink);
     }
@@ -1662,30 +1936,54 @@ namespace Direct2D
     {
         #region <ID2D1Resource>
 
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
+
+        [PreserveSig]
         HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr srcData, uint pitch, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         HRESULT CreateSharedBitmap(ref Guid riid, [In, Out] IntPtr data, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush bitmapBrush);
+        [PreserveSig]
         HRESULT CreateSolidColorBrush(D2D1_COLOR_F color, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1SolidColorBrush solidColorBrush);
+        [PreserveSig]
         HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] gradientStops, uint gradientStopsCount, D2D1_GAMMA colorInterpolationGamma, D2D1_EXTEND_MODE extendMode, out ID2D1GradientStopCollection gradientStopCollection);
+        [PreserveSig]
         HRESULT CreateLinearGradientBrush(ref D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES linearGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1LinearGradientBrush linearGradientBrush);
+        [PreserveSig]
         HRESULT CreateRadialGradientBrush(ref D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES radialGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1RadialGradientBrush radialGradientBrush);
+        [PreserveSig]
         HRESULT CreateCompatibleRenderTarget(ref D2D1_SIZE_F desiredSize, ref D2D1_SIZE_U desiredPixelSize, ref D2D1_PIXEL_FORMAT desiredFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS options, out ID2D1BitmapRenderTarget bitmapRenderTarget);
+        [PreserveSig]
         HRESULT CreateLayer(ref D2D1_SIZE_F size, out ID2D1Layer layer);
+        [PreserveSig]
         void CreateMesh(out ID2D1Mesh mesh);
-        void DrawLine(ref D2D1_POINT_2F point0, ref D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
+        void DrawLine(D2D1_POINT_2F point0, D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         void DrawRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         void FillRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush);
+        [PreserveSig]
         void DrawRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         void FillRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush);
+        [PreserveSig]
         void DrawEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         void FillEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush);
+        [PreserveSig]
         void DrawGeometry(ID2D1Geometry geometry, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         void FillGeometry(ID2D1Geometry geometry, ID2D1Brush brush, ID2D1Brush opacityBrush = null);
+        [PreserveSig]
         void FillMesh(ID2D1Mesh mesh, ID2D1Brush brush);
+        [PreserveSig]
         void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, D2D1_OPACITY_MASK_CONTENT content, D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         [PreserveSig]
         void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_BITMAP_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle);
@@ -1695,37 +1993,56 @@ namespace Direct2D
         void DrawTextLayout(D2D1_POINT_2F origin, IDWriteTextLayout textLayout, ID2D1Brush defaultForegroundBrush, D2D1_DRAW_TEXT_OPTIONS options);
         [PreserveSig]
         void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
+        [PreserveSig]
         void SetTransform(D2D1_MATRIX_3X2_F transform);
+        [PreserveSig]
         void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         [PreserveSig]
         void SetAntialiasMode(D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
-        D2D1_ANTIALIAS_MODE GetAntialiasMode();
+        void GetAntialiasMode(out D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
         void SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
         [PreserveSig]
-        D2D1_TEXT_ANTIALIAS_MODE GetTextAntialiasMode();
+        void GetTextAntialiasMode(out D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
+        [PreserveSig]
         void SetTextRenderingParams(IDWriteRenderingParams textRenderingParams = null);
+        [PreserveSig]
         void GetTextRenderingParams(out IDWriteRenderingParams textRenderingParams);
+        [PreserveSig]
         void SetTags(UInt64 tag1, UInt64 tag2);
+        [PreserveSig]
         void GetTags(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         void PushLayer(ref D2D1_LAYER_PARAMETERS layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         void PopLayer();
+        [PreserveSig]
         void Flush(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         void SaveDrawingState([In, Out] ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         void RestoreDrawingState(ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         void PushAxisAlignedClip(D2D1_RECT_F clipRect, D2D1_ANTIALIAS_MODE antialiasMode);
+        [PreserveSig]
         void PopAxisAlignedClip();
+        [PreserveSig]
         void Clear(D2D1_COLOR_F clearColor);
         [PreserveSig]
         void BeginDraw();
         [PreserveSig]
         HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);
-        D2D1_PIXEL_FORMAT GetPixelFormat();
+        [PreserveSig]
+        void GetPixelFormat(out D2D1_PIXEL_FORMAT pixelFormat);
+        [PreserveSig]
         void SetDpi(float dpiX, float dpiY);
-        void GetDpi(out float dpiX, out float dpiY);       
-        D2D1_SIZE_F GetSize();        
-        D2D1_SIZE_U GetPixelSize();
+        [PreserveSig]
+        void GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
+        void GetSize(out D2D1_SIZE_F size);
+        [PreserveSig]
+        void GetPixelSize(out D2D1_SIZE_U size);
         [PreserveSig]
         uint GetMaximumBitmapSize();
         [PreserveSig]
@@ -1775,19 +2092,33 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ID2D1Factory
     {
+        [PreserveSig]
         HRESULT ReloadSystemMetrics();
+        [PreserveSig]
         HRESULT GetDesktopDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
         HRESULT CreateRectangleGeometry(ref D2D1_RECT_F rectangle, out ID2D1RectangleGeometry rectangleGeometry);
+        [PreserveSig]
         HRESULT CreateRoundedRectangleGeometry(ref D2D1_ROUNDED_RECT roundedRectangle, out ID2D1RoundedRectangleGeometry roundedRectangleGeometry);
+        [PreserveSig]
         HRESULT CreateEllipseGeometry(ref D2D1_ELLIPSE ellipse, out ID2D1EllipseGeometry ellipseGeometry);
+        [PreserveSig]
         HRESULT CreateGeometryGroup(D2D1_FILL_MODE fillMode, ID2D1Geometry geometries, uint geometriesCount, out ID2D1GeometryGroup geometryGroup);
+        [PreserveSig]
         HRESULT CreateTransformedGeometry(ID2D1Geometry sourceGeometry, D2D1_MATRIX_3X2_F transform, out ID2D1TransformedGeometry transformedGeometry);
+        [PreserveSig]
         HRESULT CreatePathGeometry(out ID2D1PathGeometry pathGeometry);
-        ID2D1StrokeStyle CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray)] float[] dashes = null, uint dashesCount = 0);
-        HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
+        ID2D1StrokeStyle CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount = 0);
+        [PreserveSig]
+        HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         HRESULT CreateWicBitmapRenderTarget(IWICBitmap target, D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, out ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         HRESULT CreateHwndRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref D2D1_HWND_RENDER_TARGET_PROPERTIES hwndRenderTargetProperties, out ID2D1HwndRenderTarget hwndRenderTarget);
+        [PreserveSig]
         HRESULT CreateDxgiSurfaceRenderTarget(IntPtr dxgiSurface, ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         HRESULT CreateDCRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1DCRenderTarget dcRenderTarget);
     }
 
@@ -1799,129 +2130,65 @@ namespace Direct2D
     {
         #region <ID2D1Factory>
         new HRESULT ReloadSystemMetrics();
+        [PreserveSig]
         new HRESULT GetDesktopDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
         new HRESULT CreateRectangleGeometry(ref D2D1_RECT_F rectangle, out ID2D1RectangleGeometry rectangleGeometry);
+        [PreserveSig]
         new HRESULT CreateRoundedRectangleGeometry(ref D2D1_ROUNDED_RECT roundedRectangle, out ID2D1RoundedRectangleGeometry roundedRectangleGeometry);
+        [PreserveSig]
         new HRESULT CreateEllipseGeometry(ref D2D1_ELLIPSE ellipse, out ID2D1EllipseGeometry ellipseGeometry);
+        [PreserveSig]
         new HRESULT CreateGeometryGroup(D2D1_FILL_MODE fillMode, ID2D1Geometry geometries, uint geometriesCount, out ID2D1GeometryGroup geometryGroup);
+        [PreserveSig]
         new HRESULT CreateTransformedGeometry(ID2D1Geometry sourceGeometry, D2D1_MATRIX_3X2_F transform, out ID2D1TransformedGeometry transformedGeometry);
+        [PreserveSig]
         new HRESULT CreatePathGeometry(out ID2D1PathGeometry pathGeometry);
-        new ID2D1StrokeStyle CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray)] float[] dashes = null, uint dashesCount = 0);
-        new HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
+        new ID2D1StrokeStyle CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount = 0);
+        [PreserveSig]
+        new HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new HRESULT CreateWicBitmapRenderTarget(IWICBitmap target, D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, out ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         new HRESULT CreateHwndRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref D2D1_HWND_RENDER_TARGET_PROPERTIES hwndRenderTargetProperties, out ID2D1HwndRenderTarget hwndRenderTarget);
+        [PreserveSig]
         new HRESULT CreateDxgiSurfaceRenderTarget(IntPtr dxgiSurface, ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         new HRESULT CreateDCRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1DCRenderTarget dcRenderTarget);
         #endregion
 
         HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device d2dDevice);
-        HRESULT CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES1 strokeStyleProperties, float dashes, uint dashesCount, out ID2D1StrokeStyle1 strokeStyle);
+        [PreserveSig]
+        HRESULT CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES1 strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount, out ID2D1StrokeStyle1 strokeStyle);
+        [PreserveSig]
         HRESULT CreatePathGeometry(out ID2D1PathGeometry1 pathGeometry);
-        HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION1 drawingStateDescription, ref IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock1 drawingStateBlock);
+        [PreserveSig]
+        HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION1 drawingStateDescription, ref IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock1 drawingStateBlock);
+        [PreserveSig]
         HRESULT CreateGdiMetafile(System.Runtime.InteropServices.ComTypes.IStream metafileStream, out ID2D1GdiMetafile metafile);
+        [PreserveSig]
+        HRESULT RegisterEffectFromStream([MarshalAs(UnmanagedType.LPStruct)] Guid classId, System.Runtime.InteropServices.ComTypes.IStream propertyXml, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D2D1_PROPERTY_BINDING[] bindings, int bindingsCount,PD2D1_EFFECT_FACTORY effectFactory);
+        [PreserveSig]
+        HRESULT RegisterEffectFromString([MarshalAs(UnmanagedType.LPStruct)] Guid classId, [MarshalAs(UnmanagedType.LPWStr)] string propertyXml, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D2D1_PROPERTY_BINDING[] bindings, int bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+        [PreserveSig]
+        HRESULT UnregisterEffect([MarshalAs(UnmanagedType.LPStruct)] Guid classId);
+        [PreserveSig]
+        HRESULT GetRegisteredEffects([Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] Guid[] effects, int effectsCount, IntPtr effectsReturned,  IntPtr effectsRegistered);
+        [PreserveSig]
+        HRESULT GetEffectProperties([MarshalAs(UnmanagedType.LPStruct)] Guid effectId, out ID2D1Properties properties);
     }
-
-    //    /// <summary>
-    //    /// This globally registers the given effect. The effect can later be instantiated
-    //    /// by using the registered class id. The effect registration is reference counted.
-    //    /// </summary>
-    //    STDMETHOD(RegisterEffectFromStream)(
-    //        _In_ REFCLSID classId,
-    //        _In_ IStream* propertyXml,
-    //        _In_reads_opt_(bindingsCount) CONST D2D1_PROPERTY_BINDING * bindings,
-    //        UINT32 bindingsCount,
-    //        _In_ CONST PD2D1_EFFECT_FACTORY effectFactory
-    //        ) PURE;
-
-    //    /// <summary>
-    //    /// This globally registers the given effect. The effect can later be instantiated
-    //    /// by using the registered class id. The effect registration is reference counted.
-    //    /// </summary>
-    //    STDMETHOD(RegisterEffectFromString)(
-    //        _In_ REFCLSID classId,
-    //        _In_ PCWSTR propertyXml,
-    //        _In_reads_opt_(bindingsCount) CONST D2D1_PROPERTY_BINDING * bindings,
-    //        UINT32 bindingsCount,
-    //        _In_ CONST PD2D1_EFFECT_FACTORY effectFactory
-    //        ) PURE;
-
-    //    /// <summary>
-    //    /// This unregisters the given effect by its class id, you need to call
-    //    /// UnregisterEffect for every call to ID2D1Factory1::RegisterEffectFromStream and
-    //    /// ID2D1Factory1::RegisterEffectFromString to completely unregister it.
-    //    /// </summary>
-    //    STDMETHOD(UnregisterEffect)(
-    //        _In_ REFCLSID classId
-    //        ) PURE;
-
-    //    /// <summary>
-    //    /// This returns all of the registered effects in the process, including any
-    //    /// built-in effects.
-    //    /// </summary>
-    //    /// <param name="effectsReturned">The number of effects returned into the passed in
-    //    /// effects array.</param>
-    //    /// <param name="effectsRegistered">The number of effects currently registered in
-    //    /// the system.</param>
-    //    STDMETHOD(GetRegisteredEffects)(
-    //        _Out_writes_to_opt_(effectsCount, * effectsReturned) CLSID * effects,
-    //         UINT32 effectsCount,
-    //        _Out_opt_ UINT32 * effectsReturned,
-    //        _Out_opt_ UINT32* effectsRegistered
-    //        ) CONST PURE;
-
-    //    /// <summary>
-    //    /// This retrieves the effect properties for the given effect, all of the effect
-    //    /// properties will be set to a default value since an effect is not instantiated to
-    //    /// implement the returned property interface.
-    //    /// </summary>
-    //    STDMETHOD(GetEffectProperties)(
-    //        _In_ REFCLSID effectId,
-    //        _COM_Outptr_ ID2D1Properties** properties
-    //        ) CONST PURE;
-
-    //    COM_DECLSPEC_NOTHROW
-    //    HRESULT
-    //    CreateStrokeStyle(
-    //        CONST D2D1_STROKE_STYLE_PROPERTIES1 &strokeStyleProperties,
-    //        _In_reads_opt_(dashesCount) CONST FLOAT* dashes,
-    //        UINT32 dashesCount,
-    //        _COM_Outptr_ ID2D1StrokeStyle1 **strokeStyle
-    //        )
-    //    {
-    //        return CreateStrokeStyle(&strokeStyleProperties, dashes, dashesCount, strokeStyle);
-    //    }
-
-    //    COM_DECLSPEC_NOTHROW
-    //    HRESULT
-    //    CreateDrawingStateBlock(
-    //        CONST D2D1_DRAWING_STATE_DESCRIPTION1 &drawingStateDescription,
-    //        _COM_Outptr_ ID2D1DrawingStateBlock1 **drawingStateBlock
-    //        )
-    //    {
-    //        return CreateDrawingStateBlock(&drawingStateDescription, NULL, drawingStateBlock);
-    //    }
-
-    //    COM_DECLSPEC_NOTHROW
-    //    HRESULT
-    //    CreateDrawingStateBlock(
-    //        _COM_Outptr_ ID2D1DrawingStateBlock1 **drawingStateBlock
-    //        )
-    //    {
-    //        return CreateDrawingStateBlock(NULL, NULL, drawingStateBlock);
-    //    }
-    //}; // interface ID2D1Factory1
-
 
     [StructLayout(LayoutKind.Sequential)]
     public struct D2D1_DRAWING_STATE_DESCRIPTION1
     {
-        D2D1_ANTIALIAS_MODE antialiasMode;
-        D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode;
-        UInt64 tag1;
-        UInt64 tag2;
-        D2D1_MATRIX_3X2_F transform;
-        D2D1_PRIMITIVE_BLEND primitiveBlend;
-        D2D1_UNIT_MODE unitMode;
+        public D2D1_ANTIALIAS_MODE antialiasMode;
+        public D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode;
+        public UInt64 tag1;
+        public UInt64 tag2;
+        public D2D1_MATRIX_3X2_F transform;
+        public D2D1_PRIMITIVE_BLEND primitiveBlend;
+        public D2D1_UNIT_MODE unitMode;
     }
 
     [ComImport]
@@ -1931,6 +2198,7 @@ namespace Direct2D
     {
         #region ID2D1DrawingStateBlock
         #region ID2D1Resource
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
@@ -1940,7 +2208,9 @@ namespace Direct2D
         new void GetTextRenderingParams(out IDWriteRenderingParams textRenderingParams);
         #endregion
 
-        void GetDescription(out D2D1_DRAWING_STATE_DESCRIPTION1 stateDescription);     
+        [PreserveSig]
+        void GetDescription(out D2D1_DRAWING_STATE_DESCRIPTION1 stateDescription);
+        [PreserveSig]
         void SetDescription(D2D1_DRAWING_STATE_DESCRIPTION1 stateDescription);
     }
 
@@ -1954,42 +2224,43 @@ namespace Direct2D
         new void GetFactory(out ID2D1Factory factory);
         #endregion
         [PreserveSig]
-        new D2D1_CAP_STYLE GetStartCap();
+        new void GetStartCap(out D2D1_CAP_STYLE capStyle);
         [PreserveSig]
-        new D2D1_CAP_STYLE GetEndCap();
+        new void GetEndCap(out D2D1_CAP_STYLE capStyle);
         [PreserveSig]
-        new D2D1_CAP_STYLE GetDashCap();
+        new void GetDashCap(out D2D1_CAP_STYLE capStyle);
         [PreserveSig]
         new float GetMiterLimit();
         [PreserveSig]
-        new D2D1_LINE_JOIN GetLineJoin();
+        new void GetLineJoin(out D2D1_LINE_JOIN lineJoin);
         [PreserveSig]
         new float GetDashOffset();
         [PreserveSig]
-        new D2D1_DASH_STYLE GetDashStyle();
+        new void GetDashStyle(out D2D1_DASH_STYLE dashStyle);
         [PreserveSig]
         new uint GetDashesCount();
+        [PreserveSig]
         new void GetDashes(out float dashes, uint dashesCount);
         #endregion
 
         [PreserveSig]
-        D2D1_STROKE_TRANSFORM_TYPE GetStrokeTransformType();
+        void GetStrokeTransformType(out D2D1_STROKE_TRANSFORM_TYPE strokeTransformType);
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct D2D1_STROKE_STYLE_PROPERTIES1
     {
-        D2D1_CAP_STYLE startCap;
-        D2D1_CAP_STYLE endCap;
-        D2D1_CAP_STYLE dashCap;
-        D2D1_LINE_JOIN lineJoin;
-        float miterLimit;
-        D2D1_DASH_STYLE dashStyle;
-        float dashOffset;
+        public D2D1_CAP_STYLE startCap;
+        public D2D1_CAP_STYLE endCap;
+        public D2D1_CAP_STYLE dashCap;
+        public D2D1_LINE_JOIN lineJoin;
+        public float miterLimit;
+        public D2D1_DASH_STYLE dashStyle;
+        public float dashOffset;
         /// <summary>
         /// How the nib of the stroke is influenced by the context properties.
         /// </summary>
-        D2D1_STROKE_TRANSFORM_TYPE transformType;
+        public D2D1_STROKE_TRANSFORM_TYPE transformType;
     }
 
     public enum D2D1_STROKE_TRANSFORM_TYPE
@@ -2018,30 +2289,53 @@ namespace Direct2D
     public interface ID2D1DCRenderTarget : ID2D1RenderTarget
     {
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
-        #endregion 
+        #endregion
 
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr srcData, uint pitch, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateSharedBitmap(ref Guid riid, [In, Out] IntPtr data, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateSolidColorBrush(D2D1_COLOR_F color, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1SolidColorBrush solidColorBrush);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] gradientStops, uint gradientStopsCount, D2D1_GAMMA colorInterpolationGamma, D2D1_EXTEND_MODE extendMode, out ID2D1GradientStopCollection gradientStopCollection);
+        [PreserveSig]
         new HRESULT CreateLinearGradientBrush(ref D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES linearGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1LinearGradientBrush linearGradientBrush);
+        [PreserveSig]
         new HRESULT CreateRadialGradientBrush(ref D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES radialGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1RadialGradientBrush radialGradientBrush);
+        [PreserveSig]
         new HRESULT CreateCompatibleRenderTarget(ref D2D1_SIZE_F desiredSize, ref D2D1_SIZE_U desiredPixelSize, ref D2D1_PIXEL_FORMAT desiredFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS options, out ID2D1BitmapRenderTarget bitmapRenderTarget);
+        [PreserveSig]
         new HRESULT CreateLayer(ref D2D1_SIZE_F size, out ID2D1Layer layer);
+        [PreserveSig]
         new void CreateMesh(out ID2D1Mesh mesh);
-        new void DrawLine(ref D2D1_POINT_2F point0, ref D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
+        new void DrawLine(D2D1_POINT_2F point0, D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void DrawRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawGeometry(ID2D1Geometry geometry, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillGeometry(ID2D1Geometry geometry, ID2D1Brush brush, ID2D1Brush opacityBrush = null);
+        [PreserveSig]
         new void FillMesh(ID2D1Mesh mesh, ID2D1Brush brush);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, D2D1_OPACITY_MASK_CONTENT content, D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_BITMAP_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle);
@@ -2051,37 +2345,56 @@ namespace Direct2D
         new void DrawTextLayout(D2D1_POINT_2F origin, IDWriteTextLayout textLayout, ID2D1Brush defaultForegroundBrush, D2D1_DRAW_TEXT_OPTIONS options);
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
+        [PreserveSig]
         new void SetTransform(D2D1_MATRIX_3X2_F transform);
+        [PreserveSig]
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         [PreserveSig]
         new void SetAntialiasMode(D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
-        new D2D1_ANTIALIAS_MODE GetAntialiasMode();
+        new void GetAntialiasMode(out D2D1_ANTIALIAS_MODE antialiasMode );
         [PreserveSig]
         new void SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
+        [PreserveSig]        
+        new void GetTextAntialiasMode(out D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
         [PreserveSig]
-        new D2D1_TEXT_ANTIALIAS_MODE GetTextAntialiasMode();
         new void SetTextRenderingParams(IDWriteRenderingParams textRenderingParams = null/* TODO Change to default(_) if this is not a reference type */);
+        [PreserveSig]
         new void GetTextRenderingParams(out IDWriteRenderingParams textRenderingParams);
+        [PreserveSig]
         new void SetTags(UInt64 tag1, UInt64 tag2);
+        [PreserveSig]
         new void GetTags(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new void PopLayer();
+        [PreserveSig]
         new void Flush(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void SaveDrawingState(ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void RestoreDrawingState(ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void PushAxisAlignedClip(D2D1_RECT_F clipRect, D2D1_ANTIALIAS_MODE antialiasMode);
+        [PreserveSig]
         new void PopAxisAlignedClip();
+        [PreserveSig]
         new void Clear(D2D1_COLOR_F clearColor);
         [PreserveSig]
         new void BeginDraw();
         [PreserveSig]
         new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);
-        new D2D1_PIXEL_FORMAT GetPixelFormat();
+        [PreserveSig]
+        new void GetPixelFormat(out D2D1_PIXEL_FORMAT pixelFormat);
+        [PreserveSig]
         new void SetDpi(float dpiX, float dpiY);
-        new void GetDpi(out float dpiX, out float dpiY);       
-        new D2D1_SIZE_F GetSize();      
-        new D2D1_SIZE_U GetPixelSize();
+        [PreserveSig]
+        new void GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
+        new void GetSize(out D2D1_SIZE_F size);
+        [PreserveSig]
+        new void GetPixelSize(out D2D1_SIZE_U size);
         [PreserveSig]
         new uint GetMaximumBitmapSize();
         [PreserveSig]
@@ -2135,6 +2448,7 @@ namespace Direct2D
         #region <ID2D1Properties>
         [PreserveSig]
         new uint GetPropertyCount();
+        [PreserveSig]
         new HRESULT GetPropertyName(uint index, out string name, uint nameCount);
         [PreserveSig]
         new uint GetPropertyNameLength(uint index);
@@ -2142,20 +2456,29 @@ namespace Direct2D
         new D2D1_PROPERTY_TYPE GetType(uint index);
         [PreserveSig]
         new uint GetPropertyIndex(string name);
+        [PreserveSig]
         new HRESULT SetValueByName(string name, D2D1_PROPERTY_TYPE type, IntPtr data, uint dataSize);
+        [PreserveSig]
         new HRESULT SetValue(uint index, D2D1_PROPERTY_TYPE type, IntPtr data, uint dataSize);
+        [PreserveSig]
         new HRESULT GetValueByName(string name, D2D1_PROPERTY_TYPE type, out IntPtr data, uint dataSize);
+        [PreserveSig]
         new HRESULT GetValue(uint index, D2D1_PROPERTY_TYPE type, out IntPtr data, uint dataSize);
         [PreserveSig]
         new uint GetValueSize(uint index);
+        [PreserveSig]
         new HRESULT GetSubProperties(uint index, out ID2D1Properties subProperties);
         #endregion
 
+        [PreserveSig]
         void SetInput(uint index, ID2D1Image input, bool invalidate = true);
+        [PreserveSig]
         HRESULT SetInputCount(uint inputCount);
+        [PreserveSig]
         void GetInput(uint index, out ID2D1Image input);
         [PreserveSig]
         uint GetInputCount();
+        [PreserveSig]
         void GetOutput(out ID2D1Image outputImage);      
     }
 
@@ -2166,6 +2489,7 @@ namespace Direct2D
     {
         [PreserveSig]
         uint GetPropertyCount();
+        [PreserveSig]
         HRESULT GetPropertyName(uint index, out string name, uint nameCount);
         [PreserveSig]
         uint GetPropertyNameLength(uint index);
@@ -2173,12 +2497,17 @@ namespace Direct2D
         D2D1_PROPERTY_TYPE GetType(uint index);
         [PreserveSig]
         uint GetPropertyIndex(string name);
+        [PreserveSig]
         HRESULT SetValueByName(string name, D2D1_PROPERTY_TYPE type, IntPtr data, uint dataSize);
+        [PreserveSig]
         HRESULT SetValue(uint index, D2D1_PROPERTY_TYPE type, IntPtr data, uint dataSize);
+        [PreserveSig]
         HRESULT GetValueByName(string name, D2D1_PROPERTY_TYPE type, out IntPtr data, uint dataSize);
+        [PreserveSig]
         HRESULT GetValue(uint index, D2D1_PROPERTY_TYPE type, out IntPtr data, uint dataSize);
         [PreserveSig]
         uint GetValueSize(uint index);
+        [PreserveSig]
         HRESULT GetSubProperties(uint index, out ID2D1Properties subProperties);
     }
 
@@ -2246,29 +2575,50 @@ namespace Direct2D
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr srcData, uint pitch, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateSharedBitmap(ref Guid riid, [In, Out] IntPtr data, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateSolidColorBrush(D2D1_COLOR_F color, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1SolidColorBrush solidColorBrush);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] gradientStops,
             uint gradientStopsCount, D2D1_GAMMA colorInterpolationGamma, D2D1_EXTEND_MODE extendMode, out ID2D1GradientStopCollection gradientStopCollection);
         //new HRESULT CreateLinearGradientBrush(ref D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES linearGradientBrushProperties, D2D1_BRUSH_PROPERTIES brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1LinearGradientBrush linearGradientBrush);
+        [PreserveSig]
         new HRESULT CreateLinearGradientBrush(ref D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES linearGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1LinearGradientBrush linearGradientBrush);
+        [PreserveSig]
         new HRESULT CreateRadialGradientBrush(ref D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES radialGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1RadialGradientBrush radialGradientBrush);
+        [PreserveSig]
         new HRESULT CreateCompatibleRenderTarget(ref D2D1_SIZE_F desiredSize, ref D2D1_SIZE_U desiredPixelSize, ref D2D1_PIXEL_FORMAT desiredFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS options, out ID2D1BitmapRenderTarget bitmapRenderTarget);
+        [PreserveSig]
         new HRESULT CreateLayer(ref D2D1_SIZE_F size, out ID2D1Layer layer);
         new void CreateMesh(out ID2D1Mesh mesh);
-        new void DrawLine(ref D2D1_POINT_2F point0, ref D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
+        new void DrawLine(D2D1_POINT_2F point0, D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void DrawRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawGeometry(ID2D1Geometry geometry, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillGeometry(ID2D1Geometry geometry, ID2D1Brush brush, ID2D1Brush opacityBrush = null);
+        [PreserveSig]
         new void FillMesh(ID2D1Mesh mesh, ID2D1Brush brush);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, D2D1_OPACITY_MASK_CONTENT content, D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_BITMAP_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle);
@@ -2278,75 +2628,113 @@ namespace Direct2D
         new void DrawTextLayout(D2D1_POINT_2F origin, IDWriteTextLayout textLayout, ID2D1Brush defaultForegroundBrush, D2D1_DRAW_TEXT_OPTIONS options);
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
+        [PreserveSig]
         new void SetTransform(D2D1_MATRIX_3X2_F transform);
+        [PreserveSig]
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         [PreserveSig]
         new void SetAntialiasMode(D2D1_ANTIALIAS_MODE antialiasMode);
-        [PreserveSig]
-        new D2D1_ANTIALIAS_MODE GetAntialiasMode();
+        [PreserveSig]       
+        new void GetAntialiasMode(out D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
         new void SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
         [PreserveSig]
-        new D2D1_TEXT_ANTIALIAS_MODE GetTextAntialiasMode();
+        new void GetTextAntialiasMode(out D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
+        [PreserveSig]
         new void SetTextRenderingParams(IDWriteRenderingParams textRenderingParams = null);
+        [PreserveSig]
         new void GetTextRenderingParams(out IDWriteRenderingParams textRenderingParams);
+        [PreserveSig]
         new void SetTags(UInt64 tag1, UInt64 tag2);
+        [PreserveSig]
         new void GetTags(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS layerParameters, ID2D1Layer layer = null);
+        [PreserveSig]
         new void PopLayer();
+        [PreserveSig]
         new void Flush(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void SaveDrawingState([In, Out] ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void RestoreDrawingState(ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void PushAxisAlignedClip(D2D1_RECT_F clipRect, D2D1_ANTIALIAS_MODE antialiasMode);
+        [PreserveSig]
         new void PopAxisAlignedClip();
+        [PreserveSig] 
         new void Clear(D2D1_COLOR_F clearColor);
         [PreserveSig]
         new void BeginDraw();
         [PreserveSig]
         new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);
-        new D2D1_PIXEL_FORMAT GetPixelFormat();
+        [PreserveSig]
+        new void GetPixelFormat(out D2D1_PIXEL_FORMAT pixelFormat);
+        [PreserveSig]
         new void SetDpi(float dpiX, float dpiY);
-        new void GetDpi(out float dpiX, out float dpiY);        
-        new D2D1_SIZE_F GetSize();       
-        new D2D1_SIZE_U GetPixelSize();
+        [PreserveSig]
+        new void GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig] 
+        new void GetSize(out D2D1_SIZE_F size);
+        [PreserveSig]
+        new void GetPixelSize(out D2D1_SIZE_U size);
         [PreserveSig]
         new uint GetMaximumBitmapSize();
         [PreserveSig]
         new bool IsSupported(D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties);
         #endregion
-
+        [PreserveSig]
         HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr sourceData, uint pitch, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         HRESULT CreateColorContext(D2D1_COLOR_SPACE space, IntPtr profile, uint profileSize, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         HRESULT CreateColorContextFromFilename(string filename, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         HRESULT CreateColorContextFromWicColorContext(IWICColorContext wicColorContext, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         HRESULT CreateBitmapFromDxgiSurface(IDXGISurface surface, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         HRESULT CreateEffect(ref Guid effectId, out ID2D1Effect effect);
+        [PreserveSig]
         HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] straightAlphaGradientStops, uint straightAlphaGradientStopsCount, D2D1_COLOR_SPACE preInterpolationSpace,
             D2D1_COLOR_SPACE postInterpolationSpace, D2D1_BUFFER_PRECISION bufferPrecision, D2D1_EXTEND_MODE extendMode, D2D1_COLOR_INTERPOLATION_MODE colorInterpolationMode,
             out ID2D1GradientStopCollection1 gradientStopCollection1);
+        [PreserveSig]
         HRESULT CreateImageBrush(ID2D1Image image, ref D2D1_IMAGE_BRUSH_PROPERTIES imageBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1ImageBrush imageBrush);
+        [PreserveSig]    
         HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES1 bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush1 bitmapBrush);
+        [PreserveSig]
         HRESULT CreateCommandList(out ID2D1CommandList commandList);
         [PreserveSig]
         bool IsDxgiFormatSupported(DXGI_FORMAT format);
         [PreserveSig]
         bool IsBufferPrecisionSupported(D2D1_BUFFER_PRECISION bufferPrecision);
+        [PreserveSig]
         HRESULT GetImageLocalBounds(ID2D1Image image, out D2D1_RECT_F localBounds);
+        [PreserveSig]
         HRESULT GetImageWorldBounds(ID2D1Image image, out D2D1_RECT_F worldBounds);
+        [PreserveSig]
         HRESULT GetGlyphRunWorldBounds(ref D2D1_POINT_2F baselineOrigin, DWRITE_GLYPH_RUN glyphRun, DWRITE_MEASURING_MODE measuringMode, out D2D1_RECT_F bounds);
+        [PreserveSig]
         void GetDevice(out ID2D1Device device);
         [PreserveSig]
         void SetTarget(ID2D1Image image);
+        [PreserveSig]
         void GetTarget(out ID2D1Image image);
+        [PreserveSig]
         void SetRenderingControls(D2D1_RENDERING_CONTROLS renderingControls);
+        [PreserveSig]
         void GetRenderingControls(out D2D1_RENDERING_CONTROLS renderingControls);
+        [PreserveSig]
         void SetPrimitiveBlend(D2D1_PRIMITIVE_BLEND primitiveBlend);
         [PreserveSig]
-        D2D1_PRIMITIVE_BLEND GetPrimitiveBlend();
+        void GetPrimitiveBlend(out D2D1_PRIMITIVE_BLEND primitiveBlend);
+        [PreserveSig]
         void SetUnitMode(D2D1_UNIT_MODE unitMode);
         [PreserveSig]
-        D2D1_UNIT_MODE GetUnitMode();
+        void GetUnitMode(out D2D1_UNIT_MODE unitMode);
         [PreserveSig]
         void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, IntPtr glyphRunDescription, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
         [PreserveSig]
@@ -2355,14 +2743,19 @@ namespace Direct2D
         void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_POINT_2F targetOffset);
         [PreserveSig]
         void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle, D2D1_MATRIX_4X4_F perspectiveTransform = null);
+        [PreserveSig]
         void PushLayer(ref D2D1_LAYER_PARAMETERS1 layerParameters, ID2D1Layer layer);
         HRESULT InvalidateEffectInputRectangle(ID2D1Effect effect, uint input, D2D1_RECT_F inputRectangle);
+        [PreserveSig]
         HRESULT GetEffectInvalidRectangleCount(ID2D1Effect effect, out uint rectangleCount);
         //HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, out D2D1_RECT_F* rectangles, uint rectanglesCount);
+        [PreserveSig]
         HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, out IntPtr rectangles, uint rectanglesCount);
+        [PreserveSig]
         HRESULT GetEffectRequiredInputRectangles(ID2D1Effect renderEffect, D2D1_RECT_F renderImageRectangle, D2D1_EFFECT_INPUT_DESCRIPTION inputDescriptions,
             //out D2D1_RECT_F* requiredInputRects, uint inputCount);
             out IntPtr requiredInputRects, uint inputCount);
+        [PreserveSig]
         void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, ref D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
     }
 
@@ -2379,27 +2772,48 @@ namespace Direct2D
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr srcData, uint pitch, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateSharedBitmap(ref Guid riid, [In, Out] IntPtr data, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateSolidColorBrush(D2D1_COLOR_F color, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1SolidColorBrush solidColorBrush);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] gradientStops, uint gradientStopsCount, D2D1_GAMMA colorInterpolationGamma, D2D1_EXTEND_MODE extendMode, out ID2D1GradientStopCollection gradientStopCollection);
+        [PreserveSig]
         new HRESULT CreateLinearGradientBrush(ref D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES linearGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1LinearGradientBrush linearGradientBrush);
+        [PreserveSig]
         new HRESULT CreateRadialGradientBrush(ref D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES radialGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1RadialGradientBrush radialGradientBrush);
+        [PreserveSig]
         new HRESULT CreateCompatibleRenderTarget(ref D2D1_SIZE_F desiredSize, ref D2D1_SIZE_U desiredPixelSize, ref D2D1_PIXEL_FORMAT desiredFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS options, out ID2D1BitmapRenderTarget bitmapRenderTarget);
+        [PreserveSig]
         new HRESULT CreateLayer(ref D2D1_SIZE_F size, out ID2D1Layer layer);
+        [PreserveSig]
         new void CreateMesh(out ID2D1Mesh mesh);
-        new void DrawLine(ref D2D1_POINT_2F point0, ref D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
+        new void DrawLine(D2D1_POINT_2F point0, D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void DrawRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
         new void FillEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawGeometry(ID2D1Geometry geometry, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillGeometry(ID2D1Geometry geometry, ID2D1Brush brush, ID2D1Brush opacityBrush = null);
+        [PreserveSig]
         new void FillMesh(ID2D1Mesh mesh, ID2D1Brush brush);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, D2D1_OPACITY_MASK_CONTENT content, D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_BITMAP_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle);
@@ -2409,74 +2823,114 @@ namespace Direct2D
         new void DrawTextLayout(D2D1_POINT_2F origin, IDWriteTextLayout textLayout, ID2D1Brush defaultForegroundBrush, D2D1_DRAW_TEXT_OPTIONS options);
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
+        [PreserveSig]
         new void SetTransform(D2D1_MATRIX_3X2_F transform);
+        [PreserveSig]
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         [PreserveSig]
         new void SetAntialiasMode(D2D1_ANTIALIAS_MODE antialiasMode);
-        [PreserveSig]
-        new D2D1_ANTIALIAS_MODE GetAntialiasMode();
+        [PreserveSig]       
+        new void GetAntialiasMode(out D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
         new void SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
         [PreserveSig]
-        new D2D1_TEXT_ANTIALIAS_MODE GetTextAntialiasMode();
+        new void GetTextAntialiasMode(out D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
+        [PreserveSig]
         new void SetTextRenderingParams(IDWriteRenderingParams textRenderingParams = null);
+        [PreserveSig]
         new void GetTextRenderingParams(out IDWriteRenderingParams textRenderingParams);
+        [PreserveSig]
         new void SetTags(UInt64 tag1, UInt64 tag2);
+        [PreserveSig]
         new void GetTags(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new void PopLayer();
+        [PreserveSig]
         new void Flush(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void SaveDrawingState([In, Out] ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void RestoreDrawingState(ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void PushAxisAlignedClip(D2D1_RECT_F clipRect, D2D1_ANTIALIAS_MODE antialiasMode);
+        [PreserveSig]
         new void PopAxisAlignedClip();
+        [PreserveSig]
         new void Clear(D2D1_COLOR_F clearColor);
         [PreserveSig]
         new void BeginDraw();
         [PreserveSig]
         new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);
-        new D2D1_PIXEL_FORMAT GetPixelFormat();
+        [PreserveSig]
+        new void GetPixelFormat(out D2D1_PIXEL_FORMAT pixelFormat);
+        [PreserveSig]
         new void SetDpi(float dpiX, float dpiY);
-        new void GetDpi(out float dpiX, out float dpiY);        
-        new D2D1_SIZE_F GetSize();        
-        new D2D1_SIZE_U GetPixelSize();
+        [PreserveSig]
+        new void GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
+        new void GetSize(out D2D1_SIZE_F size);
+        [PreserveSig]
+        new void GetPixelSize(out D2D1_SIZE_U size);
         [PreserveSig]
         new uint GetMaximumBitmapSize();
         [PreserveSig]
         new bool IsSupported(D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr sourceData, uint pitch, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateColorContext(D2D1_COLOR_SPACE space, IntPtr profile, uint profileSize, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromFilename(string filename, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromWicColorContext(IWICColorContext wicColorContext, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateBitmapFromDxgiSurface(IDXGISurface surface, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateEffect(ref Guid effectId, out ID2D1Effect effect);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] straightAlphaGradientStops, uint straightAlphaGradientStopsCount, D2D1_COLOR_SPACE preInterpolationSpace,
              D2D1_COLOR_SPACE postInterpolationSpace, D2D1_BUFFER_PRECISION bufferPrecision, D2D1_EXTEND_MODE extendMode, D2D1_COLOR_INTERPOLATION_MODE colorInterpolationMode,
              out ID2D1GradientStopCollection1 gradientStopCollection1);
+        [PreserveSig]
         new HRESULT CreateImageBrush(ID2D1Image image, ref D2D1_IMAGE_BRUSH_PROPERTIES imageBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1ImageBrush imageBrush);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES1 bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush1 bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateCommandList(out ID2D1CommandList commandList);
         [PreserveSig]
         new bool IsDxgiFormatSupported(DXGI_FORMAT format);
         [PreserveSig]
         new bool IsBufferPrecisionSupported(D2D1_BUFFER_PRECISION bufferPrecision);
+        [PreserveSig]
         new HRESULT GetImageLocalBounds(ID2D1Image image, out D2D1_RECT_F localBounds);
+        [PreserveSig]
         new HRESULT GetImageWorldBounds(ID2D1Image image, out D2D1_RECT_F worldBounds);
+        [PreserveSig]
         new HRESULT GetGlyphRunWorldBounds(ref D2D1_POINT_2F baselineOrigin, DWRITE_GLYPH_RUN glyphRun, DWRITE_MEASURING_MODE measuringMode, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new void GetDevice(out ID2D1Device device);
+        [PreserveSig]
         new void SetTarget(ID2D1Image image);
+        [PreserveSig]
         new void GetTarget(out ID2D1Image image);
+        [PreserveSig]
         new void SetRenderingControls(D2D1_RENDERING_CONTROLS renderingControls);
+        [PreserveSig] 
         new void GetRenderingControls(out D2D1_RENDERING_CONTROLS renderingControls);
+        [PreserveSig]
         new void SetPrimitiveBlend(D2D1_PRIMITIVE_BLEND primitiveBlend);
         [PreserveSig]
-        new D2D1_PRIMITIVE_BLEND GetPrimitiveBlend();
+        new void GetPrimitiveBlend(out D2D1_PRIMITIVE_BLEND primitiveBlend);
+        [PreserveSig]
         new void SetUnitMode(D2D1_UNIT_MODE unitMode);
         [PreserveSig]
-        new D2D1_UNIT_MODE GetUnitMode();
+        new void GetUnitMode(out D2D1_UNIT_MODE unitMode);
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, IntPtr glyphRunDescription, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
         [PreserveSig]
@@ -2485,19 +2939,28 @@ namespace Direct2D
         new void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_POINT_2F targetOffset);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle, D2D1_MATRIX_4X4_F perspectiveTransform);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS1 layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new HRESULT InvalidateEffectInputRectangle(ID2D1Effect effect, uint input, D2D1_RECT_F inputRectangle);
+        [PreserveSig]
         new HRESULT GetEffectInvalidRectangleCount(ID2D1Effect effect, out uint rectangleCount);
         //new  HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, out D2D1_RECT_F* rectangles, uint rectanglesCount);
+        [PreserveSig]
         new HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, out IntPtr rectangles, uint rectanglesCount);
+        [PreserveSig]
         new HRESULT GetEffectRequiredInputRectangles(ID2D1Effect renderEffect, D2D1_RECT_F renderImageRectangle, D2D1_EFFECT_INPUT_DESCRIPTION inputDescriptions,
             // out D2D1_RECT_F* requiredInputRects, uint inputCount);
             out IntPtr requiredInputRects, uint inputCount);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, ref D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         #endregion
 
+        [PreserveSig]
         HRESULT CreateFilledGeometryRealization(ID2D1Geometry geometry, float flatteningTolerance, out ID2D1GeometryRealization geometryRealization);
+        [PreserveSig]
         HRESULT CreateStrokedGeometryRealization(ID2D1Geometry geometry, float flatteningTolerance, float strokeWidth, ID2D1StrokeStyle strokeStyle, out ID2D1GeometryRealization geometryRealization);
+        [PreserveSig]
         void DrawGeometryRealization(ID2D1GeometryRealization geometryRealization, ID2D1Brush brush);
     }
 
@@ -2525,27 +2988,49 @@ namespace Direct2D
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr srcData, uint pitch, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateSharedBitmap(ref Guid riid, [In, Out] IntPtr data, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateSolidColorBrush(D2D1_COLOR_F color, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1SolidColorBrush solidColorBrush);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] gradientStops, uint gradientStopsCount, D2D1_GAMMA colorInterpolationGamma, D2D1_EXTEND_MODE extendMode, out ID2D1GradientStopCollection gradientStopCollection);
+        [PreserveSig]
         new HRESULT CreateLinearGradientBrush(ref D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES linearGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1LinearGradientBrush linearGradientBrush);
+        [PreserveSig]
         new HRESULT CreateRadialGradientBrush(ref D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES radialGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1RadialGradientBrush radialGradientBrush);
+        [PreserveSig]
         new HRESULT CreateCompatibleRenderTarget(ref D2D1_SIZE_F desiredSize, ref D2D1_SIZE_U desiredPixelSize, ref D2D1_PIXEL_FORMAT desiredFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS options, out ID2D1BitmapRenderTarget bitmapRenderTarget);
+        [PreserveSig]
         new HRESULT CreateLayer(ref D2D1_SIZE_F size, out ID2D1Layer layer);
+        [PreserveSig]
         new void CreateMesh(out ID2D1Mesh mesh);
-        new void DrawLine(ref D2D1_POINT_2F point0, ref D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
+        new void DrawLine(D2D1_POINT_2F point0, D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void DrawRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawGeometry(ID2D1Geometry geometry, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillGeometry(ID2D1Geometry geometry, ID2D1Brush brush, ID2D1Brush opacityBrush = null);
+        [PreserveSig]
         new void FillMesh(ID2D1Mesh mesh, ID2D1Brush brush);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, D2D1_OPACITY_MASK_CONTENT content, D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_BITMAP_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle);
@@ -2555,74 +3040,114 @@ namespace Direct2D
         new void DrawTextLayout(D2D1_POINT_2F origin, IDWriteTextLayout textLayout, ID2D1Brush defaultForegroundBrush, D2D1_DRAW_TEXT_OPTIONS options);
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
+        [PreserveSig]
         new void SetTransform(D2D1_MATRIX_3X2_F transform);
+        [PreserveSig]
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         [PreserveSig]
         new void SetAntialiasMode(D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
-        new D2D1_ANTIALIAS_MODE GetAntialiasMode();
+        new void GetAntialiasMode(out D2D1_ANTIALIAS_MODE antialiasMode );
         [PreserveSig]
         new void SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
         [PreserveSig]
-        new D2D1_TEXT_ANTIALIAS_MODE GetTextAntialiasMode();
+        new void GetTextAntialiasMode(out D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
+        [PreserveSig]
         new void SetTextRenderingParams(IDWriteRenderingParams textRenderingParams = null);
+        [PreserveSig]
         new void GetTextRenderingParams(out IDWriteRenderingParams textRenderingParams);
+        [PreserveSig]
         new void SetTags(UInt64 tag1, UInt64 tag2);
+        [PreserveSig]
         new void GetTags(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new void PopLayer();
+        [PreserveSig]
         new void Flush(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void SaveDrawingState([In, Out] ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void RestoreDrawingState(ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void PushAxisAlignedClip(D2D1_RECT_F clipRect, D2D1_ANTIALIAS_MODE antialiasMode);
+        [PreserveSig]
         new void PopAxisAlignedClip();
+        [PreserveSig]
         new void Clear(D2D1_COLOR_F clearColor);
         [PreserveSig]
         new void BeginDraw();
         [PreserveSig]
-        new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);       
-        new D2D1_PIXEL_FORMAT GetPixelFormat();
+        new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
+        new void GetPixelFormat(out D2D1_PIXEL_FORMAT pixelFormat);
+        [PreserveSig]
         new void SetDpi(float dpiX, float dpiY);
-        new void GetDpi(out float dpiX, out float dpiY);        
-        new D2D1_SIZE_F GetSize();       
-        new D2D1_SIZE_U GetPixelSize();
+        [PreserveSig]
+        new void GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
+        new void GetSize(out D2D1_SIZE_F size);
+        [PreserveSig]
+        new void GetPixelSize(out D2D1_SIZE_U size);
         [PreserveSig]
         new uint GetMaximumBitmapSize();
         [PreserveSig]
         new bool IsSupported(D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr sourceData, uint pitch, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateColorContext(D2D1_COLOR_SPACE space, IntPtr profile, uint profileSize, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromFilename(string filename, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromWicColorContext(IWICColorContext wicColorContext, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateBitmapFromDxgiSurface(IDXGISurface surface, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateEffect(ref Guid effectId, out ID2D1Effect effect);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] straightAlphaGradientStops, uint straightAlphaGradientStopsCount, D2D1_COLOR_SPACE preInterpolationSpace,
           D2D1_COLOR_SPACE postInterpolationSpace, D2D1_BUFFER_PRECISION bufferPrecision, D2D1_EXTEND_MODE extendMode, D2D1_COLOR_INTERPOLATION_MODE colorInterpolationMode,
           out ID2D1GradientStopCollection1 gradientStopCollection1);
+        [PreserveSig]
         new HRESULT CreateImageBrush(ID2D1Image image, ref D2D1_IMAGE_BRUSH_PROPERTIES imageBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1ImageBrush imageBrush);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES1 bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush1 bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateCommandList(out ID2D1CommandList commandList);
         [PreserveSig]
         new bool IsDxgiFormatSupported(DXGI_FORMAT format);
         [PreserveSig]
         new bool IsBufferPrecisionSupported(D2D1_BUFFER_PRECISION bufferPrecision);
-        new HRESULT GetImageLocalBounds(ID2D1Image image, out D2D1_RECT_F localBounds);
-        new HRESULT GetImageWorldBounds(ID2D1Image image, out D2D1_RECT_F worldBounds);
-        new HRESULT GetGlyphRunWorldBounds(ref D2D1_POINT_2F baselineOrigin, DWRITE_GLYPH_RUN glyphRun, DWRITE_MEASURING_MODE measuringMode, out D2D1_RECT_F bounds);
-        new void GetDevice(out ID2D1Device device);
-        new void SetTarget(ID2D1Image image);
-        new void GetTarget(out ID2D1Image image);
-        new void SetRenderingControls(D2D1_RENDERING_CONTROLS renderingControls);
-        new void GetRenderingControls(out D2D1_RENDERING_CONTROLS renderingControls);
-        new void SetPrimitiveBlend(D2D1_PRIMITIVE_BLEND primitiveBlend);
         [PreserveSig]
-        new D2D1_PRIMITIVE_BLEND GetPrimitiveBlend();
+        new HRESULT GetImageLocalBounds(ID2D1Image image, out D2D1_RECT_F localBounds);
+        [PreserveSig]
+        new HRESULT GetImageWorldBounds(ID2D1Image image, out D2D1_RECT_F worldBounds);
+        [PreserveSig]
+        new HRESULT GetGlyphRunWorldBounds(ref D2D1_POINT_2F baselineOrigin, DWRITE_GLYPH_RUN glyphRun, DWRITE_MEASURING_MODE measuringMode, out D2D1_RECT_F bounds);
+        [PreserveSig]
+        new void GetDevice(out ID2D1Device device);
+        [PreserveSig]
+        new void SetTarget(ID2D1Image image);
+        [PreserveSig]
+        new void GetTarget(out ID2D1Image image);
+        [PreserveSig]
+        new void SetRenderingControls(D2D1_RENDERING_CONTROLS renderingControls);
+        [PreserveSig]
+        new void GetRenderingControls(out D2D1_RENDERING_CONTROLS renderingControls);
+        [PreserveSig]
+        new void SetPrimitiveBlend(D2D1_PRIMITIVE_BLEND primitiveBlend);
+        [PreserveSig]       
+        new void GetPrimitiveBlend(out D2D1_PRIMITIVE_BLEND primitiveBlend);
+        [PreserveSig]
         new void SetUnitMode(D2D1_UNIT_MODE unitMode);
         [PreserveSig]
-        new D2D1_UNIT_MODE GetUnitMode();
+        new void GetUnitMode(out D2D1_UNIT_MODE unitMode);
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, IntPtr glyphRunDescription, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
         [PreserveSig]
@@ -2631,33 +3156,53 @@ namespace Direct2D
         new void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_POINT_2F targetOffset);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle, D2D1_MATRIX_4X4_F perspectiveTransform);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS1 layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new HRESULT InvalidateEffectInputRectangle(ID2D1Effect effect, uint input, D2D1_RECT_F inputRectangle);
+        [PreserveSig]
         new HRESULT GetEffectInvalidRectangleCount(ID2D1Effect effect, out uint rectangleCount);
+        [PreserveSig]
         //new  HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, out D2D1_RECT_F* rectangles, uint rectanglesCount);
         new HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, out IntPtr rectangles, uint rectanglesCount);
+        [PreserveSig]
         new HRESULT GetEffectRequiredInputRectangles(ID2D1Effect renderEffect, D2D1_RECT_F renderImageRectangle, D2D1_EFFECT_INPUT_DESCRIPTION inputDescriptions,
             // out D2D1_RECT_F* requiredInputRects, uint inputCount);
             out IntPtr requiredInputRects, uint inputCount);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, ref D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateFilledGeometryRealization(ID2D1Geometry geometry, float flatteningTolerance, out ID2D1GeometryRealization geometryRealization);
+        [PreserveSig]
         new HRESULT CreateStrokedGeometryRealization(ID2D1Geometry geometry, float flatteningTolerance, float strokeWidth, ID2D1StrokeStyle strokeStyle, out ID2D1GeometryRealization geometryRealization);
+        [PreserveSig]
         new void DrawGeometryRealization(ID2D1GeometryRealization geometryRealization, ID2D1Brush brush);
         #endregion
 
+        [PreserveSig]
         HRESULT CreateInk(D2D1_INK_POINT startPoint, out ID2D1Ink ink);
+        [PreserveSig]
         HRESULT CreateInkStyle(D2D1_INK_STYLE_PROPERTIES inkStyleProperties, out ID2D1InkStyle inkStyle);
+        [PreserveSig]
         HRESULT CreateGradientMesh(D2D1_GRADIENT_MESH_PATCH patches, uint patchesCount, out ID2D1GradientMesh gradientMesh);
+        [PreserveSig]
         HRESULT CreateImageSourceFromWic(IWICBitmapSource wicBitmapSource, D2D1_IMAGE_SOURCE_LOADING_OPTIONS loadingOptions, D2D1_ALPHA_MODE alphaMode, out ID2D1ImageSourceFromWic imageSource);
+        [PreserveSig]
         HRESULT CreateLookupTable3D(D2D1_BUFFER_PRECISION precision, uint extents, IntPtr data, uint dataCount, uint strides, out ID2D1LookupTable3D lookupTable);
+        [PreserveSig]
         //HRESULT CreateImageSourceFromDxgi(IDXGISurface** surfaces, uint surfaceCount, DXGI_COLOR_SPACE_TYPE colorSpace, D2D1_IMAGE_SOURCE_FROM_DXGI_OPTIONS options, out ID2D1ImageSource** imageSource);
         HRESULT CreateImageSourceFromDxgi(IntPtr surfaces, uint surfaceCount, DXGI_COLOR_SPACE_TYPE colorSpace, D2D1_IMAGE_SOURCE_FROM_DXGI_OPTIONS options, out ID2D1ImageSource imageSource);
+        [PreserveSig]
         HRESULT GetGradientMeshWorldBounds(ID2D1GradientMesh gradientMesh, out D2D1_RECT_F pBounds);
+        [PreserveSig]
         void DrawInk(ID2D1Ink ink, ID2D1Brush brush, ID2D1InkStyle inkStyle);
+        [PreserveSig]
         void DrawGradientMesh(ID2D1GradientMesh gradientMesh);
+        [PreserveSig]
         void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_RECT_F destinationRectangle, ref D2D1_RECT_F sourceRectangle);
+        [PreserveSig]
         HRESULT CreateTransformedImageSource(ID2D1ImageSource imageSource, D2D1_TRANSFORMED_IMAGE_SOURCE_PROPERTIES properties, out ID2D1TransformedImageSource transformedImageSource);
     }
 
@@ -2677,27 +3222,49 @@ namespace Direct2D
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr srcData, uint pitch, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateSharedBitmap(ref Guid riid, [In, Out] IntPtr data, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateSolidColorBrush(D2D1_COLOR_F color, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1SolidColorBrush solidColorBrush);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] gradientStops, uint gradientStopsCount, D2D1_GAMMA colorInterpolationGamma, D2D1_EXTEND_MODE extendMode, out ID2D1GradientStopCollection gradientStopCollection);
+        [PreserveSig]
         new HRESULT CreateLinearGradientBrush(ref D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES linearGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1LinearGradientBrush linearGradientBrush);
+        [PreserveSig]
         new HRESULT CreateRadialGradientBrush(ref D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES radialGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1RadialGradientBrush radialGradientBrush);
+        [PreserveSig]
         new HRESULT CreateCompatibleRenderTarget(ref D2D1_SIZE_F desiredSize, ref D2D1_SIZE_U desiredPixelSize, ref D2D1_PIXEL_FORMAT desiredFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS options, out ID2D1BitmapRenderTarget bitmapRenderTarget);
+        [PreserveSig]
         new HRESULT CreateLayer(ref D2D1_SIZE_F size, out ID2D1Layer layer);
+        [PreserveSig]
         new void CreateMesh(out ID2D1Mesh mesh);
-        new void DrawLine(ref D2D1_POINT_2F point0, ref D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
+        new void DrawLine(D2D1_POINT_2F point0, D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void DrawRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawGeometry(ID2D1Geometry geometry, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillGeometry(ID2D1Geometry geometry, ID2D1Brush brush, ID2D1Brush opacityBrush = null);
+        [PreserveSig]
         new void FillMesh(ID2D1Mesh mesh, ID2D1Brush brush);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, D2D1_OPACITY_MASK_CONTENT content, D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_BITMAP_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle);
@@ -2707,37 +3274,56 @@ namespace Direct2D
         new void DrawTextLayout(D2D1_POINT_2F origin, IDWriteTextLayout textLayout, ID2D1Brush defaultForegroundBrush, D2D1_DRAW_TEXT_OPTIONS options);
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
+        [PreserveSig]
         new void SetTransform(D2D1_MATRIX_3X2_F transform);
+        [PreserveSig]
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         [PreserveSig]
         new void SetAntialiasMode(D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
-        new D2D1_ANTIALIAS_MODE GetAntialiasMode();
+        new void GetAntialiasMode(out D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
         new void SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
         [PreserveSig]
-        new D2D1_TEXT_ANTIALIAS_MODE GetTextAntialiasMode();
+        new void GetTextAntialiasMode(out D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
+        [PreserveSig]
         new void SetTextRenderingParams(IDWriteRenderingParams textRenderingParams = null);
+        [PreserveSig]
         new void GetTextRenderingParams(out IDWriteRenderingParams textRenderingParams);
+        [PreserveSig]
         new void SetTags(UInt64 tag1, UInt64 tag2);
+        [PreserveSig]
         new void GetTags(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new void PopLayer();
+        [PreserveSig]
         new void Flush(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void SaveDrawingState([In, Out] ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void RestoreDrawingState(ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void PushAxisAlignedClip(D2D1_RECT_F clipRect, D2D1_ANTIALIAS_MODE antialiasMode);
+        [PreserveSig]
         new void PopAxisAlignedClip();
+        [PreserveSig]
         new void Clear(D2D1_COLOR_F clearColor);
         [PreserveSig]
         new void BeginDraw();
         [PreserveSig]
-        new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);       
-        new D2D1_PIXEL_FORMAT GetPixelFormat();
+        new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
+        new void GetPixelFormat(out D2D1_PIXEL_FORMAT pixelFormat);
+        [PreserveSig]
         new void SetDpi(float dpiX, float dpiY);
-        new void GetDpi(out float dpiX, out float dpiY);        
-        new D2D1_SIZE_F GetSize();        
-        new D2D1_SIZE_U GetPixelSize();
+        [PreserveSig]
+        new void GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
+        new void GetSize(out D2D1_SIZE_F size);
+        [PreserveSig]
+        new void GetPixelSize(out D2D1_SIZE_U size);
         [PreserveSig]
         new uint GetMaximumBitmapSize();
         [PreserveSig]
@@ -2746,36 +3332,56 @@ namespace Direct2D
 
         [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr sourceData, uint pitch, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateColorContext(D2D1_COLOR_SPACE space, IntPtr profile, uint profileSize, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromFilename(string filename, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromWicColorContext(IWICColorContext wicColorContext, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateBitmapFromDxgiSurface(IDXGISurface surface, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateEffect(ref Guid effectId, out ID2D1Effect effect);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] straightAlphaGradientStops, uint straightAlphaGradientStopsCount, D2D1_COLOR_SPACE preInterpolationSpace,
           D2D1_COLOR_SPACE postInterpolationSpace, D2D1_BUFFER_PRECISION bufferPrecision, D2D1_EXTEND_MODE extendMode, D2D1_COLOR_INTERPOLATION_MODE colorInterpolationMode,
           out ID2D1GradientStopCollection1 gradientStopCollection1);
+        [PreserveSig]
         new HRESULT CreateImageBrush(ID2D1Image image, ref D2D1_IMAGE_BRUSH_PROPERTIES imageBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1ImageBrush imageBrush);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES1 bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush1 bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateCommandList(out ID2D1CommandList commandList);
         [PreserveSig]
         new bool IsDxgiFormatSupported(DXGI_FORMAT format);
         [PreserveSig]
         new bool IsBufferPrecisionSupported(D2D1_BUFFER_PRECISION bufferPrecision);
+        [PreserveSig]
         new HRESULT GetImageLocalBounds(ID2D1Image image, out D2D1_RECT_F localBounds);
+        [PreserveSig]
         new HRESULT GetImageWorldBounds(ID2D1Image image, out D2D1_RECT_F worldBounds);
+        [PreserveSig]
         new HRESULT GetGlyphRunWorldBounds(ref D2D1_POINT_2F baselineOrigin, DWRITE_GLYPH_RUN glyphRun, DWRITE_MEASURING_MODE measuringMode, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new void GetDevice(out ID2D1Device device);
+        [PreserveSig]
         new void SetTarget(ID2D1Image image);
+        [PreserveSig]
         new void GetTarget(out ID2D1Image image);
+        [PreserveSig]
         new void SetRenderingControls(D2D1_RENDERING_CONTROLS renderingControls);
+        [PreserveSig]
         new void GetRenderingControls(out D2D1_RENDERING_CONTROLS renderingControls);
+        [PreserveSig]
         new void SetPrimitiveBlend(D2D1_PRIMITIVE_BLEND primitiveBlend);
         [PreserveSig]
-        new D2D1_PRIMITIVE_BLEND GetPrimitiveBlend();
+        new void GetPrimitiveBlend(out D2D1_PRIMITIVE_BLEND primitiveBlend);       
+        [PreserveSig]
         new void SetUnitMode(D2D1_UNIT_MODE unitMode);
         [PreserveSig]
-        new D2D1_UNIT_MODE GetUnitMode();
+        new void GetUnitMode(out D2D1_UNIT_MODE unitMode);
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, IntPtr glyphRunDescription, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
         [PreserveSig]
@@ -2784,37 +3390,57 @@ namespace Direct2D
         new void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_POINT_2F targetOffset);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle, D2D1_MATRIX_4X4_F perspectiveTransform);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS1 layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new HRESULT InvalidateEffectInputRectangle(ID2D1Effect effect, uint input, D2D1_RECT_F inputRectangle);
+        [PreserveSig]
         new HRESULT GetEffectInvalidRectangleCount(ID2D1Effect effect, out uint rectangleCount);
         //new  HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, out D2D1_RECT_F* rectangles, uint rectanglesCount);
+        [PreserveSig]
         new HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, out IntPtr rectangles, uint rectanglesCount);
+        [PreserveSig]
         new HRESULT GetEffectRequiredInputRectangles(ID2D1Effect renderEffect, D2D1_RECT_F renderImageRectangle, D2D1_EFFECT_INPUT_DESCRIPTION inputDescriptions,
             // out D2D1_RECT_F* requiredInputRects, uint inputCount);
             out IntPtr requiredInputRects, uint inputCount);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, ref D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         #endregion
-
+        [PreserveSig]
         new HRESULT CreateFilledGeometryRealization(ID2D1Geometry geometry, float flatteningTolerance, out ID2D1GeometryRealization geometryRealization);
+        [PreserveSig]
         new HRESULT CreateStrokedGeometryRealization(ID2D1Geometry geometry, float flatteningTolerance, float strokeWidth, ID2D1StrokeStyle strokeStyle, out ID2D1GeometryRealization geometryRealization);
+        [PreserveSig]
         new void DrawGeometryRealization(ID2D1GeometryRealization geometryRealization, ID2D1Brush brush);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateInk(D2D1_INK_POINT startPoint, out ID2D1Ink ink);
+        [PreserveSig]
         new HRESULT CreateInkStyle(D2D1_INK_STYLE_PROPERTIES inkStyleProperties, out ID2D1InkStyle inkStyle);
+        [PreserveSig]
         new HRESULT CreateGradientMesh(D2D1_GRADIENT_MESH_PATCH patches, uint patchesCount, out ID2D1GradientMesh gradientMesh);
+        [PreserveSig]
         new HRESULT CreateImageSourceFromWic(IWICBitmapSource wicBitmapSource, D2D1_IMAGE_SOURCE_LOADING_OPTIONS loadingOptions, D2D1_ALPHA_MODE alphaMode, out ID2D1ImageSourceFromWic imageSource);
+        [PreserveSig]
         new HRESULT CreateLookupTable3D(D2D1_BUFFER_PRECISION precision, uint extents, IntPtr data, uint dataCount, uint strides, out ID2D1LookupTable3D lookupTable);
         //new HRESULT CreateImageSourceFromDxgi(IDXGISurface** surfaces, uint surfaceCount, DXGI_COLOR_SPACE_TYPE colorSpace, D2D1_IMAGE_SOURCE_FROM_DXGI_OPTIONS options, out ID2D1ImageSource** imageSource);
+        [PreserveSig]
         new HRESULT CreateImageSourceFromDxgi(IntPtr surfaces, uint surfaceCount, DXGI_COLOR_SPACE_TYPE colorSpace, D2D1_IMAGE_SOURCE_FROM_DXGI_OPTIONS options, out ID2D1ImageSource imageSource);
+        [PreserveSig]
         new HRESULT GetGradientMeshWorldBounds(ID2D1GradientMesh gradientMesh, out D2D1_RECT_F pBounds);
+        [PreserveSig]
         new void DrawInk(ID2D1Ink ink, ID2D1Brush brush, ID2D1InkStyle inkStyle);
+        [PreserveSig]
         new void DrawGradientMesh(ID2D1GradientMesh gradientMesh);
+        [PreserveSig]
         new void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_RECT_F destinationRectangle, ref D2D1_RECT_F sourceRectangle);
+        [PreserveSig]
         new HRESULT CreateTransformedImageSource(ID2D1ImageSource imageSource, D2D1_TRANSFORMED_IMAGE_SOURCE_PROPERTIES properties, out ID2D1TransformedImageSource transformedImageSource);
 
         #endregion
 
+        [PreserveSig]
         HRESULT CreateSpriteBatch(out ID2D1SpriteBatch spriteBatch);
         [PreserveSig]
         void DrawSpriteBatch(ID2D1SpriteBatch spriteBatch, uint startIndex, uint spriteCount, ID2D1Bitmap bitmap,
@@ -2848,20 +3474,21 @@ namespace Direct2D
         //       HRESULT AddSprites(uint spriteCount,  D2D1_RECT_F* destinationRectangles, void* sourceRectangles, void* colors, void* transforms,
         //    uint destinationRectanglesStride, uint sourceRectanglesStride, uint colorsStride, uint transformsStride);
 
+        [PreserveSig]
         HRESULT AddSprites(uint spriteCount, [MarshalAs(UnmanagedType.LPArray)] D2D1_RECT_F[] destinationRectangles, [MarshalAs(UnmanagedType.LPArray)] D2D1_RECT_U[] sourceRectangles,
          [MarshalAs(UnmanagedType.LPArray)] D2D1_COLOR_F_STRUCT[] colors, [MarshalAs(UnmanagedType.LPArray)] D2D1_MATRIX_3X2_F_STRUCT[] transforms,
         uint destinationRectanglesStride, uint sourceRectanglesStride, uint colorsStride, uint transformsStride);
-    
+        [PreserveSig]
         HRESULT SetSprites(uint startIndex, uint spriteCount,
            [MarshalAs(UnmanagedType.LPArray)] D2D1_RECT_F[] destinationRectangles, [MarshalAs(UnmanagedType.LPArray)] D2D1_RECT_U[] sourceRectangles,
             [MarshalAs(UnmanagedType.LPArray)] D2D1_COLOR_F_STRUCT[] colors, [MarshalAs(UnmanagedType.LPArray)] D2D1_MATRIX_3X2_F_STRUCT[] transforms,
            uint destinationRectanglesStride, uint sourceRectanglesStride, uint colorsStride, uint transformsStride);
-
+        [PreserveSig]
         HRESULT GetSprites(uint startIndex, uint spriteCount, out IntPtr destinationRectangles, out IntPtr sourceRectangles, out IntPtr colors, out IntPtr transforms);
-
         [return: MarshalAs(UnmanagedType.U4)]
         [PreserveSig]
         uint GetSpriteCount();
+        [PreserveSig]
         void Clear();
     }
 
@@ -2883,27 +3510,49 @@ namespace Direct2D
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr srcData, uint pitch, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateSharedBitmap(ref Guid riid, [In, Out] IntPtr data, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateSolidColorBrush(D2D1_COLOR_F color, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1SolidColorBrush solidColorBrush);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] gradientStops, uint gradientStopsCount, D2D1_GAMMA colorInterpolationGamma, D2D1_EXTEND_MODE extendMode, out ID2D1GradientStopCollection gradientStopCollection);
+        [PreserveSig]
         new HRESULT CreateLinearGradientBrush(ref D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES linearGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1LinearGradientBrush linearGradientBrush);
+        [PreserveSig]
         new HRESULT CreateRadialGradientBrush(ref D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES radialGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1RadialGradientBrush radialGradientBrush);
+        [PreserveSig]
         new HRESULT CreateCompatibleRenderTarget(ref D2D1_SIZE_F desiredSize, ref D2D1_SIZE_U desiredPixelSize, ref D2D1_PIXEL_FORMAT desiredFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS options, out ID2D1BitmapRenderTarget bitmapRenderTarget);
+        [PreserveSig]
         new HRESULT CreateLayer(ref D2D1_SIZE_F size, out ID2D1Layer layer);
+        [PreserveSig]
         new void CreateMesh(out ID2D1Mesh mesh);
-        new void DrawLine(ref D2D1_POINT_2F point0, ref D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
+        new void DrawLine(D2D1_POINT_2F point0, D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void DrawRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawGeometry(ID2D1Geometry geometry, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillGeometry(ID2D1Geometry geometry, ID2D1Brush brush, ID2D1Brush opacityBrush = null);
+        [PreserveSig]
         new void FillMesh(ID2D1Mesh mesh, ID2D1Brush brush);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, D2D1_OPACITY_MASK_CONTENT content, D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_BITMAP_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle);
@@ -2914,120 +3563,176 @@ namespace Direct2D
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
         //new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, IntPtr glyphRun, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
-
-
+        [PreserveSig]
         new void SetTransform(D2D1_MATRIX_3X2_F transform);
+        [PreserveSig]
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         [PreserveSig]
         new void SetAntialiasMode(D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
-        new D2D1_ANTIALIAS_MODE GetAntialiasMode();
+        new void GetAntialiasMode(out D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
         new void SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
         [PreserveSig]
-        new D2D1_TEXT_ANTIALIAS_MODE GetTextAntialiasMode();
+        new void GetTextAntialiasMode(out D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
+        [PreserveSig]
         new void SetTextRenderingParams(IDWriteRenderingParams textRenderingParams = null);
+        [PreserveSig]
         new void GetTextRenderingParams(out IDWriteRenderingParams textRenderingParams);
+        [PreserveSig]
         new void SetTags(UInt64 tag1, UInt64 tag2);
+        [PreserveSig]
         new void GetTags(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new void PopLayer();
+        [PreserveSig]
         new void Flush(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void SaveDrawingState([In, Out] ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void RestoreDrawingState(ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void PushAxisAlignedClip(D2D1_RECT_F clipRect, D2D1_ANTIALIAS_MODE antialiasMode);
+        [PreserveSig]
         new void PopAxisAlignedClip();
+        [PreserveSig]
         new void Clear(D2D1_COLOR_F clearColor);
         [PreserveSig]
         new void BeginDraw();
         [PreserveSig]
-        new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);       
-        new D2D1_PIXEL_FORMAT GetPixelFormat();
+        new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
+        new void GetPixelFormat(out D2D1_PIXEL_FORMAT pixelFormat);
+        [PreserveSig]
         new void SetDpi(float dpiX, float dpiY);
-        new void GetDpi(out float dpiX, out float dpiY);        
-        new D2D1_SIZE_F GetSize();       
-        new D2D1_SIZE_U GetPixelSize();
+        [PreserveSig]
+        new void GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
+        new void GetSize(out D2D1_SIZE_F size);
+        [PreserveSig]
+        new void GetPixelSize(out D2D1_SIZE_U size);
         [PreserveSig]
         new uint GetMaximumBitmapSize();
         [PreserveSig]
         new bool IsSupported(D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr sourceData, uint pitch, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateColorContext(D2D1_COLOR_SPACE space, IntPtr profile, uint profileSize, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromFilename(string filename, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromWicColorContext(IWICColorContext wicColorContext, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateBitmapFromDxgiSurface(IDXGISurface surface, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateEffect(ref Guid effectId, out ID2D1Effect effect);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] straightAlphaGradientStops, uint straightAlphaGradientStopsCount, D2D1_COLOR_SPACE preInterpolationSpace,
           D2D1_COLOR_SPACE postInterpolationSpace, D2D1_BUFFER_PRECISION bufferPrecision, D2D1_EXTEND_MODE extendMode, D2D1_COLOR_INTERPOLATION_MODE colorInterpolationMode,
           out ID2D1GradientStopCollection1 gradientStopCollection1);
+        [PreserveSig]
         new HRESULT CreateImageBrush(ID2D1Image image, ref D2D1_IMAGE_BRUSH_PROPERTIES imageBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1ImageBrush imageBrush);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES1 bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush1 bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateCommandList(out ID2D1CommandList commandList);
         [PreserveSig]
         new bool IsDxgiFormatSupported(DXGI_FORMAT format);
         [PreserveSig]
         new bool IsBufferPrecisionSupported(D2D1_BUFFER_PRECISION bufferPrecision);
+        [PreserveSig]
         new HRESULT GetImageLocalBounds(ID2D1Image image, out D2D1_RECT_F localBounds);
+        [PreserveSig]
         new HRESULT GetImageWorldBounds(ID2D1Image image, out D2D1_RECT_F worldBounds);
+        [PreserveSig]
         new HRESULT GetGlyphRunWorldBounds(ref D2D1_POINT_2F baselineOrigin, DWRITE_GLYPH_RUN glyphRun, DWRITE_MEASURING_MODE measuringMode, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new void GetDevice(out ID2D1Device device);
+        [PreserveSig]
         new void SetTarget(ID2D1Image image);
+        [PreserveSig]
         new void GetTarget(out ID2D1Image image);
+        [PreserveSig]
         new void SetRenderingControls(D2D1_RENDERING_CONTROLS renderingControls);
+        [PreserveSig]
         new void GetRenderingControls(out D2D1_RENDERING_CONTROLS renderingControls);
+        [PreserveSig]
         new void SetPrimitiveBlend(D2D1_PRIMITIVE_BLEND primitiveBlend);
         [PreserveSig]
-        new D2D1_PRIMITIVE_BLEND GetPrimitiveBlend();
+        new void GetPrimitiveBlend(out D2D1_PRIMITIVE_BLEND primitiveBlend);       
+        [PreserveSig]
         new void SetUnitMode(D2D1_UNIT_MODE unitMode);
         [PreserveSig]
-        new D2D1_UNIT_MODE GetUnitMode();
+        new void GetUnitMode(out D2D1_UNIT_MODE unitMode);
         [PreserveSig]
         //new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ref DWRITE_GLYPH_RUN_DESCRIPTION glyphRunDescription, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
-
         //new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin,  DWRITE_GLYPH_RUN glyphRun, /* optional(DWRITE_GLYPH_RUN_DESCRIPTION) */ IntPtr glyphRunDescription, /* _In_ */ ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
-
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, IntPtr glyphRunDescription, /* _In_ */ ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
-
         [PreserveSig]
         new void DrawImage(ID2D1Image image, ref D2D1_POINT_2F targetOffset, ref D2D1_RECT_F imageRectangle, D2D1_INTERPOLATION_MODE interpolationMode, D2D1_COMPOSITE_MODE compositeMode);
         [PreserveSig]
         new void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_POINT_2F targetOffset);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle, D2D1_MATRIX_4X4_F perspectiveTransform);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS1 layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new HRESULT InvalidateEffectInputRectangle(ID2D1Effect effect, uint input, D2D1_RECT_F inputRectangle);
+        [PreserveSig]
         new HRESULT GetEffectInvalidRectangleCount(ID2D1Effect effect, out uint rectangleCount);
         //new  HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, out D2D1_RECT_F* rectangles, uint rectanglesCount);
+        [PreserveSig]
         new HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, out IntPtr rectangles, uint rectanglesCount);
+        [PreserveSig]
         new HRESULT GetEffectRequiredInputRectangles(ID2D1Effect renderEffect, D2D1_RECT_F renderImageRectangle, D2D1_EFFECT_INPUT_DESCRIPTION inputDescriptions,
             // out D2D1_RECT_F* requiredInputRects, uint inputCount);
             out IntPtr requiredInputRects, uint inputCount);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, ref D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateFilledGeometryRealization(ID2D1Geometry geometry, float flatteningTolerance, out ID2D1GeometryRealization geometryRealization);
+        [PreserveSig]
         new HRESULT CreateStrokedGeometryRealization(ID2D1Geometry geometry, float flatteningTolerance, float strokeWidth, ID2D1StrokeStyle strokeStyle, out ID2D1GeometryRealization geometryRealization);
+        [PreserveSig]
         new void DrawGeometryRealization(ID2D1GeometryRealization geometryRealization, ID2D1Brush brush);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateInk(D2D1_INK_POINT startPoint, out ID2D1Ink ink);
+        [PreserveSig]
         new HRESULT CreateInkStyle(D2D1_INK_STYLE_PROPERTIES inkStyleProperties, out ID2D1InkStyle inkStyle);
+        [PreserveSig]
         new HRESULT CreateGradientMesh(D2D1_GRADIENT_MESH_PATCH patches, uint patchesCount, out ID2D1GradientMesh gradientMesh);
+        [PreserveSig]
         new HRESULT CreateImageSourceFromWic(IWICBitmapSource wicBitmapSource, D2D1_IMAGE_SOURCE_LOADING_OPTIONS loadingOptions, D2D1_ALPHA_MODE alphaMode, out ID2D1ImageSourceFromWic imageSource);
+        [PreserveSig]
         new HRESULT CreateLookupTable3D(D2D1_BUFFER_PRECISION precision, uint extents, IntPtr data, uint dataCount, uint strides, out ID2D1LookupTable3D lookupTable);
+        [PreserveSig]
         //new HRESULT CreateImageSourceFromDxgi(IDXGISurface** surfaces, uint surfaceCount, DXGI_COLOR_SPACE_TYPE colorSpace, D2D1_IMAGE_SOURCE_FROM_DXGI_OPTIONS options, out ID2D1ImageSource** imageSource);
         new HRESULT CreateImageSourceFromDxgi(IntPtr surfaces, uint surfaceCount, DXGI_COLOR_SPACE_TYPE colorSpace, D2D1_IMAGE_SOURCE_FROM_DXGI_OPTIONS options, out ID2D1ImageSource imageSource);
+        [PreserveSig]
         new HRESULT GetGradientMeshWorldBounds(ID2D1GradientMesh gradientMesh, out D2D1_RECT_F pBounds);
+        [PreserveSig]
         new void DrawInk(ID2D1Ink ink, ID2D1Brush brush, ID2D1InkStyle inkStyle);
+        [PreserveSig]
         new void DrawGradientMesh(ID2D1GradientMesh gradientMesh);
+        [PreserveSig]
         new void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_RECT_F destinationRectangle, ref D2D1_RECT_F sourceRectangle);
+        [PreserveSig]
         new HRESULT CreateTransformedImageSource(ID2D1ImageSource imageSource, D2D1_TRANSFORMED_IMAGE_SOURCE_PROPERTIES properties, out ID2D1TransformedImageSource transformedImageSource);
 
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateSpriteBatch(out ID2D1SpriteBatch spriteBatch);
         [PreserveSig]
         new void DrawSpriteBatch(ID2D1SpriteBatch spriteBatch, uint startIndex, uint spriteCount, ID2D1Bitmap bitmap,
@@ -3035,11 +3740,14 @@ namespace Direct2D
 
         #endregion
 
+        [PreserveSig]
         HRESULT CreateSvgGlyphStyle(out ID2D1SvgGlyphStyle svgGlyphStyle);
+        [PreserveSig]
         void DrawText(string sString, uint stringLength, IDWriteTextFormat textFormat, ref D2D1_RECT_F layoutRect, ID2D1Brush defaultFillBrush,
             ID2D1SvgGlyphStyle svgGlyphStyle, uint colorPaletteIndex = 0,
             D2D1_DRAW_TEXT_OPTIONS options = D2D1_DRAW_TEXT_OPTIONS.D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT,
             DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL);
+        [PreserveSig]
         void DrawTextLayout(D2D1_POINT_2F origin,
             IDWriteTextLayout textLayout,
             ID2D1Brush defaultFillBrush,
@@ -3050,18 +3758,18 @@ namespace Direct2D
         //    IntPtr glyphRun, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL,
         //    D2D1_COLOR_BITMAP_GLYPH_SNAP_OPTION bitmapSnapOption = D2D1_COLOR_BITMAP_GLYPH_SNAP_OPTION.D2D1_COLOR_BITMAP_GLYPH_SNAP_OPTION_DEFAULT);
 
+        [PreserveSig]
         void DrawColorBitmapGlyphRun(DWRITE_GLYPH_IMAGE_FORMATS glyphImageFormat, D2D1_POINT_2F baselineOrigin,
            ref DWRITE_GLYPH_RUN glyphRun, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL,
            D2D1_COLOR_BITMAP_GLYPH_SNAP_OPTION bitmapSnapOption = D2D1_COLOR_BITMAP_GLYPH_SNAP_OPTION.D2D1_COLOR_BITMAP_GLYPH_SNAP_OPTION_DEFAULT);
 
-
         //void DrawSvgGlyphRun(D2D1_POINT_2F baselineOrigin, IntPtr glyphRun, ID2D1Brush defaultFillBrush = null,
         // ID2D1SvgGlyphStyle svgGlyphStyle = null, uint colorPaletteIndex = 0, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL);
 
+        [PreserveSig]
         void DrawSvgGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush defaultFillBrush = null,
-       ID2D1SvgGlyphStyle svgGlyphStyle = null, uint colorPaletteIndex = 0, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL);
-
-
+            ID2D1SvgGlyphStyle svgGlyphStyle = null, uint colorPaletteIndex = 0, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL);
+        [PreserveSig]
         HRESULT GetColorBitmapGlyphImage(
             DWRITE_GLYPH_IMAGE_FORMATS glyphImageFormat,
             D2D1_POINT_2F glyphOrigin,
@@ -3074,6 +3782,7 @@ namespace Direct2D
             float dpiY,
             out D2D1_MATRIX_3X2_F glyphTransform,
             out ID2D1Image glyphImage);
+        [PreserveSig]
         HRESULT GetSvgGlyphImage(
             ref D2D1_POINT_2F glyphOrigin,
             IDWriteFontFace fontFace,
@@ -3094,14 +3803,19 @@ namespace Direct2D
     public interface ID2D1SvgGlyphStyle : ID2D1Resource
     {
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         HRESULT SetFill(ID2D1Brush brush);
+        [PreserveSig]
         void GetFill(out ID2D1Brush brush);
+        [PreserveSig]
         HRESULT SetStroke(ID2D1Brush brush, float strokeWidth = 1.0f, float dashes = 0.0f, uint dashesCount = 0, float dashOffset = 1.0f);
         [PreserveSig]
         uint GetStrokeDashesCount();
+        [PreserveSig]
         void GetStroke(out ID2D1Brush brush, out float strokeWidth, out float dashes, uint dashesCount, out float dashOffset);
     }
 
@@ -3201,27 +3915,50 @@ namespace Direct2D
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
+       
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr srcData, uint pitch, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateSharedBitmap(ref Guid riid, [In, Out] IntPtr data, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateSolidColorBrush(D2D1_COLOR_F color, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1SolidColorBrush solidColorBrush);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] gradientStops, uint gradientStopsCount, D2D1_GAMMA colorInterpolationGamma, D2D1_EXTEND_MODE extendMode, out ID2D1GradientStopCollection gradientStopCollection);
+        [PreserveSig]
         new HRESULT CreateLinearGradientBrush(ref D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES linearGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1LinearGradientBrush linearGradientBrush);
+        [PreserveSig]
         new HRESULT CreateRadialGradientBrush(ref D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES radialGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1RadialGradientBrush radialGradientBrush);
+        [PreserveSig]
         new HRESULT CreateCompatibleRenderTarget(ref D2D1_SIZE_F desiredSize, ref D2D1_SIZE_U desiredPixelSize, ref D2D1_PIXEL_FORMAT desiredFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS options, out ID2D1BitmapRenderTarget bitmapRenderTarget);
+        [PreserveSig]
         new HRESULT CreateLayer(ref D2D1_SIZE_F size, out ID2D1Layer layer);
+        [PreserveSig]
         new void CreateMesh(out ID2D1Mesh mesh);
-        new void DrawLine(ref D2D1_POINT_2F point0, ref D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
+        new void DrawLine(D2D1_POINT_2F point0, D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void DrawRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawGeometry(ID2D1Geometry geometry, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillGeometry(ID2D1Geometry geometry, ID2D1Brush brush, ID2D1Brush opacityBrush = null);
+        [PreserveSig]
         new void FillMesh(ID2D1Mesh mesh, ID2D1Brush brush);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, D2D1_OPACITY_MASK_CONTENT content, D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_BITMAP_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle);
@@ -3231,74 +3968,114 @@ namespace Direct2D
         new void DrawTextLayout(D2D1_POINT_2F origin, IDWriteTextLayout textLayout, ID2D1Brush defaultForegroundBrush, D2D1_DRAW_TEXT_OPTIONS options);
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
+        [PreserveSig]
         new void SetTransform(D2D1_MATRIX_3X2_F transform);
+        [PreserveSig]
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         [PreserveSig]
         new void SetAntialiasMode(D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
-        new D2D1_ANTIALIAS_MODE GetAntialiasMode();
+        new void GetAntialiasMode(out D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
         new void SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
         [PreserveSig]
-        new D2D1_TEXT_ANTIALIAS_MODE GetTextAntialiasMode();
+        new void GetTextAntialiasMode(out D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
+        [PreserveSig]
         new void SetTextRenderingParams(IDWriteRenderingParams textRenderingParams = null);
+        [PreserveSig]
         new void GetTextRenderingParams(out IDWriteRenderingParams textRenderingParams);
+        [PreserveSig]
         new void SetTags(UInt64 tag1, UInt64 tag2);
+        [PreserveSig]
         new void GetTags(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new void PopLayer();
+        [PreserveSig]
         new void Flush(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void SaveDrawingState([In, Out] ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void RestoreDrawingState(ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void PushAxisAlignedClip(D2D1_RECT_F clipRect, D2D1_ANTIALIAS_MODE antialiasMode);
+        [PreserveSig]
         new void PopAxisAlignedClip();
+        [PreserveSig]
         new void Clear(D2D1_COLOR_F clearColor);
         [PreserveSig]
         new void BeginDraw();
         [PreserveSig]
-        new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);        
-        new D2D1_PIXEL_FORMAT GetPixelFormat();
+        new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
+        new void GetPixelFormat(out D2D1_PIXEL_FORMAT pixelFormat);
+        [PreserveSig]
         new void SetDpi(float dpiX, float dpiY);
-        new void GetDpi(out float dpiX, out float dpiY);       
-        new D2D1_SIZE_F GetSize();       
-        new D2D1_SIZE_U GetPixelSize();
+        [PreserveSig]
+        new void GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig]     
+        new void GetSize(out D2D1_SIZE_F size);
+        [PreserveSig]
+        new void GetPixelSize(out D2D1_SIZE_U size);
         [PreserveSig]
         new uint GetMaximumBitmapSize();
         [PreserveSig]
         new bool IsSupported(D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr sourceData, uint pitch, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateColorContext(D2D1_COLOR_SPACE space, IntPtr profile, uint profileSize, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromFilename(string filename, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromWicColorContext(IWICColorContext wicColorContext, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateBitmapFromDxgiSurface(IDXGISurface surface, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateEffect(ref Guid effectId, out ID2D1Effect effect);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] straightAlphaGradientStops, uint straightAlphaGradientStopsCount, D2D1_COLOR_SPACE preInterpolationSpace,
             D2D1_COLOR_SPACE postInterpolationSpace, D2D1_BUFFER_PRECISION bufferPrecision, D2D1_EXTEND_MODE extendMode, D2D1_COLOR_INTERPOLATION_MODE colorInterpolationMode,
             out ID2D1GradientStopCollection1 gradientStopCollection1);
+        [PreserveSig]
         new HRESULT CreateImageBrush(ID2D1Image image, ref D2D1_IMAGE_BRUSH_PROPERTIES imageBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1ImageBrush imageBrush);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES1 bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush1 bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateCommandList(out ID2D1CommandList commandList);
         [PreserveSig]
         new bool IsDxgiFormatSupported(DXGI_FORMAT format);
         [PreserveSig]
         new bool IsBufferPrecisionSupported(D2D1_BUFFER_PRECISION bufferPrecision);
+        [PreserveSig]
         new HRESULT GetImageLocalBounds(ID2D1Image image, out D2D1_RECT_F localBounds);
+        [PreserveSig]
         new HRESULT GetImageWorldBounds(ID2D1Image image, out D2D1_RECT_F worldBounds);
+        [PreserveSig]
         new HRESULT GetGlyphRunWorldBounds(ref D2D1_POINT_2F baselineOrigin, DWRITE_GLYPH_RUN glyphRun, DWRITE_MEASURING_MODE measuringMode, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new void GetDevice(out ID2D1Device device);
+        [PreserveSig]
         new void SetTarget(ID2D1Image image);
+        [PreserveSig]
         new void GetTarget(out ID2D1Image image);
+        [PreserveSig]
         new void SetRenderingControls(D2D1_RENDERING_CONTROLS renderingControls);
+        [PreserveSig]
         new void GetRenderingControls(out D2D1_RENDERING_CONTROLS renderingControls);
+        [PreserveSig]
         new void SetPrimitiveBlend(D2D1_PRIMITIVE_BLEND primitiveBlend);
         [PreserveSig]
-        new D2D1_PRIMITIVE_BLEND GetPrimitiveBlend();
+        new void GetPrimitiveBlend(out D2D1_PRIMITIVE_BLEND primitiveBlend);
+        [PreserveSig]
         new void SetUnitMode(D2D1_UNIT_MODE unitMode);
         [PreserveSig]
-        new D2D1_UNIT_MODE GetUnitMode();
+        new void GetUnitMode(out D2D1_UNIT_MODE unitMode);
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, IntPtr glyphRunDescription, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
         [PreserveSig]
@@ -3307,37 +4084,58 @@ namespace Direct2D
         new void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_POINT_2F targetOffset);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle, D2D1_MATRIX_4X4_F perspectiveTransform);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS1 layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new HRESULT InvalidateEffectInputRectangle(ID2D1Effect effect, uint input, D2D1_RECT_F inputRectangle);
+        [PreserveSig]
         new HRESULT GetEffectInvalidRectangleCount(ID2D1Effect effect, out uint rectangleCount);
+        [PreserveSig]
         //new  HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, out D2D1_RECT_F* rectangles, uint rectanglesCount);
         new HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, out IntPtr rectangles, uint rectanglesCount);
+        [PreserveSig]
         new HRESULT GetEffectRequiredInputRectangles(ID2D1Effect renderEffect, D2D1_RECT_F renderImageRectangle, D2D1_EFFECT_INPUT_DESCRIPTION inputDescriptions,
             // out D2D1_RECT_F* requiredInputRects, uint inputCount);
             out IntPtr requiredInputRects, uint inputCount);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, ref D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateFilledGeometryRealization(ID2D1Geometry geometry, float flatteningTolerance, out ID2D1GeometryRealization geometryRealization);
+        [PreserveSig]
         new HRESULT CreateStrokedGeometryRealization(ID2D1Geometry geometry, float flatteningTolerance, float strokeWidth, ID2D1StrokeStyle strokeStyle, out ID2D1GeometryRealization geometryRealization);
+        [PreserveSig]
         new void DrawGeometryRealization(ID2D1GeometryRealization geometryRealization, ID2D1Brush brush);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateInk(D2D1_INK_POINT startPoint, out ID2D1Ink ink);
+        [PreserveSig]
         new HRESULT CreateInkStyle(D2D1_INK_STYLE_PROPERTIES inkStyleProperties, out ID2D1InkStyle inkStyle);
+        [PreserveSig]
         new HRESULT CreateGradientMesh(D2D1_GRADIENT_MESH_PATCH patches, uint patchesCount, out ID2D1GradientMesh gradientMesh);
+        [PreserveSig]
         new HRESULT CreateImageSourceFromWic(IWICBitmapSource wicBitmapSource, D2D1_IMAGE_SOURCE_LOADING_OPTIONS loadingOptions, D2D1_ALPHA_MODE alphaMode, out ID2D1ImageSourceFromWic imageSource);
+        [PreserveSig]
         new HRESULT CreateLookupTable3D(D2D1_BUFFER_PRECISION precision, uint extents, IntPtr data, uint dataCount, uint strides, out ID2D1LookupTable3D lookupTable);
+        [PreserveSig]
         //new HRESULT CreateImageSourceFromDxgi(IDXGISurface** surfaces, uint surfaceCount, DXGI_COLOR_SPACE_TYPE colorSpace, D2D1_IMAGE_SOURCE_FROM_DXGI_OPTIONS options, out ID2D1ImageSource** imageSource);
         new HRESULT CreateImageSourceFromDxgi(IntPtr surfaces, uint surfaceCount, DXGI_COLOR_SPACE_TYPE colorSpace, D2D1_IMAGE_SOURCE_FROM_DXGI_OPTIONS options, out ID2D1ImageSource imageSource);
+        [PreserveSig]
         new HRESULT GetGradientMeshWorldBounds(ID2D1GradientMesh gradientMesh, out D2D1_RECT_F pBounds);
+        [PreserveSig]
         new void DrawInk(ID2D1Ink ink, ID2D1Brush brush, ID2D1InkStyle inkStyle);
+        [PreserveSig]
         new void DrawGradientMesh(ID2D1GradientMesh gradientMesh);
+        [PreserveSig]
         new void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_RECT_F destinationRectangle, ref D2D1_RECT_F sourceRectangle);
+        [PreserveSig]
         new HRESULT CreateTransformedImageSource(ID2D1ImageSource imageSource, D2D1_TRANSFORMED_IMAGE_SOURCE_PROPERTIES properties, out ID2D1TransformedImageSource transformedImageSource);
 
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateSpriteBatch(out ID2D1SpriteBatch spriteBatch);
         [PreserveSig]
         new void DrawSpriteBatch(ID2D1SpriteBatch spriteBatch, uint startIndex, uint spriteCount, ID2D1Bitmap bitmap,
@@ -3345,22 +4143,28 @@ namespace Direct2D
 
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateSvgGlyphStyle(out ID2D1SvgGlyphStyle svgGlyphStyle);
+        [PreserveSig]
         new void DrawText(string sString, uint stringLength, IDWriteTextFormat textFormat, ref D2D1_RECT_F layoutRect, ID2D1Brush defaultFillBrush,
             ID2D1SvgGlyphStyle svgGlyphStyle, uint colorPaletteIndex = 0,
             D2D1_DRAW_TEXT_OPTIONS options = D2D1_DRAW_TEXT_OPTIONS.D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT,
             DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL);
+        [PreserveSig]
         new void DrawTextLayout(D2D1_POINT_2F origin,
             IDWriteTextLayout textLayout,
             ID2D1Brush defaultFillBrush,
             ID2D1SvgGlyphStyle svgGlyphStyle,
             uint colorPaletteIndex = 0,
             D2D1_DRAW_TEXT_OPTIONS options = D2D1_DRAW_TEXT_OPTIONS.D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT);
+        [PreserveSig]
         new void DrawColorBitmapGlyphRun(DWRITE_GLYPH_IMAGE_FORMATS glyphImageFormat, D2D1_POINT_2F baselineOrigin,
             ref DWRITE_GLYPH_RUN glyphRun, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL,
             D2D1_COLOR_BITMAP_GLYPH_SNAP_OPTION bitmapSnapOption = D2D1_COLOR_BITMAP_GLYPH_SNAP_OPTION.D2D1_COLOR_BITMAP_GLYPH_SNAP_OPTION_DEFAULT);
+        [PreserveSig]
         new void DrawSvgGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush defaultFillBrush = null,
             ID2D1SvgGlyphStyle svgGlyphStyle = null, uint colorPaletteIndex = 0, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL);
+        [PreserveSig]
         new HRESULT GetColorBitmapGlyphImage(
             DWRITE_GLYPH_IMAGE_FORMATS glyphImageFormat,
             D2D1_POINT_2F glyphOrigin,
@@ -3373,6 +4177,7 @@ namespace Direct2D
             float dpiY,
             out D2D1_MATRIX_3X2_F glyphTransform,
             out ID2D1Image glyphImage);
+        [PreserveSig]
         new HRESULT GetSvgGlyphImage(
             ref D2D1_POINT_2F glyphOrigin,
             IDWriteFontFace fontFace,
@@ -3387,9 +4192,13 @@ namespace Direct2D
             out ID2D1CommandList glyphImage);
         #endregion
 
+        [PreserveSig]
         HRESULT CreateSvgDocument(System.Runtime.InteropServices.ComTypes.IStream inputXmlStream, D2D1_SIZE_F viewportSize, out ID2D1SvgDocument svgDocument);
+        [PreserveSig]
         void DrawSvgDocument(ID2D1SvgDocument svgDocument);
+        [PreserveSig]
         HRESULT CreateColorContextFromDxgiColorSpace(DXGI_COLOR_SPACE_TYPE colorSpace, out ID2D1ColorContext1 colorContext);
+        [PreserveSig]
         HRESULT CreateColorContextFromSimpleColorProfile(ref D2D1_SIMPLE_COLOR_PROFILE simpleProfile, out ID2D1ColorContext1 colorContext);
     }
 
@@ -3411,27 +4220,50 @@ namespace Direct2D
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
+
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr srcData, uint pitch, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateSharedBitmap(ref Guid riid, [In, Out] IntPtr data, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateSolidColorBrush(D2D1_COLOR_F color, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1SolidColorBrush solidColorBrush);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] gradientStops, uint gradientStopsCount, D2D1_GAMMA colorInterpolationGamma, D2D1_EXTEND_MODE extendMode, out ID2D1GradientStopCollection gradientStopCollection);
+        [PreserveSig]
         new HRESULT CreateLinearGradientBrush(ref D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES linearGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1LinearGradientBrush linearGradientBrush);
+        [PreserveSig]
         new HRESULT CreateRadialGradientBrush(ref D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES radialGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1RadialGradientBrush radialGradientBrush);
+        [PreserveSig]
         new HRESULT CreateCompatibleRenderTarget(ref D2D1_SIZE_F desiredSize, ref D2D1_SIZE_U desiredPixelSize, ref D2D1_PIXEL_FORMAT desiredFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS options, out ID2D1BitmapRenderTarget bitmapRenderTarget);
+        [PreserveSig]
         new HRESULT CreateLayer(ref D2D1_SIZE_F size, out ID2D1Layer layer);
+        [PreserveSig]
         new void CreateMesh(out ID2D1Mesh mesh);
-        new void DrawLine(ref D2D1_POINT_2F point0, ref D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
+        new void DrawLine(D2D1_POINT_2F point0, D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void DrawRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawGeometry(ID2D1Geometry geometry, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillGeometry(ID2D1Geometry geometry, ID2D1Brush brush, ID2D1Brush opacityBrush = null);
+        [PreserveSig]
         new void FillMesh(ID2D1Mesh mesh, ID2D1Brush brush);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, D2D1_OPACITY_MASK_CONTENT content, D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_BITMAP_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle);
@@ -3441,74 +4273,114 @@ namespace Direct2D
         new void DrawTextLayout(D2D1_POINT_2F origin, IDWriteTextLayout textLayout, ID2D1Brush defaultForegroundBrush, D2D1_DRAW_TEXT_OPTIONS options);
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
+        [PreserveSig]
         new void SetTransform(D2D1_MATRIX_3X2_F transform);
+        [PreserveSig]
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         [PreserveSig]
         new void SetAntialiasMode(D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
-        new D2D1_ANTIALIAS_MODE GetAntialiasMode();
+        new void GetAntialiasMode(out D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
         new void SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
         [PreserveSig]
-        new D2D1_TEXT_ANTIALIAS_MODE GetTextAntialiasMode();
+        new void GetTextAntialiasMode(out D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
+        [PreserveSig]
         new void SetTextRenderingParams(IDWriteRenderingParams textRenderingParams = null);
+        [PreserveSig]
         new void GetTextRenderingParams(out IDWriteRenderingParams textRenderingParams);
+        [PreserveSig]
         new void SetTags(UInt64 tag1, UInt64 tag2);
+        [PreserveSig]
         new void GetTags(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new void PopLayer();
+        [PreserveSig]
         new void Flush(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void SaveDrawingState([In, Out] ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void RestoreDrawingState(ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void PushAxisAlignedClip(D2D1_RECT_F clipRect, D2D1_ANTIALIAS_MODE antialiasMode);
+        [PreserveSig]
         new void PopAxisAlignedClip();
+        [PreserveSig]
         new void Clear(D2D1_COLOR_F clearColor);
         [PreserveSig]
         new void BeginDraw();
         [PreserveSig]
-        new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);        
-        new D2D1_PIXEL_FORMAT GetPixelFormat();
+        new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
+        new void GetPixelFormat(out D2D1_PIXEL_FORMAT pixelFormat);
+        [PreserveSig]
         new void SetDpi(float dpiX, float dpiY);
-        new void GetDpi(out float dpiX, out float dpiY);       
-        new D2D1_SIZE_F GetSize();       
-        new D2D1_SIZE_U GetPixelSize();
+        [PreserveSig]
+        new void GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
+        new void GetSize(out D2D1_SIZE_F size);
+        [PreserveSig]
+        new void GetPixelSize(out D2D1_SIZE_U size);
         [PreserveSig]
         new uint GetMaximumBitmapSize();
         [PreserveSig]
         new bool IsSupported(D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr sourceData, uint pitch, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateColorContext(D2D1_COLOR_SPACE space, IntPtr profile, uint profileSize, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromFilename(string filename, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromWicColorContext(IWICColorContext wicColorContext, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateBitmapFromDxgiSurface(IDXGISurface surface, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateEffect(ref Guid effectId, out ID2D1Effect effect);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] straightAlphaGradientStops, uint straightAlphaGradientStopsCount, D2D1_COLOR_SPACE preInterpolationSpace,
             D2D1_COLOR_SPACE postInterpolationSpace, D2D1_BUFFER_PRECISION bufferPrecision, D2D1_EXTEND_MODE extendMode, D2D1_COLOR_INTERPOLATION_MODE colorInterpolationMode,
             out ID2D1GradientStopCollection1 gradientStopCollection1);
+        [PreserveSig]
         new HRESULT CreateImageBrush(ID2D1Image image, ref D2D1_IMAGE_BRUSH_PROPERTIES imageBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1ImageBrush imageBrush);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES1 bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush1 bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateCommandList(out ID2D1CommandList commandList);
         [PreserveSig]
         new bool IsDxgiFormatSupported(DXGI_FORMAT format);
         [PreserveSig]
         new bool IsBufferPrecisionSupported(D2D1_BUFFER_PRECISION bufferPrecision);
+        [PreserveSig]
         new HRESULT GetImageLocalBounds(ID2D1Image image, out D2D1_RECT_F localBounds);
+        [PreserveSig]
         new HRESULT GetImageWorldBounds(ID2D1Image image, out D2D1_RECT_F worldBounds);
+        [PreserveSig]
         new HRESULT GetGlyphRunWorldBounds(ref D2D1_POINT_2F baselineOrigin, DWRITE_GLYPH_RUN glyphRun, DWRITE_MEASURING_MODE measuringMode, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new void GetDevice(out ID2D1Device device);
+        [PreserveSig]
         new void SetTarget(ID2D1Image image);
+        [PreserveSig]
         new void GetTarget(out ID2D1Image image);
+        [PreserveSig]
         new void SetRenderingControls(D2D1_RENDERING_CONTROLS renderingControls);
+        [PreserveSig]
         new void GetRenderingControls(out D2D1_RENDERING_CONTROLS renderingControls);
+        [PreserveSig]
         new void SetPrimitiveBlend(D2D1_PRIMITIVE_BLEND primitiveBlend);
         [PreserveSig]
-        new D2D1_PRIMITIVE_BLEND GetPrimitiveBlend();
+        new void GetPrimitiveBlend(out D2D1_PRIMITIVE_BLEND primitiveBlend);
+        [PreserveSig]
         new void SetUnitMode(D2D1_UNIT_MODE unitMode);
         [PreserveSig]
-        new D2D1_UNIT_MODE GetUnitMode();
+        new void GetUnitMode(out D2D1_UNIT_MODE unitMode);
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, IntPtr glyphRunDescription, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
         [PreserveSig]
@@ -3517,37 +4389,58 @@ namespace Direct2D
         new void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_POINT_2F targetOffset);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle, D2D1_MATRIX_4X4_F perspectiveTransform);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS1 layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new HRESULT InvalidateEffectInputRectangle(ID2D1Effect effect, uint input, D2D1_RECT_F inputRectangle);
+        [PreserveSig]
         new HRESULT GetEffectInvalidRectangleCount(ID2D1Effect effect, out uint rectangleCount);
+        [PreserveSig]
         //new  HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, out D2D1_RECT_F* rectangles, uint rectanglesCount);
         new HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, out IntPtr rectangles, uint rectanglesCount);
+        [PreserveSig]
         new HRESULT GetEffectRequiredInputRectangles(ID2D1Effect renderEffect, D2D1_RECT_F renderImageRectangle, D2D1_EFFECT_INPUT_DESCRIPTION inputDescriptions,
             // out D2D1_RECT_F* requiredInputRects, uint inputCount);
             out IntPtr requiredInputRects, uint inputCount);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, ref D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateFilledGeometryRealization(ID2D1Geometry geometry, float flatteningTolerance, out ID2D1GeometryRealization geometryRealization);
+        [PreserveSig]
         new HRESULT CreateStrokedGeometryRealization(ID2D1Geometry geometry, float flatteningTolerance, float strokeWidth, ID2D1StrokeStyle strokeStyle, out ID2D1GeometryRealization geometryRealization);
+        [PreserveSig]
         new void DrawGeometryRealization(ID2D1GeometryRealization geometryRealization, ID2D1Brush brush);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateInk(D2D1_INK_POINT startPoint, out ID2D1Ink ink);
+        [PreserveSig]
         new HRESULT CreateInkStyle(D2D1_INK_STYLE_PROPERTIES inkStyleProperties, out ID2D1InkStyle inkStyle);
+        [PreserveSig]
         new HRESULT CreateGradientMesh(D2D1_GRADIENT_MESH_PATCH patches, uint patchesCount, out ID2D1GradientMesh gradientMesh);
+        [PreserveSig]
         new HRESULT CreateImageSourceFromWic(IWICBitmapSource wicBitmapSource, D2D1_IMAGE_SOURCE_LOADING_OPTIONS loadingOptions, D2D1_ALPHA_MODE alphaMode, out ID2D1ImageSourceFromWic imageSource);
+        [PreserveSig]
         new HRESULT CreateLookupTable3D(D2D1_BUFFER_PRECISION precision, uint extents, IntPtr data, uint dataCount, uint strides, out ID2D1LookupTable3D lookupTable);
+        [PreserveSig]
         //new HRESULT CreateImageSourceFromDxgi(IDXGISurface** surfaces, uint surfaceCount, DXGI_COLOR_SPACE_TYPE colorSpace, D2D1_IMAGE_SOURCE_FROM_DXGI_OPTIONS options, out ID2D1ImageSource** imageSource);
         new HRESULT CreateImageSourceFromDxgi(IntPtr surfaces, uint surfaceCount, DXGI_COLOR_SPACE_TYPE colorSpace, D2D1_IMAGE_SOURCE_FROM_DXGI_OPTIONS options, out ID2D1ImageSource imageSource);
+        [PreserveSig]
         new HRESULT GetGradientMeshWorldBounds(ID2D1GradientMesh gradientMesh, out D2D1_RECT_F pBounds);
+        [PreserveSig]
         new void DrawInk(ID2D1Ink ink, ID2D1Brush brush, ID2D1InkStyle inkStyle);
+        [PreserveSig]
         new void DrawGradientMesh(ID2D1GradientMesh gradientMesh);
+        [PreserveSig]
         new void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_RECT_F destinationRectangle, ref D2D1_RECT_F sourceRectangle);
+        [PreserveSig]
         new HRESULT CreateTransformedImageSource(ID2D1ImageSource imageSource, D2D1_TRANSFORMED_IMAGE_SOURCE_PROPERTIES properties, out ID2D1TransformedImageSource transformedImageSource);
 
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateSpriteBatch(out ID2D1SpriteBatch spriteBatch);
         [PreserveSig]
         new void DrawSpriteBatch(ID2D1SpriteBatch spriteBatch, uint startIndex, uint spriteCount, ID2D1Bitmap bitmap,
@@ -3555,22 +4448,28 @@ namespace Direct2D
 
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateSvgGlyphStyle(out ID2D1SvgGlyphStyle svgGlyphStyle);
+        [PreserveSig]
         new void DrawText(string sString, uint stringLength, IDWriteTextFormat textFormat, ref D2D1_RECT_F layoutRect, ID2D1Brush defaultFillBrush,
             ID2D1SvgGlyphStyle svgGlyphStyle, uint colorPaletteIndex = 0,
             D2D1_DRAW_TEXT_OPTIONS options = D2D1_DRAW_TEXT_OPTIONS.D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT,
             DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL);
+        [PreserveSig]
         new void DrawTextLayout(D2D1_POINT_2F origin,
             IDWriteTextLayout textLayout,
             ID2D1Brush defaultFillBrush,
             ID2D1SvgGlyphStyle svgGlyphStyle,
             uint colorPaletteIndex = 0,
             D2D1_DRAW_TEXT_OPTIONS options = D2D1_DRAW_TEXT_OPTIONS.D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT);
+        [PreserveSig]
         new void DrawColorBitmapGlyphRun(DWRITE_GLYPH_IMAGE_FORMATS glyphImageFormat, D2D1_POINT_2F baselineOrigin,
             ref DWRITE_GLYPH_RUN glyphRun, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL,
             D2D1_COLOR_BITMAP_GLYPH_SNAP_OPTION bitmapSnapOption = D2D1_COLOR_BITMAP_GLYPH_SNAP_OPTION.D2D1_COLOR_BITMAP_GLYPH_SNAP_OPTION_DEFAULT);
+        [PreserveSig]
         new void DrawSvgGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush defaultFillBrush = null,
             ID2D1SvgGlyphStyle svgGlyphStyle = null, uint colorPaletteIndex = 0, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL);
+        [PreserveSig]
         new HRESULT GetColorBitmapGlyphImage(
             DWRITE_GLYPH_IMAGE_FORMATS glyphImageFormat,
             D2D1_POINT_2F glyphOrigin,
@@ -3583,6 +4482,7 @@ namespace Direct2D
             float dpiY,
             out D2D1_MATRIX_3X2_F glyphTransform,
             out ID2D1Image glyphImage);
+        [PreserveSig]
         new HRESULT GetSvgGlyphImage(
             ref D2D1_POINT_2F glyphOrigin,
             IDWriteFontFace fontFace,
@@ -3597,12 +4497,17 @@ namespace Direct2D
             out ID2D1CommandList glyphImage);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateSvgDocument(System.Runtime.InteropServices.ComTypes.IStream inputXmlStream, D2D1_SIZE_F viewportSize, out ID2D1SvgDocument svgDocument);
+        [PreserveSig]
         new void DrawSvgDocument(ID2D1SvgDocument svgDocument);
+        [PreserveSig]
         new HRESULT CreateColorContextFromDxgiColorSpace(DXGI_COLOR_SPACE_TYPE colorSpace, out ID2D1ColorContext1 colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromSimpleColorProfile(ref D2D1_SIMPLE_COLOR_PROFILE simpleProfile, out ID2D1ColorContext1 colorContext);
         #endregion
 
+        [PreserveSig]
         void BlendImage(ID2D1Image image, D2D1_BLEND_MODE blendMode, ref D2D1_POINT_2F targetOffset,
             ref D2D1_RECT_F imageRectangle, D2D1_INTERPOLATION_MODE interpolationMode = D2D1_INTERPOLATION_MODE.D2D1_INTERPOLATION_MODE_LINEAR);
     }
@@ -3625,27 +4530,50 @@ namespace Direct2D
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
+
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr srcData, uint pitch, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateSharedBitmap(ref Guid riid, [In, Out] IntPtr data, ref D2D1_BITMAP_PROPERTIES bitmapProperties, out ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateSolidColorBrush(D2D1_COLOR_F color, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1SolidColorBrush solidColorBrush);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] gradientStops, uint gradientStopsCount, D2D1_GAMMA colorInterpolationGamma, D2D1_EXTEND_MODE extendMode, out ID2D1GradientStopCollection gradientStopCollection);
+        [PreserveSig]
         new HRESULT CreateLinearGradientBrush(ref D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES linearGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1LinearGradientBrush linearGradientBrush);
+        [PreserveSig]
         new HRESULT CreateRadialGradientBrush(ref D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES radialGradientBrushProperties, IntPtr brushProperties, ID2D1GradientStopCollection gradientStopCollection, out ID2D1RadialGradientBrush radialGradientBrush);
+        [PreserveSig]
         new HRESULT CreateCompatibleRenderTarget(ref D2D1_SIZE_F desiredSize, ref D2D1_SIZE_U desiredPixelSize, ref D2D1_PIXEL_FORMAT desiredFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS options, out ID2D1BitmapRenderTarget bitmapRenderTarget);
+        [PreserveSig]
         new HRESULT CreateLayer(ref D2D1_SIZE_F size, out ID2D1Layer layer);
+        [PreserveSig]
         new void CreateMesh(out ID2D1Mesh mesh);
-        new void DrawLine(ref D2D1_POINT_2F point0, ref D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
+        new void DrawLine(D2D1_POINT_2F point0, D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void DrawRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRectangle(ref D2D1_RECT_F rect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillRoundedRectangle(ref D2D1_ROUNDED_RECT roundedRect, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillEllipse(ref D2D1_ELLIPSE ellipse, ID2D1Brush brush);
+        [PreserveSig]
         new void DrawGeometry(ID2D1Geometry geometry, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+        [PreserveSig]
         new void FillGeometry(ID2D1Geometry geometry, ID2D1Brush brush, ID2D1Brush opacityBrush = null);
+        [PreserveSig]
         new void FillMesh(ID2D1Mesh mesh, ID2D1Brush brush);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, D2D1_OPACITY_MASK_CONTENT content, D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_BITMAP_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle);
@@ -3655,74 +4583,114 @@ namespace Direct2D
         new void DrawTextLayout(D2D1_POINT_2F origin, IDWriteTextLayout textLayout, ID2D1Brush defaultForegroundBrush, D2D1_DRAW_TEXT_OPTIONS options);
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
+        [PreserveSig]
         new void SetTransform(D2D1_MATRIX_3X2_F transform);
+        [PreserveSig]
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         [PreserveSig]
         new void SetAntialiasMode(D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
-        new D2D1_ANTIALIAS_MODE GetAntialiasMode();
+        new void GetAntialiasMode(out D2D1_ANTIALIAS_MODE antialiasMode);
         [PreserveSig]
         new void SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
         [PreserveSig]
-        new D2D1_TEXT_ANTIALIAS_MODE GetTextAntialiasMode();
+        new void GetTextAntialiasMode(out D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
+        [PreserveSig]
         new void SetTextRenderingParams(IDWriteRenderingParams textRenderingParams = null);
+        [PreserveSig]
         new void GetTextRenderingParams(out IDWriteRenderingParams textRenderingParams);
+        [PreserveSig]
         new void SetTags(UInt64 tag1, UInt64 tag2);
+        [PreserveSig]
         new void GetTags(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new void PopLayer();
+        [PreserveSig]
         new void Flush(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
         new void SaveDrawingState([In, Out] ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void RestoreDrawingState(ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new void PushAxisAlignedClip(D2D1_RECT_F clipRect, D2D1_ANTIALIAS_MODE antialiasMode);
+        [PreserveSig]
         new void PopAxisAlignedClip();
+        [PreserveSig]
         new void Clear(D2D1_COLOR_F clearColor);
         [PreserveSig]
         new void BeginDraw();
         [PreserveSig]
-        new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);       
-        new D2D1_PIXEL_FORMAT GetPixelFormat();
+        new HRESULT EndDraw(out UInt64 tag1, out UInt64 tag2);
+        [PreserveSig]
+        new void GetPixelFormat(out D2D1_PIXEL_FORMAT pixelFormat);
+        [PreserveSig]
         new void SetDpi(float dpiX, float dpiY);
-        new void GetDpi(out float dpiX, out float dpiY);       
-        new D2D1_SIZE_F GetSize();       
-        new D2D1_SIZE_U GetPixelSize();
+        [PreserveSig]
+        new void GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
+        new void GetSize(out D2D1_SIZE_F size);
+        [PreserveSig]
+        new void GetPixelSize(out D2D1_SIZE_U size);
         [PreserveSig]
         new uint GetMaximumBitmapSize();
         [PreserveSig]
         new bool IsSupported(D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateBitmap(D2D1_SIZE_U size, IntPtr sourceData, uint pitch, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateColorContext(D2D1_COLOR_SPACE space, IntPtr profile, uint profileSize, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromFilename(string filename, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromWicColorContext(IWICColorContext wicColorContext, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateBitmapFromDxgiSurface(IDXGISurface surface, ref D2D1_BITMAP_PROPERTIES1 bitmapProperties, out ID2D1Bitmap1 bitmap);
+        [PreserveSig]
         new HRESULT CreateEffect(ref Guid effectId, out ID2D1Effect effect);
+        [PreserveSig]
         new HRESULT CreateGradientStopCollection([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] D2D1_GRADIENT_STOP[] straightAlphaGradientStops, uint straightAlphaGradientStopsCount, D2D1_COLOR_SPACE preInterpolationSpace,
             D2D1_COLOR_SPACE postInterpolationSpace, D2D1_BUFFER_PRECISION bufferPrecision, D2D1_EXTEND_MODE extendMode, D2D1_COLOR_INTERPOLATION_MODE colorInterpolationMode,
             out ID2D1GradientStopCollection1 gradientStopCollection1);
+        [PreserveSig]
         new HRESULT CreateImageBrush(ID2D1Image image, ref D2D1_IMAGE_BRUSH_PROPERTIES imageBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1ImageBrush imageBrush);
+        [PreserveSig]
         new HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ref D2D1_BITMAP_BRUSH_PROPERTIES1 bitmapBrushProperties, ref D2D1_BRUSH_PROPERTIES brushProperties, out ID2D1BitmapBrush1 bitmapBrush);
+        [PreserveSig]
         new HRESULT CreateCommandList(out ID2D1CommandList commandList);
         [PreserveSig]
         new bool IsDxgiFormatSupported(DXGI_FORMAT format);
         [PreserveSig]
         new bool IsBufferPrecisionSupported(D2D1_BUFFER_PRECISION bufferPrecision);
+        [PreserveSig]
         new HRESULT GetImageLocalBounds(ID2D1Image image, out D2D1_RECT_F localBounds);
+        [PreserveSig]
         new HRESULT GetImageWorldBounds(ID2D1Image image, out D2D1_RECT_F worldBounds);
+        [PreserveSig]
         new HRESULT GetGlyphRunWorldBounds(ref D2D1_POINT_2F baselineOrigin, DWRITE_GLYPH_RUN glyphRun, DWRITE_MEASURING_MODE measuringMode, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new void GetDevice(out ID2D1Device device);
+        [PreserveSig]
         new void SetTarget(ID2D1Image image);
+        [PreserveSig]
         new void GetTarget(out ID2D1Image image);
+        [PreserveSig]
         new void SetRenderingControls(D2D1_RENDERING_CONTROLS renderingControls);
+        [PreserveSig]
         new void GetRenderingControls(out D2D1_RENDERING_CONTROLS renderingControls);
+        [PreserveSig]
         new void SetPrimitiveBlend(D2D1_PRIMITIVE_BLEND primitiveBlend);
         [PreserveSig]
-        new D2D1_PRIMITIVE_BLEND GetPrimitiveBlend();
+        new void GetPrimitiveBlend(out D2D1_PRIMITIVE_BLEND primitiveBlend);
+        [PreserveSig]
         new void SetUnitMode(D2D1_UNIT_MODE unitMode);
         [PreserveSig]
-        new D2D1_UNIT_MODE GetUnitMode();
+        new void GetUnitMode(out D2D1_UNIT_MODE unitMode);
         [PreserveSig]
         new void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, IntPtr glyphRunDescription, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
         [PreserveSig]
@@ -3731,37 +4699,58 @@ namespace Direct2D
         new void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_POINT_2F targetOffset);
         [PreserveSig]
         new void DrawBitmap(ID2D1Bitmap bitmap, ref D2D1_RECT_F destinationRectangle, float opacity, D2D1_INTERPOLATION_MODE interpolationMode, ref D2D1_RECT_F sourceRectangle, D2D1_MATRIX_4X4_F perspectiveTransform);
+        [PreserveSig]
         new void PushLayer(ref D2D1_LAYER_PARAMETERS1 layerParameters, ID2D1Layer layer);
+        [PreserveSig]
         new HRESULT InvalidateEffectInputRectangle(ID2D1Effect effect, uint input, D2D1_RECT_F inputRectangle);
+        [PreserveSig]
         new HRESULT GetEffectInvalidRectangleCount(ID2D1Effect effect, out uint rectangleCount);
+        [PreserveSig]
         //new  HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, out D2D1_RECT_F* rectangles, uint rectanglesCount);
         new HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, out IntPtr rectangles, uint rectanglesCount);
+        [PreserveSig]
         new HRESULT GetEffectRequiredInputRectangles(ID2D1Effect renderEffect, D2D1_RECT_F renderImageRectangle, D2D1_EFFECT_INPUT_DESCRIPTION inputDescriptions,
             // out D2D1_RECT_F* requiredInputRects, uint inputCount);
             out IntPtr requiredInputRects, uint inputCount);
+        [PreserveSig]
         new void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, ref D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateFilledGeometryRealization(ID2D1Geometry geometry, float flatteningTolerance, out ID2D1GeometryRealization geometryRealization);
+        [PreserveSig]
         new HRESULT CreateStrokedGeometryRealization(ID2D1Geometry geometry, float flatteningTolerance, float strokeWidth, ID2D1StrokeStyle strokeStyle, out ID2D1GeometryRealization geometryRealization);
+        [PreserveSig]
         new void DrawGeometryRealization(ID2D1GeometryRealization geometryRealization, ID2D1Brush brush);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateInk(D2D1_INK_POINT startPoint, out ID2D1Ink ink);
+        [PreserveSig]
         new HRESULT CreateInkStyle(D2D1_INK_STYLE_PROPERTIES inkStyleProperties, out ID2D1InkStyle inkStyle);
+        [PreserveSig]
         new HRESULT CreateGradientMesh(D2D1_GRADIENT_MESH_PATCH patches, uint patchesCount, out ID2D1GradientMesh gradientMesh);
+        [PreserveSig]
         new HRESULT CreateImageSourceFromWic(IWICBitmapSource wicBitmapSource, D2D1_IMAGE_SOURCE_LOADING_OPTIONS loadingOptions, D2D1_ALPHA_MODE alphaMode, out ID2D1ImageSourceFromWic imageSource);
+        [PreserveSig]
         new HRESULT CreateLookupTable3D(D2D1_BUFFER_PRECISION precision, uint extents, IntPtr data, uint dataCount, uint strides, out ID2D1LookupTable3D lookupTable);
+        [PreserveSig]
         //new HRESULT CreateImageSourceFromDxgi(IDXGISurface** surfaces, uint surfaceCount, DXGI_COLOR_SPACE_TYPE colorSpace, D2D1_IMAGE_SOURCE_FROM_DXGI_OPTIONS options, out ID2D1ImageSource** imageSource);
         new HRESULT CreateImageSourceFromDxgi(IntPtr surfaces, uint surfaceCount, DXGI_COLOR_SPACE_TYPE colorSpace, D2D1_IMAGE_SOURCE_FROM_DXGI_OPTIONS options, out ID2D1ImageSource imageSource);
+        [PreserveSig]
         new HRESULT GetGradientMeshWorldBounds(ID2D1GradientMesh gradientMesh, out D2D1_RECT_F pBounds);
+        [PreserveSig]
         new void DrawInk(ID2D1Ink ink, ID2D1Brush brush, ID2D1InkStyle inkStyle);
+        [PreserveSig]
         new void DrawGradientMesh(ID2D1GradientMesh gradientMesh);
+        [PreserveSig]
         new void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_RECT_F destinationRectangle, ref D2D1_RECT_F sourceRectangle);
+        [PreserveSig]
         new HRESULT CreateTransformedImageSource(ID2D1ImageSource imageSource, D2D1_TRANSFORMED_IMAGE_SOURCE_PROPERTIES properties, out ID2D1TransformedImageSource transformedImageSource);
 
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateSpriteBatch(out ID2D1SpriteBatch spriteBatch);
         [PreserveSig]
         new void DrawSpriteBatch(ID2D1SpriteBatch spriteBatch, uint startIndex, uint spriteCount, ID2D1Bitmap bitmap,
@@ -3769,22 +4758,28 @@ namespace Direct2D
 
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateSvgGlyphStyle(out ID2D1SvgGlyphStyle svgGlyphStyle);
+        [PreserveSig]
         new void DrawText(string sString, uint stringLength, IDWriteTextFormat textFormat, ref D2D1_RECT_F layoutRect, ID2D1Brush defaultFillBrush,
             ID2D1SvgGlyphStyle svgGlyphStyle, uint colorPaletteIndex = 0,
             D2D1_DRAW_TEXT_OPTIONS options = D2D1_DRAW_TEXT_OPTIONS.D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT,
             DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL);
+        [PreserveSig]
         new void DrawTextLayout(D2D1_POINT_2F origin,
             IDWriteTextLayout textLayout,
             ID2D1Brush defaultFillBrush,
             ID2D1SvgGlyphStyle svgGlyphStyle,
             uint colorPaletteIndex = 0,
             D2D1_DRAW_TEXT_OPTIONS options = D2D1_DRAW_TEXT_OPTIONS.D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT);
+        [PreserveSig]
         new void DrawColorBitmapGlyphRun(DWRITE_GLYPH_IMAGE_FORMATS glyphImageFormat, D2D1_POINT_2F baselineOrigin,
             ref DWRITE_GLYPH_RUN glyphRun, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL,
             D2D1_COLOR_BITMAP_GLYPH_SNAP_OPTION bitmapSnapOption = D2D1_COLOR_BITMAP_GLYPH_SNAP_OPTION.D2D1_COLOR_BITMAP_GLYPH_SNAP_OPTION_DEFAULT);
+        [PreserveSig]
         new void DrawSvgGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush defaultFillBrush = null,
             ID2D1SvgGlyphStyle svgGlyphStyle = null, uint colorPaletteIndex = 0, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL);
+        [PreserveSig]
         new HRESULT GetColorBitmapGlyphImage(
             DWRITE_GLYPH_IMAGE_FORMATS glyphImageFormat,
             D2D1_POINT_2F glyphOrigin,
@@ -3797,6 +4792,7 @@ namespace Direct2D
             float dpiY,
             out D2D1_MATRIX_3X2_F glyphTransform,
             out ID2D1Image glyphImage);
+        [PreserveSig]
         new HRESULT GetSvgGlyphImage(
             ref D2D1_POINT_2F glyphOrigin,
             IDWriteFontFace fontFace,
@@ -3811,13 +4807,18 @@ namespace Direct2D
             out ID2D1CommandList glyphImage);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateSvgDocument(System.Runtime.InteropServices.ComTypes.IStream inputXmlStream, D2D1_SIZE_F viewportSize, out ID2D1SvgDocument svgDocument);
+        [PreserveSig]
         new void DrawSvgDocument(ID2D1SvgDocument svgDocument);
+        [PreserveSig]
         new HRESULT CreateColorContextFromDxgiColorSpace(DXGI_COLOR_SPACE_TYPE colorSpace, out ID2D1ColorContext1 colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromSimpleColorProfile(ref D2D1_SIMPLE_COLOR_PROFILE simpleProfile, out ID2D1ColorContext1 colorContext);
         #endregion
 
         #region <ID2D1DeviceContext6>
+        [PreserveSig]
         new void BlendImage(ID2D1Image image, D2D1_BLEND_MODE blendMode, ref D2D1_POINT_2F targetOffset,
             ref D2D1_RECT_F imageRectangle, D2D1_INTERPOLATION_MODE interpolationMode = D2D1_INTERPOLATION_MODE.D2D1_INTERPOLATION_MODE_LINEAR);
         #endregion
@@ -3832,12 +4833,14 @@ namespace Direct2D
         /// <param name="colorPaletteIndex">The index used to select a color palette within
         /// a color font. Note that this not the same as the paletteIndex in the
         /// DWRITE_COLOR_GLYPH_RUN struct, which is not relevant for paint glyphs.</param>
+        [PreserveSig]
         void DrawPaintGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, ID2D1Brush defaultFillBrush = null,
             uint colorPaletteIndex = 0, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL);
 
         /// <summary>
         /// Draws a glyph run, using color representations of glyphs if available.
         /// </summary>
+        [PreserveSig]
         void DrawGlyphRunWithColorSupport(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, IntPtr glyphRunDescription,
             ID2D1Brush foregroundBrush, ID2D1SvgGlyphStyle svgGlyphStyle, uint colorPaletteIndex = 0,
             DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.DWRITE_MEASURING_MODE_NATURAL,
@@ -3853,13 +4856,15 @@ namespace Direct2D
         #region <ID2D1ColorContext>
 
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
         [PreserveSig]
-        new D2D1_COLOR_SPACE GetColorSpace();
+        new void GetColorSpace(out D2D1_COLOR_SPACE colorSpace);
         [PreserveSig]
         new uint GetProfileSize();
+        [PreserveSig]
         new HRESULT GetProfile(out IntPtr profile, uint profileSize);
         #endregion
 
@@ -3867,6 +4872,7 @@ namespace Direct2D
         D2D1_COLOR_CONTEXT_TYPE GetColorContextType();
         [PreserveSig]
         DXGI_COLOR_SPACE_TYPE GetDXGIColorSpace();
+        [PreserveSig]
         HRESULT GetSimpleColorProfile(out D2D1_SIMPLE_COLOR_PROFILE simpleProfile);
     }
 
@@ -3887,19 +4893,31 @@ namespace Direct2D
     public interface ID2D1SvgDocument : ID2D1Resource
     {
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         HRESULT SetViewportSize(D2D1_SIZE_F viewportSize);
-        D2D1_SIZE_F GetViewportSize();
+        [PreserveSig]
+        void GetViewportSize(out D2D1_SIZE_F viewportSize);
+        [PreserveSig]
         HRESULT SetRoot(ID2D1SvgElement root);
+        [PreserveSig]
         void GetRoot(out ID2D1SvgElement root);
+        [PreserveSig]
         HRESULT FindElementById(string id, out ID2D1SvgElement svgElement);
+        [PreserveSig]
         HRESULT Serialize(System.Runtime.InteropServices.ComTypes.IStream outputXmlStream, ID2D1SvgElement subtree = null);
+        [PreserveSig]
         HRESULT Deserialize(System.Runtime.InteropServices.ComTypes.IStream inputXmlStream, out ID2D1SvgElement subtree);
+        [PreserveSig]
         HRESULT CreatePaint(D2D1_SVG_PAINT_TYPE paintType, D2D1_COLOR_F color, string id, out ID2D1SvgPaint paint);
+        [PreserveSig]
         HRESULT CreateStrokeDashArray(D2D1_SVG_LENGTH dashes, uint dashesCount, out ID2D1SvgStrokeDashArray strokeDashArray);
+        [PreserveSig]
         HRESULT CreatePointCollection(ref D2D1_POINT_2F points, uint pointsCount, out ID2D1SvgPointCollection pointCollection);
+        [PreserveSig]
         HRESULT CreatePathData(float segmentData, uint segmentDataCount, D2D1_SVG_PATH_COMMAND commands, uint commandsCount, out ID2D1SvgPathData pathData);
     }
 
@@ -3909,44 +4927,69 @@ namespace Direct2D
     public interface ID2D1SvgElement : ID2D1Resource
     {
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         void GetDocument(out ID2D1SvgDocument document);
+        [PreserveSig]
         HRESULT GetTagName(out string name, uint nameCount);
         [PreserveSig]
         uint GetTagNameLength();
         [PreserveSig]
         bool IsTextContent();
+        [PreserveSig]
         void GetParent(out ID2D1SvgElement parent);
         [PreserveSig]
         bool HasChildren();
+        [PreserveSig]
         void GetFirstChild(out ID2D1SvgElement child);
+        [PreserveSig]
         void GetLastChild(out ID2D1SvgElement child);
+        [PreserveSig]
         HRESULT GetPreviousChild(ID2D1SvgElement referenceChild, out ID2D1SvgElement previousChild);
+        [PreserveSig]
         HRESULT GetNextChild(ID2D1SvgElement referenceChild, out ID2D1SvgElement nextChild);
+        [PreserveSig]
         HRESULT InsertChildBefore(ID2D1SvgElement newChild, ID2D1SvgElement referenceChild = null);
+        [PreserveSig]
         HRESULT AppendChild(ID2D1SvgElement newChild);
+        [PreserveSig]
         HRESULT ReplaceChild(ID2D1SvgElement newChild, ID2D1SvgElement oldChild);
+        [PreserveSig]
         HRESULT RemoveChild(ID2D1SvgElement oldChild);
+        [PreserveSig]
         HRESULT CreateChild(string tagName, out ID2D1SvgElement newChild);
         [PreserveSig]
         bool IsAttributeSpecified(string name, out bool inherited);
         [PreserveSig]
         uint GetSpecifiedAttributeCount();
+        [PreserveSig]
         HRESULT GetSpecifiedAttributeName(uint index, out string name, uint nameCount, out bool inherited);
+        [PreserveSig]
         HRESULT GetSpecifiedAttributeNameLength(uint index, out uint nameLength, out bool inherited);
+        [PreserveSig]
         HRESULT RemoveAttribute(string name);
+        [PreserveSig]
         HRESULT SetTextValue(string name, uint nameCount);
+        [PreserveSig]
         HRESULT GetTextValue(out string name, uint nameCount);
         [PreserveSig]
         uint GetTextValueLength();
+        [PreserveSig]
         HRESULT SetAttributeValue(string name, D2D1_SVG_ATTRIBUTE_STRING_TYPE type, string value);
+        [PreserveSig]
         HRESULT GetAttributeValue(string name, D2D1_SVG_ATTRIBUTE_STRING_TYPE type, out string value, uint valueCount);
+        [PreserveSig]
         HRESULT GetAttributeValueLength(string name, D2D1_SVG_ATTRIBUTE_STRING_TYPE type, out uint valueLength);
+        [PreserveSig]
         HRESULT SetAttributeValue(string name, D2D1_SVG_ATTRIBUTE_POD_TYPE type, IntPtr value, uint valueSizeInBytes);
+        [PreserveSig]
         HRESULT GetAttributeValue(string name, D2D1_SVG_ATTRIBUTE_POD_TYPE type, out IntPtr value, uint valueSizeInBytes);
+        [PreserveSig]
         HRESULT SetAttributeValue(string name, ID2D1SvgAttribute value);
+        [PreserveSig]
         HRESULT GetAttributeValue(string name, ref Guid riid, out IntPtr value);
     }
 
@@ -3956,10 +4999,13 @@ namespace Direct2D
     public interface ID2D1SvgAttribute : ID2D1Resource
     {
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         void GetElement(out ID2D1SvgElement element);
+        [PreserveSig]
         HRESULT Clone(out ID2D1SvgAttribute attribute);
     }
 
@@ -3970,19 +5016,27 @@ namespace Direct2D
     {
         #region <ID2D1SvgAttribute>
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new void GetElement(out ID2D1SvgElement element);
+        [PreserveSig]
         new HRESULT Clone(out ID2D1SvgAttribute attribute);
         #endregion
 
+        [PreserveSig]
         HRESULT SetPaintType(D2D1_SVG_PAINT_TYPE paintType);
         [PreserveSig]
         D2D1_SVG_PAINT_TYPE GetPaintType();
+        [PreserveSig]
         HRESULT SetColor(D2D1_COLOR_F color);
+        [PreserveSig]
         void GetColor(out D2D1_COLOR_F color);
+        [PreserveSig]
         HRESULT SetId(string id);
+        [PreserveSig]
         HRESULT GetId(out string id, uint idCount);
         [PreserveSig]
         uint GetIdLength();
@@ -3995,17 +5049,25 @@ namespace Direct2D
     {
         #region <ID2D1SvgAttribute>
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new void GetElement(out ID2D1SvgElement element);
+        [PreserveSig]
         new HRESULT Clone(out ID2D1SvgAttribute attribute);
         #endregion
 
+        [PreserveSig]
         HRESULT RemoveDashesAtEnd(uint dashesCount);
+        [PreserveSig]
         HRESULT UpdateDashes(float dashes, uint dashesCount, uint startIndex = 0);
+        [PreserveSig]
         HRESULT UpdateDashes(D2D1_SVG_LENGTH dashes, uint dashesCount, uint startIndex = 0);
+        [PreserveSig]
         HRESULT GetDashes(out float dashes, uint dashesCount, uint startIndex = 0);
+        [PreserveSig]
         HRESULT GetDashes(out D2D1_SVG_LENGTH dashes, uint dashesCount, uint startIndex = 0);
         [PreserveSig]
         uint GetDashesCount();
@@ -4018,15 +5080,21 @@ namespace Direct2D
     {
         #region <ID2D1SvgAttribute>
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new void GetElement(out ID2D1SvgElement element);
+        [PreserveSig]
         new HRESULT Clone(out ID2D1SvgAttribute attribute);
         #endregion
 
+        [PreserveSig]
         HRESULT RemovePointsAtEnd(uint pointsCount);
+        [PreserveSig]
         HRESULT UpdatePoints(ref D2D1_POINT_2F points, uint pointsCount, uint startIndex = 0);
+        [PreserveSig]
         HRESULT GetPoints(out D2D1_POINT_2F points, uint pointsCount, uint startIndex = 0);
         [PreserveSig]
         uint GetPointsCount();
@@ -4039,23 +5107,33 @@ namespace Direct2D
     {
         #region <ID2D1SvgAttribute>
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new void GetElement(out ID2D1SvgElement element);
+        [PreserveSig]
         new HRESULT Clone(out ID2D1SvgAttribute attribute);
         #endregion
 
+        [PreserveSig]
         HRESULT RemoveSegmentDataAtEnd(uint dataCount);
+        [PreserveSig]
         HRESULT UpdateSegmentData(float data, uint dataCount, uint startIndex = 0);
+        [PreserveSig]
         HRESULT GetSegmentData(out float data, uint dataCount, uint startIndex = 0);
         [PreserveSig]
         uint GetSegmentDataCount();
+        [PreserveSig]
         HRESULT RemoveCommandsAtEnd(uint commandsCount);
+        [PreserveSig]
         HRESULT UpdateCommands(D2D1_SVG_PATH_COMMAND commands, uint commandsCount, uint startIndex = 0);
+        [PreserveSig]
         HRESULT GetCommands(out D2D1_SVG_PATH_COMMAND commands, uint commandsCount, uint startIndex = 0);
         [PreserveSig]
         uint GetCommandsCount();
+        [PreserveSig]
         HRESULT CreatePathGeometry(D2D1_FILL_MODE fillMode, out ID2D1PathGeometry1 pathGeometry);
     }
 
@@ -4068,31 +5146,50 @@ namespace Direct2D
 
         #region ID2D1Geometry
         #region ID2D1Resource
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new HRESULT GetBounds(D2D1_MATRIX_3X2_F worldTransform, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new HRESULT GetWidenedBounds(float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_RECT_F bounds);
+        [PreserveSig]
         new HRESULT StrokeContainsPoint(ref D2D1_POINT_2F point, float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out bool contains);
+        [PreserveSig]
         new HRESULT FillContainsPoint(ref D2D1_POINT_2F point, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out bool contains);
+        [PreserveSig]
         new HRESULT CompareWithGeometry(ID2D1Geometry inputGeometry, D2D1_MATRIX_3X2_F inputGeometryTransform, float flatteningTolerance, out D2D1_GEOMETRY_RELATION relation);
+        [PreserveSig]
         new HRESULT Simplify(D2D1_GEOMETRY_SIMPLIFICATION_OPTION simplificationOption, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT Tessellate(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1TessellationSink tessellationSink);
+        [PreserveSig]
         new HRESULT CombineWithGeometry(ID2D1Geometry inputGeometry, D2D1_COMBINE_MODE combineMode, D2D1_MATRIX_3X2_F inputGeometryTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT Outline(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT ComputeArea(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out float area);
+        [PreserveSig]
         new HRESULT ComputeLength(D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out float length);
+        [PreserveSig]
         new HRESULT ComputePointAtLength(float length, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_POINT_2F point, out D2D1_POINT_2F unitTangentVector);
+        [PreserveSig]
         new HRESULT Widen(float strokeWidth, ID2D1StrokeStyle strokeStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
 
         #endregion
 
+        [PreserveSig]
         new HRESULT Open(out ID2D1GeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT Stream(ID2D1GeometrySink geometrySink);
+        [PreserveSig]
         new HRESULT GetSegmentCount(out int count);
+        [PreserveSig]
         new HRESULT GetFigureCount(out int count);
         #endregion
 
+        [PreserveSig]
         HRESULT ComputePointAndSegmentAtLength(float length, uint startSegment, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, out D2D1_POINT_DESCRIPTION pointDescription);
     }
 
@@ -4171,20 +5268,29 @@ namespace Direct2D
     public interface ID2D1Ink : ID2D1Resource
     {
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         void SetStartPoint(D2D1_INK_POINT startPoint);
         [PreserveSig]
-        D2D1_INK_POINT GetStartPoint();
+        void GetStartPoint(out D2D1_INK_POINT startPoint);
+        [PreserveSig]
         HRESULT AddSegments(D2D1_INK_BEZIER_SEGMENT segments, uint segmentsCount);
+        [PreserveSig]
         HRESULT RemoveSegmentsAtEnd(uint segmentsCount);
+        [PreserveSig]
         HRESULT SetSegments(uint startSegment, D2D1_INK_BEZIER_SEGMENT segments, uint segmentsCount);
+        [PreserveSig]
         HRESULT SetSegmentAtEnd(D2D1_INK_BEZIER_SEGMENT segment);
         [PreserveSig]
         uint GetSegmentCount();
+        [PreserveSig]
         HRESULT GetSegments(uint startSegment, out D2D1_INK_BEZIER_SEGMENT segments, uint segmentsCount);
+        [PreserveSig]
         HRESULT StreamAsGeometry(ID2D1InkStyle inkStyle, D2D1_MATRIX_3X2_F worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         HRESULT GetBounds(ID2D1InkStyle inkStyle, D2D1_MATRIX_3X2_F worldTransform, out D2D1_RECT_F bounds);
     }
 
@@ -4194,13 +5300,18 @@ namespace Direct2D
     public interface ID2D1InkStyle : ID2D1Resource
     {
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         void SetNibTransform(D2D1_MATRIX_3X2_F transform);
+        [PreserveSig]
         void GetNibTransform(out D2D1_MATRIX_3X2_F transform);
+        [PreserveSig]
         void SetNibShape(D2D1_INK_NIB_SHAPE nibShape);
-        D2D1_INK_NIB_SHAPE GetNibShape();
+        [PreserveSig]
+        void GetNibShape(out D2D1_INK_NIB_SHAPE nibShape);
     }
 
     [ComImport]
@@ -4209,11 +5320,13 @@ namespace Direct2D
     public interface ID2D1GradientMesh : ID2D1Resource
     {
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
         [PreserveSig]
         uint GetPatchCount();
+        [PreserveSig]
         HRESULT GetPatches(uint startIndex, out D2D1_GRADIENT_MESH_PATCH patches, uint patchesCount);
     }
 
@@ -4224,12 +5337,15 @@ namespace Direct2D
     {
         #region <ID2D1Image>
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
         #endregion
 
+        [PreserveSig]
         HRESULT OfferResources();
+        [PreserveSig]
         HRESULT TryReclaimResources(out bool resourcesDiscarded);
     }
 
@@ -4240,12 +5356,15 @@ namespace Direct2D
     {
         #region <ID2D1Image>
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
         #endregion
 
+        [PreserveSig]
         void GetSource(out ID2D1ImageSource imageSource);
+        [PreserveSig]
         void GetProperties(out D2D1_TRANSFORMED_IMAGE_SOURCE_PROPERTIES properties);
     }
 
@@ -4258,17 +5377,23 @@ namespace Direct2D
 
         #region <ID2D1Image>
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
         #endregion
 
+        [PreserveSig]
         new HRESULT OfferResources();
+        [PreserveSig]
         new HRESULT TryReclaimResources(out bool resourcesDiscarded);
         #endregion
 
+        [PreserveSig]
         HRESULT EnsureCached(D2D1_RECT_U rectangleToFill);
+        [PreserveSig]
         HRESULT TrimCache(D2D1_RECT_U rectangleToPreserve);
+        [PreserveSig]
         void GetSource(out IWICBitmapSource wicBitmapSource);
     }
 
@@ -4278,6 +5403,7 @@ namespace Direct2D
     public interface ID2D1LookupTable3D : ID2D1Resource
     {
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion      
     }
@@ -4617,8 +5743,10 @@ namespace Direct2D
     public interface ID2D1Multithread
     {
         [PreserveSig]
-        bool GetMultithreadProtected();      
-        void Enter();        
+        bool GetMultithreadProtected();
+        [PreserveSig]
+        void Enter();
+        [PreserveSig]
         void Leave();
     }
 
@@ -4628,26 +5756,21 @@ namespace Direct2D
     public interface ID2D1Device : ID2D1Resource
     {
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext deviceContext);
+        [PreserveSig]
         //HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IPrintDocumentPackageTarget documentTarget, D2D1_PRINT_CONTROL_PROPERTIES printControlProperties, out ID2D1PrintControl printControl);
         HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IntPtr documentTarget, ref D2D1_PRINT_CONTROL_PROPERTIES printControlProperties, out ID2D1PrintControl printControl);
+        [PreserveSig]
         void SetMaximumTextureMemory(UInt64 maximumInBytes);
+        [PreserveSig]
         UInt64 GetMaximumTextureMemory();
+        [PreserveSig]
         void ClearResources(uint millisecondsSinceUse = 0);
-        //COM_DECLSPEC_NOTHROW
-        //HRESULT
-        //CreatePrintControl(
-        //     IWICImagingFactory* wicFactory,
-        //     IPrintDocumentPackageTarget* documentTarget,
-        //    CONST D2D1_PRINT_CONTROL_PROPERTIES &printControlProperties,
-        //    _COM_Outptr_ ID2D1PrintControl **printControl
-        //    )
-        //    {
-        //        return CreatePrintControl(wicFactory, documentTarget, &printControlProperties, printControl);
-        //    }
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -4712,10 +5835,15 @@ namespace Direct2D
         HRESULT SetTags(UInt64 tag1, UInt64 tag2);
         [PreserveSig]
         HRESULT SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
+        [PreserveSig]
         HRESULT SetTextRenderingParams(IDWriteRenderingParams textRenderingParams);
+        [PreserveSig]
         HRESULT SetTransform(D2D1_MATRIX_3X2_F transform);
+        [PreserveSig]
         HRESULT SetPrimitiveBlend(D2D1_PRIMITIVE_BLEND primitiveBlend);
+        [PreserveSig]
         HRESULT SetUnitMode(D2D1_UNIT_MODE unitMode);
+        [PreserveSig]
         HRESULT Clear(D2D1_COLOR_F color);
         [PreserveSig]
         HRESULT DrawGlyphRun(D2D1_POINT_2F baselineOrigin, ref DWRITE_GLYPH_RUN glyphRun, IntPtr glyphRunDescription, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
@@ -4731,13 +5859,21 @@ namespace Direct2D
         HRESULT DrawImage(ID2D1Image image, ref D2D1_POINT_2F targetOffset, D2D1_RECT_F imageRectangle, D2D1_INTERPOLATION_MODE interpolationMode, D2D1_COMPOSITE_MODE compositeMode);
         [PreserveSig]
         HRESULT DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_POINT_2F targetOffset);
+        [PreserveSig]
         HRESULT FillMesh(ID2D1Mesh mesh, ID2D1Brush brush);
+        [PreserveSig]
         HRESULT FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, D2D1_RECT_F destinationRectangle, D2D1_RECT_F sourceRectangle);
+        [PreserveSig]
         HRESULT FillGeometry(ID2D1Geometry geometry, ID2D1Brush brush, ID2D1Brush opacityBrush);
+        [PreserveSig]
         HRESULT FillRectangle(D2D1_RECT_F rect, ID2D1Brush brush);
+        [PreserveSig]
         HRESULT PushAxisAlignedClip(D2D1_RECT_F clipRect, D2D1_ANTIALIAS_MODE antialiasMode);
+        [PreserveSig]
         HRESULT PushLayer(ref D2D1_LAYER_PARAMETERS1 layerParameters1, ID2D1Layer layer);
+        [PreserveSig]
         HRESULT PopAxisAlignedClip();
+        [PreserveSig]
         HRESULT PopLayer();
     }
 
@@ -4746,6 +5882,7 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ID2D1GdiMetafileSink
     {
+        [PreserveSig]
         HRESULT ProcessRecord(uint recordType, IntPtr recordData, uint recordDataSize);
     }
 
@@ -4755,9 +5892,11 @@ namespace Direct2D
     public interface ID2D1GdiMetafileSink1 : ID2D1GdiMetafileSink
     {
         #region <ID2D1GdiMetafileSink>
+        [PreserveSig]
         new HRESULT ProcessRecord(uint recordType, IntPtr recordData, uint recordDataSize);
         #endregion
 
+        [PreserveSig]
         HRESULT ProcessRecord(uint recordType, IntPtr recordData, uint recordDataSize, uint flags);
     }
 
@@ -4767,10 +5906,13 @@ namespace Direct2D
     public interface ID2D1GdiMetafile : ID2D1Resource
     {
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         HRESULT Stream(ID2D1GdiMetafileSink sink);
+        [PreserveSig]
         HRESULT GetBounds(out D2D1_RECT_F bounds);
     }
 
@@ -4781,18 +5923,21 @@ namespace Direct2D
     {
         #region <ID2D1GdiMetafile>
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new HRESULT Stream(ID2D1GdiMetafileSink sink);
+        [PreserveSig]
         new HRESULT GetBounds(out D2D1_RECT_F bounds);
         #endregion
 
+        [PreserveSig]
         HRESULT GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
         HRESULT GetSourceBounds(out D2D1_RECT_F bounds);
     }
-
-
 
     [StructLayout(LayoutKind.Sequential)]
     public struct D2D1_LAYER_PARAMETERS1
@@ -4821,11 +5966,14 @@ namespace Direct2D
     {
         #region <ID2D1Image>
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
         #endregion
 
+        [PreserveSig]
         HRESULT Stream(ID2D1CommandSink sink);
+        [PreserveSig]
         HRESULT Close();
     }
 
@@ -4846,21 +5994,28 @@ namespace Direct2D
         [PreserveSig]
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         #endregion
+        [PreserveSig]
         new void SetExtendModeX(D2D1_EXTEND_MODE extendModeX);
+        [PreserveSig]
         new void SetExtendModeY(D2D1_EXTEND_MODE extendModeY);
+        [PreserveSig]
         new void SetInterpolationMode(D2D1_BITMAP_INTERPOLATION_MODE interpolationMode);
+        [PreserveSig]
         new void SetBitmap(ID2D1Bitmap bitmap);
         [PreserveSig]
-        new D2D1_EXTEND_MODE GetExtendModeX();
+        new void GetExtendModeX(out D2D1_EXTEND_MODE extendedModeX);
         [PreserveSig]
-        new D2D1_EXTEND_MODE GetExtendModeY();
+        new void GetExtendModeY(out D2D1_EXTEND_MODE extendedModeY);
         [PreserveSig]
-        new D2D1_BITMAP_INTERPOLATION_MODE GetInterpolationMode();
+        new void GetInterpolationMode(out D2D1_BITMAP_INTERPOLATION_MODE interpolationMode);
+        [PreserveSig]
         new void GetBitmap(out ID2D1Bitmap bitmap);
         #endregion
 
+        [PreserveSig]
         void SetInterpolationMode1(D2D1_INTERPOLATION_MODE interpolationMode);
-        D2D1_INTERPOLATION_MODE GetInterpolationMode1();
+        [PreserveSig]
+        void GetInterpolationMode1(out D2D1_INTERPOLATION_MODE interpolationMode1);
     }
 
     [ComImport]
@@ -4870,6 +6025,7 @@ namespace Direct2D
     {
         #region ID2D1Brush
         #region ID2D1Resource
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
         [PreserveSig]
@@ -4882,18 +6038,25 @@ namespace Direct2D
         new void GetTransform(out D2D1_MATRIX_3X2_F_STRUCT transform);
         #endregion
 
+        [PreserveSig]
         void SetImage(ID2D1Image image);
+        [PreserveSig]
         void SetExtendModeX(D2D1_EXTEND_MODE extendModeX);
+        [PreserveSig]
         void SetExtendModeY(D2D1_EXTEND_MODE extendModeY);
+        [PreserveSig]
         void SetInterpolationMode(D2D1_INTERPOLATION_MODE interpolationMode);
+        [PreserveSig]
         void SetSourceRectangle(D2D1_RECT_F sourceRectangle);
+        [PreserveSig]
         void GetImage(out ID2D1Image image);
         [PreserveSig]
-        D2D1_EXTEND_MODE GetExtendModeX();
+        void GetExtendModeX(out D2D1_EXTEND_MODE extendedModeX);
         [PreserveSig]
-        D2D1_EXTEND_MODE GetExtendModeY();
+        void GetExtendModeY(out D2D1_EXTEND_MODE extendedModeY);
         [PreserveSig]
-        D2D1_INTERPOLATION_MODE GetInterpolationMode();
+        void GetInterpolationMode(out D2D1_BITMAP_INTERPOLATION_MODE interpolationMode);
+        [PreserveSig]
         void GetSourceRectangle(out D2D1_RECT_F sourceRectangle);
     }
 
@@ -4904,26 +6067,28 @@ namespace Direct2D
     {
         #region <ID2D1GradientStopCollection>
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
         [PreserveSig]
         new uint GetGradientStopCount();
+        [PreserveSig]
         new void GetGradientStops(out D2D1_GRADIENT_STOP gradientStops, uint gradientStopsCount);
         [PreserveSig]
-        new D2D1_GAMMA GetColorInterpolationGamma();
+        new void GetColorInterpolationGamma(out D2D1_GAMMA colorInterpolationGamma);
         [PreserveSig]
-        new D2D1_EXTEND_MODE GetExtendMode();
+        new void GetExtendMode(out D2D1_EXTEND_MODE extendedMode);
         #endregion
 
         void GetGradientStops1(out D2D1_GRADIENT_STOP gradientStops, uint gradientStopsCount);
         [PreserveSig]
-        D2D1_COLOR_SPACE GetPreInterpolationSpace();
+        void GetPreInterpolationSpace(out D2D1_COLOR_SPACE preInterpolationSpace);
         [PreserveSig]
-        D2D1_COLOR_SPACE GetPostInterpolationSpace();
+        void GetPostInterpolationSpace(out D2D1_COLOR_SPACE postInterpolationSpace);
         [PreserveSig]
-        D2D1_BUFFER_PRECISION GetBufferPrecision();
+        void GetBufferPrecision(out D2D1_BUFFER_PRECISION bufferPrecision);
         [PreserveSig]
-        D2D1_COLOR_INTERPOLATION_MODE GetColorInterpolationMode();
+        void GetColorInterpolationMode(out D2D1_COLOR_INTERPOLATION_MODE colorInterpolationMode);
     }
 
 
@@ -7312,25 +8477,38 @@ namespace Direct2D
         #region <ID2D1Image>
 
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
 
         #endregion
 
         #endregion
 
-        new D2D1_SIZE_F GetSize();
-        new D2D1_SIZE_U GetPixelSize();
-        new D2D1_PIXEL_FORMAT GetPixelFormat();
+        [PreserveSig]
+        new void GetSize(out D2D1_SIZE_F size);
+        [PreserveSig]
+        new void GetPixelSize(out D2D1_SIZE_U size);
+        [PreserveSig]
+        new void GetPixelFormat(out D2D1_PIXEL_FORMAT format);
+        [PreserveSig]
         new void GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
         new void CopyFromBitmap(ref D2D1_POINT_2U destPoint, ID2D1Bitmap bitmap, D2D1_RECT_U srcRect);
+        [PreserveSig]
         new void CopyFromRenderTarget(ref D2D1_POINT_2U destPoint, ID2D1RenderTarget renderTarget, D2D1_RECT_U srcRect);
+        [PreserveSig]
         new void CopyFromMemory(ref D2D1_RECT_U dstRect, IntPtr srcData, uint pitch);
         #endregion
 
+        [PreserveSig]
         void GetColorContext(out ID2D1ColorContext colorContext);
-        D2D1_BITMAP_OPTIONS GetOptions();
+        [PreserveSig]
+        void GetOptions(out D2D1_BITMAP_OPTIONS options);
+        [PreserveSig]
         HRESULT GetSurface(out IDXGISurface dxgiSurface);
+        [PreserveSig]
         HRESULT Map(D2D1_MAP_OPTIONS options, out D2D1_MAPPED_RECT mappedRect);
+        [PreserveSig]
         HRESULT Unmap();
     }
 
@@ -7401,13 +8579,15 @@ namespace Direct2D
     public interface ID2D1ColorContext : ID2D1Resource
     {
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
         [PreserveSig]
-        D2D1_COLOR_SPACE GetColorSpace();
+        void GetColorSpace(out D2D1_COLOR_SPACE colorSpace);
         [PreserveSig]
         uint GetProfileSize();
+        [PreserveSig]
         HRESULT GetProfile(out IntPtr profile, uint profileSize);
     }
 
@@ -8285,19 +9465,26 @@ namespace Direct2D
     {
         #region ID3D11Resource
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         new void GetType(out D3D11_RESOURCE_DIMENSION pResourceDimension);
+        [PreserveSig]
         new void SetEvictionPriority(uint EvictionPriority);
         [PreserveSig]
         new uint GetEvictionPriority();
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_TEXTURE2D_DESC pDesc);
     }
 
@@ -8330,14 +9517,20 @@ namespace Direct2D
     public interface ID3D11Resource : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void GetType(out D3D11_RESOURCE_DIMENSION pResourceDimension);
+        [PreserveSig]
         void SetEvictionPriority(uint EvictionPriority);
         [PreserveSig]
         uint GetEvictionPriority();
@@ -8357,10 +9550,14 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ID3D11DeviceChild
     {
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
     }
 
@@ -8370,133 +9567,242 @@ namespace Direct2D
     public interface ID3D11DeviceContext : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void VSSetConstantBuffers(uint StartSlot, uint NumBuffers, ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void PSSetShaderResources(uint StartSlot, uint NumViews, ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void PSSetShader(ID3D11PixelShader pPixelShader, ID3D11ClassInstance ppClassInstances, uint NumClassInstances);
+        [PreserveSig]
         void PSSetSamplers(uint StartSlot, uint NumSamplers, ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void VSSetShader(ID3D11VertexShader pVertexShader, ID3D11ClassInstance ppClassInstances, uint NumClassInstances);
+        [PreserveSig]
         void DrawIndexed(uint IndexCount, uint StartIndexLocation, int BaseVertexLocation);
+        [PreserveSig]
         void Draw(uint VertexCount, uint StartVertexLocation);
+        [PreserveSig]
         HRESULT Map(ID3D11Resource pResource, uint Subresource, D3D11_MAP MapType, uint MapFlags, out D3D11_MAPPED_SUBRESOURCE pMappedResource);
+        [PreserveSig]
         void Unmap(ID3D11Resource pResource, uint Subresource);
+        [PreserveSig]
         void PSSetConstantBuffers(uint StartSlot, uint NumBuffers, ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void IASetInputLayout(ID3D11InputLayout pInputLayout);
+        [PreserveSig]
         void IASetVertexBuffers(uint StartSlot, uint NumBuffers, ID3D11Buffer ppVertexBuffers, uint pStrides, uint pOffsets);
+        [PreserveSig]
         void IASetIndexBuffer(ID3D11Buffer pIndexBuffer, DXGI_FORMAT Format, uint Offset);
+        [PreserveSig]
         void DrawIndexedInstanced(uint IndexCountPerInstance, uint InstanceCount, uint StartIndexLocation, int BaseVertexLocation, uint StartInstanceLocation);
+        [PreserveSig]
         void DrawInstanced(uint VertexCountPerInstance, uint InstanceCount, uint StartVertexLocation, uint StartInstanceLocation);
+        [PreserveSig]
         void GSSetConstantBuffers(uint StartSlot, uint NumBuffers, ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void GSSetShader(ID3D11GeometryShader pShader, ID3D11ClassInstance ppClassInstances, uint NumClassInstances);
+        [PreserveSig]
         //void IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY Topology);
         void IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY Topology);
+        [PreserveSig]
         void VSSetShaderResources(uint StartSlot, uint NumViews, ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void VSSetSamplers(uint StartSlot, uint NumSamplers, ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void Begin(ID3D11Asynchronous pAsync);
+        [PreserveSig]
         void End(ID3D11Asynchronous pAsync);
+        [PreserveSig]
         HRESULT GetData(ID3D11Asynchronous pAsync, out IntPtr pData, uint DataSize, uint GetDataFlags);
+        [PreserveSig]
         void SetPredication(ID3D11Predicate pPredicate, bool PredicateValue);
+        [PreserveSig]
         void GSSetShaderResources(uint StartSlot, uint NumViews, ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void GSSetSamplers(uint StartSlot, uint NumSamplers, ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void OMSetRenderTargets(uint NumViews, ID3D11RenderTargetView ppRenderTargetViews, ID3D11DepthStencilView pDepthStencilView);
+        [PreserveSig]
         void OMSetRenderTargetsAndUnorderedAccessViews(uint NumRTVs, ID3D11RenderTargetView ppRenderTargetViews, ID3D11DepthStencilView pDepthStencilView,
             uint UAVStartSlot, uint NumUAVs, ID3D11UnorderedAccessView ppUnorderedAccessViews, uint pUAVInitialCounts);
+        [PreserveSig]
         //   _In_opt_  const FLOAT BlendFactor[ 4 ],
         void OMSetBlendState(ID3D11BlendState pBlendState, float[] BlendFactor, uint SampleMask);
+        [PreserveSig]
         void OMSetDepthStencilState(ID3D11DepthStencilState pDepthStencilState, uint StencilRef);
+        [PreserveSig]
         void SOSetTargets(uint NumBuffers, ID3D11Buffer ppSOTargets, uint pOffsets);
+        [PreserveSig]
         void DrawAuto();
+        [PreserveSig]
         void DrawIndexedInstancedIndirect(ID3D11Buffer pBufferForArgs, uint AlignedByteOffsetForArgs);
+        [PreserveSig]
         void DrawInstancedIndirect(ID3D11Buffer pBufferForArgs, uint AlignedByteOffsetForArgs);
+        [PreserveSig]
         void Dispatch(uint ThreadGroupCountX, uint ThreadGroupCountY, uint ThreadGroupCountZ);
+        [PreserveSig]
         void DispatchIndirect(ID3D11Buffer pBufferForArgs, uint AlignedByteOffsetForArgs);
+        [PreserveSig]
         void RSSetState(ID3D11RasterizerState pRasterizerState);
+        [PreserveSig]
         void RSSetViewports(uint NumViewports, D3D11_VIEWPORT pViewports);
+        [PreserveSig]
         ////void RSSetScissorRects(uint NumRects, D3D11_RECT pRects);
         void RSSetScissorRects(uint NumRects, RECT pRects);
+        [PreserveSig]
         void CopySubresourceRegion(ID3D11Resource pDstResource, uint DstSubresource, uint DstX, uint DstY, uint DstZ, ID3D11Resource pSrcResource, uint SrcSubresource, D3D11_BOX pSrcBox);
+        [PreserveSig]
         void CopyResource(ID3D11Resource pDstResource, ID3D11Resource pSrcResource);
+        [PreserveSig]
         void UpdateSubresource(ID3D11Resource pDstResource, uint DstSubresource, D3D11_BOX pDstBox, IntPtr pSrcData, uint SrcRowPitch, uint SrcDepthPitch);
+        [PreserveSig]
         void CopyStructureCount(ID3D11Buffer pDstBuffer, uint DstAlignedByteOffset, ID3D11UnorderedAccessView pSrcView);
+        [PreserveSig]
         // float ColorRGBA[ 4 ]
         void ClearRenderTargetView(ID3D11RenderTargetView pRenderTargetView, float[] ColorRGBA);
+        [PreserveSig]
         // uint Values[ 4 ]
         void ClearUnorderedAccessViewuint(ID3D11UnorderedAccessView pUnorderedAccessView, uint[] Values);
+        [PreserveSig]
         // float Values[ 4 ]
         void ClearUnorderedAccessViewfloat(ID3D11UnorderedAccessView pUnorderedAccessView, float[] Values);
+        [PreserveSig]
         void ClearDepthStencilView(ID3D11DepthStencilView pDepthStencilView, uint ClearFlags, float Depth, byte Stencil);
+        [PreserveSig]
         void GenerateMips(ID3D11ShaderResourceView pShaderResourceView);
+        [PreserveSig]
         void SetResourceMinLOD(ID3D11Resource pResource, float MinLOD);
         [PreserveSig]
         float GetResourceMinLOD(ID3D11Resource pResource);
+        [PreserveSig]
         void ResolveSubresource(ID3D11Resource pDstResource, uint DstSubresource, ID3D11Resource pSrcResource, uint SrcSubresource, DXGI_FORMAT Format);
+        [PreserveSig]
         void ExecuteCommandList(ID3D11CommandList pCommandList, bool RestoreContextState);
+        [PreserveSig]
         void HSSetShaderResources(uint StartSlot, uint NumViews,ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void HSSetShader(ID3D11HullShader pHullShader, ID3D11ClassInstance ppClassInstances, uint NumClassInstances);
+        [PreserveSig]
         void HSSetSamplers(uint StartSlot, uint NumSamplers, ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void HSSetConstantBuffers(uint StartSlot, uint NumBuffers, ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void DSSetShaderResources(uint StartSlot, uint NumViews, ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void DSSetShader(ID3D11DomainShader pDomainShader, ID3D11ClassInstance ppClassInstances, uint NumClassInstances);
+        [PreserveSig]
         void DSSetSamplers(uint StartSlot, uint NumSamplers, ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void DSSetConstantBuffers(uint StartSlot, uint NumBuffers, ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void CSSetShaderResources(uint StartSlot, uint NumViews, ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void CSSetUnorderedAccessViews(uint StartSlot, uint NumUAVs, ID3D11UnorderedAccessView ppUnorderedAccessViews, uint pUAVInitialCounts);
+        [PreserveSig]
         void CSSetShader(ID3D11ComputeShader pComputeShader, ID3D11ClassInstance ppClassInstances, uint NumClassInstances);
+        [PreserveSig]
         void CSSetSamplers(uint StartSlot, uint NumSamplers, ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void CSSetConstantBuffers(uint StartSlot, uint NumBuffers, ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void VSGetConstantBuffers(uint StartSlot, uint NumBuffers, out ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void PSGetShaderResources(uint StartSlot, uint NumViews, out ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void PSGetShader(out ID3D11PixelShader ppPixelShader, out ID3D11ClassInstance ppClassInstances, ref uint pNumClassInstances);
+        [PreserveSig]
         void PSGetSamplers(uint StartSlot, uint NumSamplers, out ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void VSGetShader(out ID3D11VertexShader ppVertexShader, out ID3D11ClassInstance ppClassInstances, ref uint pNumClassInstances);
+        [PreserveSig]
         void PSGetConstantBuffers(uint StartSlot, uint NumBuffers, out ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void IAGetInputLayout(out ID3D11InputLayout ppInputLayout);
+        [PreserveSig]
         void IAGetVertexBuffers(uint StartSlot, uint NumBuffers, out ID3D11Buffer ppVertexBuffers, out uint pStrides, out uint pOffsets);
+        [PreserveSig]
         void IAGetIndexBuffer(out ID3D11Buffer pIndexBuffer, out DXGI_FORMAT Format, out uint Offset);
+        [PreserveSig]
         void GSGetConstantBuffers(uint StartSlot, uint NumBuffers, out ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void GSGetShader(out ID3D11GeometryShader ppGeometryShader, out ID3D11ClassInstance ppClassInstances, ref uint pNumClassInstances);
+        [PreserveSig]
         //void IAGetPrimitiveTopology(out D3D11_PRIMITIVE_TOPOLOGY pTopology);
         void IAGetPrimitiveTopology(out D3D_PRIMITIVE_TOPOLOGY pTopology);
+        [PreserveSig]
         void VSGetShaderResources(uint StartSlot, uint NumViews, out ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void VSGetSamplers(uint StartSlot, uint NumSamplers, out ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void GetPredication(out ID3D11Predicate ppPredicate, out bool pPredicateValue);
+        [PreserveSig]
         void GSGetShaderResources(uint StartSlot, uint NumViews, out ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void GSGetSamplers(uint StartSlot, uint NumSamplers, out ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void OMGetRenderTargets(uint NumViews, out ID3D11RenderTargetView ppRenderTargetViews, out ID3D11DepthStencilView ppDepthStencilView);
+        [PreserveSig]
         void OMGetRenderTargetsAndUnorderedAccessViews(uint NumRTVs, out ID3D11RenderTargetView ppRenderTargetViews, out ID3D11DepthStencilView ppDepthStencilView, uint UAVStartSlot, uint NumUAVs, out ID3D11UnorderedAccessView ppUnorderedAccessViews);
+        [PreserveSig]
         //  float BlendFactor[ 4 ]
         void OMGetBlendState(out ID3D11BlendState ppBlendState, out float[] BlendFactor, out uint pSampleMask);
+        [PreserveSig]
         void OMGetDepthStencilState(out ID3D11DepthStencilState ppDepthStencilState, out uint pStencilRef);
+        [PreserveSig]
         void SOGetTargets(uint NumBuffers, out ID3D11Buffer ppSOTargets);
+        [PreserveSig]
         void RSGetState(out ID3D11RasterizerState ppRasterizerState);
+        [PreserveSig]
         void RSGetViewports(ref uint pNumViewports, out D3D11_VIEWPORT pViewports);
+        [PreserveSig]
         //void RSGetScissorRects(ref uint pNumRects, out D3D11_RECT pRects);
         void RSGetScissorRects(ref uint pNumRects, out RECT pRects);
+        [PreserveSig]
         void HSGetShaderResources(uint StartSlot, uint NumViews, out ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void HSGetShader(out ID3D11HullShader ppHullShader, out ID3D11ClassInstance ppClassInstances, ref uint pNumClassInstances);
+        [PreserveSig]
         void HSGetSamplers(uint StartSlot, uint NumSamplers, out ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void HSGetConstantBuffers(uint StartSlot, uint NumBuffers, out ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void DSGetShaderResources(uint StartSlot, uint NumViews, out ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void DSGetShader(out ID3D11DomainShader ppDomainShader, out ID3D11ClassInstance ppClassInstances, ref uint pNumClassInstances);
+        [PreserveSig]
         void DSGetSamplers(uint StartSlot, uint NumSamplers, out ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void DSGetConstantBuffers(uint StartSlot, uint NumBuffers, out ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void CSGetShaderResources(uint StartSlot, uint NumViews, out ID3D11ShaderResourceView ppShaderResourceViews);
+        [PreserveSig]
         void CSGetUnorderedAccessViews(uint StartSlot, uint NumUAVs, out ID3D11UnorderedAccessView ppUnorderedAccessViews);
+        [PreserveSig]
         void CSGetShader(out ID3D11ComputeShader ppComputeShader, out ID3D11ClassInstance ppClassInstances, ref uint pNumClassInstances);
+        [PreserveSig]
         void CSGetSamplers(uint StartSlot, uint NumSamplers, out ID3D11SamplerState ppSamplers);
+        [PreserveSig]
         void CSGetConstantBuffers(uint StartSlot, uint NumBuffers, out ID3D11Buffer ppConstantBuffers);
+        [PreserveSig]
         void ClearState();
+        [PreserveSig]
         void Flush();
         [PreserveSig]
-        D3D11_DEVICE_CONTEXT_TYPE GetType();
+        void GetType(out D3D11_DEVICE_CONTEXT_TYPE deviceContextType);
         [PreserveSig]
         uint GetContextFlags();
+        [PreserveSig]
         HRESULT FinishCommandList(bool RestoreDeferredContextState, out ID3D11CommandList ppCommandList);
     }
 
@@ -8508,19 +9814,26 @@ namespace Direct2D
 
         #region ID3D11Resource
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         new void GetType(out D3D11_RESOURCE_DIMENSION pResourceDimension);
+        [PreserveSig]
         new void SetEvictionPriority(uint EvictionPriority);
         [PreserveSig]
         new uint GetEvictionPriority();
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_BUFFER_DESC pDesc);
     }
 
@@ -8541,13 +9854,18 @@ namespace Direct2D
     public interface ID3D11View : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void GetResource(out ID3D11Resource ppResource);
     }
 
@@ -8558,16 +9876,22 @@ namespace Direct2D
     {
         #region ID3D11View
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         new void GetResource(out ID3D11Resource ppResource);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_SHADER_RESOURCE_VIEW_DESC pDesc);
     }
 
@@ -8650,10 +9974,14 @@ namespace Direct2D
     public interface ID3D11PixelShader : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion        
     }
@@ -8664,16 +9992,24 @@ namespace Direct2D
     public interface ID3D11ClassInstance : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void GetClassLinkage(out ID3D11ClassLinkage ppLinkage);
+        [PreserveSig]
         void GetDesc(out D3D11_CLASS_INSTANCE_DESC pDesc);
+        [PreserveSig]
         void GetInstanceName(out System.Text.StringBuilder pInstanceName, ref uint pBufferLength);
+        [PreserveSig]
         void GetTypeName(out System.Text.StringBuilder pTypeName, ref uint pBufferLength);
     }
 
@@ -8696,14 +10032,20 @@ namespace Direct2D
     public interface ID3D11ClassLinkage : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         HRESULT GetClassInstance(string pClassInstanceName, uint InstanceIndex, out ID3D11ClassInstance ppInstance);
+        [PreserveSig]
         HRESULT CreateClassInstance(string pClassTypeName, uint ConstantBufferOffset, uint ConstantVectorOffset, uint TextureOffset, uint SamplerOffset, out ID3D11ClassInstance ppInstance);
     }
 
@@ -8714,13 +10056,18 @@ namespace Direct2D
     public interface ID3D11SamplerState : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_SAMPLER_DESC pDesc);
     }
 
@@ -8806,10 +10153,14 @@ namespace Direct2D
     public interface ID3D11VertexShader : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion        
     }
@@ -8837,10 +10188,14 @@ namespace Direct2D
     public interface ID3D11InputLayout : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion        
     }
@@ -8851,10 +10206,14 @@ namespace Direct2D
     public interface ID3D11GeometryShader : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion        
     }
@@ -8964,10 +10323,14 @@ namespace Direct2D
     public interface ID3D11Asynchronous : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
 
@@ -8982,10 +10345,14 @@ namespace Direct2D
     {
         #region ID3D11Asynchronous
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
 
@@ -8993,6 +10360,7 @@ namespace Direct2D
         new uint GetDataSize();
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_QUERY_DESC pDesc);
     }
 
@@ -9041,6 +10409,8 @@ namespace Direct2D
         [PreserveSig]
         new uint GetDataSize();
         #endregion
+
+        [PreserveSig]
         new void GetDesc(out D3D11_QUERY_DESC pDesc);
         #endregion
     }
@@ -9052,15 +10422,21 @@ namespace Direct2D
     {
         #region ID3D11View
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
+        [PreserveSig]
         new void GetResource(out ID3D11Resource ppResource);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_RENDER_TARGET_VIEW_DESC pDesc);
     }
 
@@ -9104,15 +10480,21 @@ namespace Direct2D
     {
         #region ID3D11View
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
+        [PreserveSig]
         new void GetResource(out ID3D11Resource ppResource);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_DEPTH_STENCIL_VIEW_DESC pDesc);
     }
 
@@ -9152,15 +10534,22 @@ namespace Direct2D
     {
         #region ID3D11View
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
+
+        [PreserveSig]
         new void GetResource(out ID3D11Resource ppResource);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_UNORDERED_ACCESS_VIEW_DESC pDesc);
     }
 
@@ -9198,13 +10587,18 @@ namespace Direct2D
     public interface ID3D11BlendState : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_BLEND_DESC pDesc);
     }
 
@@ -9266,13 +10660,18 @@ namespace Direct2D
     public interface ID3D11DepthStencilState : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_DEPTH_STENCIL_DESC pDesc);
     }
 
@@ -9321,13 +10720,18 @@ namespace Direct2D
     public interface ID3D11RasterizerState : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
 
+        [PreserveSig]
         void GetDesc(out D3D11_RASTERIZER_DESC pDesc);
     }
 
@@ -9376,10 +10780,14 @@ namespace Direct2D
     public interface ID3D11CommandList : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion
 
@@ -9404,10 +10812,14 @@ namespace Direct2D
     public interface ID3D11HullShader : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion        
     }   
@@ -9418,10 +10830,14 @@ namespace Direct2D
     public interface ID3D11DomainShader : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion        
     }
@@ -9432,10 +10848,14 @@ namespace Direct2D
     public interface ID3D11ComputeShader : ID3D11DeviceChild
     {
         #region ID3D11DeviceChild
+        [PreserveSig]
         //void GetDevice(out ID3D11Device ppDevice);
         new void GetDevice(out IntPtr ppDevice);
+        [PreserveSig]
         new HRESULT GetPrivateData(ref Guid guid, ref uint pDataSize, out IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateData(ref Guid guid, uint DataSize, IntPtr pData);
+        [PreserveSig]
         new HRESULT SetPrivateDataInterface(ref Guid guid, IntPtr pData);
         #endregion        
     }
@@ -9539,19 +10959,28 @@ namespace Direct2D
     {
         #region <ID2D1Device>
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext deviceContext);
+        [PreserveSig]
         //HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IPrintDocumentPackageTarget documentTarget, D2D1_PRINT_CONTROL_PROPERTIES printControlProperties, out ID2D1PrintControl printControl);
         new HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IntPtr documentTarget, ref D2D1_PRINT_CONTROL_PROPERTIES printControlProperties, out ID2D1PrintControl printControl);
+        [PreserveSig]
         new void SetMaximumTextureMemory(UInt64 maximumInBytes);
+        [PreserveSig]
         new UInt64 GetMaximumTextureMemory();
+        [PreserveSig]
         new void ClearResources(uint millisecondsSinceUse = 0);
         #endregion
 
-        D2D1_RENDERING_PRIORITY GetRenderingPriority();
+        [PreserveSig]
+        void GetRenderingPriority(out D2D1_RENDERING_PRIORITY renderingPriority);
+        [PreserveSig]
         void SetRenderingPriority(D2D1_RENDERING_PRIORITY renderingPriority);
+        [PreserveSig]
         HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext1 deviceContext1);
     }
 
@@ -9562,29 +10991,59 @@ namespace Direct2D
     {
         #region <ID2D1Factory1>
         #region <ID2D1Factory>
+        [PreserveSig]
         new HRESULT ReloadSystemMetrics();
+        [PreserveSig]
         new HRESULT GetDesktopDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
         new HRESULT CreateRectangleGeometry(ref D2D1_RECT_F rectangle, out ID2D1RectangleGeometry rectangleGeometry);
+        [PreserveSig]
         new HRESULT CreateRoundedRectangleGeometry(ref D2D1_ROUNDED_RECT roundedRectangle, out ID2D1RoundedRectangleGeometry roundedRectangleGeometry);
+        [PreserveSig]
         new HRESULT CreateEllipseGeometry(ref D2D1_ELLIPSE ellipse, out ID2D1EllipseGeometry ellipseGeometry);
+        [PreserveSig]
         new HRESULT CreateGeometryGroup(D2D1_FILL_MODE fillMode, ID2D1Geometry geometries, uint geometriesCount, out ID2D1GeometryGroup geometryGroup);
+        [PreserveSig]
         new HRESULT CreateTransformedGeometry(ID2D1Geometry sourceGeometry, D2D1_MATRIX_3X2_F transform, out ID2D1TransformedGeometry transformedGeometry);
+        [PreserveSig]
         new HRESULT CreatePathGeometry(out ID2D1PathGeometry pathGeometry);
-        new ID2D1StrokeStyle CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray)] float[] dashes = null, uint dashesCount = 0);
-        new HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
+        new ID2D1StrokeStyle CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount = 0);
+        [PreserveSig]
+        new HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new HRESULT CreateWicBitmapRenderTarget(IWICBitmap target, D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, out ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         new HRESULT CreateHwndRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref D2D1_HWND_RENDER_TARGET_PROPERTIES hwndRenderTargetProperties, out ID2D1HwndRenderTarget hwndRenderTarget);
+        [PreserveSig]
         new HRESULT CreateDxgiSurfaceRenderTarget(IntPtr dxgiSurface, ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         new HRESULT CreateDCRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1DCRenderTarget dcRenderTarget);
         #endregion
 
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device d2dDevice);
-        new HRESULT CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES1 strokeStyleProperties, float dashes, uint dashesCount, out ID2D1StrokeStyle1 strokeStyle);
+        [PreserveSig]
+        new HRESULT CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES1 strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount, out ID2D1StrokeStyle1 strokeStyle);
+        [PreserveSig]
         new HRESULT CreatePathGeometry(out ID2D1PathGeometry1 pathGeometry);
-        new HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION1 drawingStateDescription, ref IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock1 drawingStateBlock);
+        [PreserveSig]
+        new HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION1 drawingStateDescription, ref IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock1 drawingStateBlock);
+        [PreserveSig]
         new HRESULT CreateGdiMetafile(System.Runtime.InteropServices.ComTypes.IStream metafileStream, out ID2D1GdiMetafile metafile);
+        [PreserveSig]
+        new HRESULT RegisterEffectFromStream([MarshalAs(UnmanagedType.LPStruct)] Guid classId, System.Runtime.InteropServices.ComTypes.IStream propertyXml, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D2D1_PROPERTY_BINDING[] bindings, int bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+        [PreserveSig]
+        new HRESULT RegisterEffectFromString([MarshalAs(UnmanagedType.LPStruct)] Guid classId, [MarshalAs(UnmanagedType.LPWStr)] string propertyXml, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D2D1_PROPERTY_BINDING[] bindings, int bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+        [PreserveSig]
+        new HRESULT UnregisterEffect([MarshalAs(UnmanagedType.LPStruct)] Guid classId);
+        [PreserveSig]
+        new HRESULT GetRegisteredEffects([Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] Guid[] effects, int effectsCount, IntPtr effectsReturned, IntPtr effectsRegistered);
+        [PreserveSig]
+        new HRESULT GetEffectProperties([MarshalAs(UnmanagedType.LPStruct)] Guid effectId, out ID2D1Properties properties);
+
         #endregion
 
+        [PreserveSig]
         HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device1 d2dDevice1);
     }
 
@@ -9596,32 +11055,64 @@ namespace Direct2D
         #region <ID2D1Factory2>
         #region <ID2D1Factory1>
         #region <ID2D1Factory>
+        [PreserveSig]
         new HRESULT ReloadSystemMetrics();
+        [PreserveSig]
         new HRESULT GetDesktopDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
         new HRESULT CreateRectangleGeometry(ref D2D1_RECT_F rectangle, out ID2D1RectangleGeometry rectangleGeometry);
+        [PreserveSig]
         new HRESULT CreateRoundedRectangleGeometry(ref D2D1_ROUNDED_RECT roundedRectangle, out ID2D1RoundedRectangleGeometry roundedRectangleGeometry);
+        [PreserveSig]
         new HRESULT CreateEllipseGeometry(ref D2D1_ELLIPSE ellipse, out ID2D1EllipseGeometry ellipseGeometry);
+        [PreserveSig]
         new HRESULT CreateGeometryGroup(D2D1_FILL_MODE fillMode, ID2D1Geometry geometries, uint geometriesCount, out ID2D1GeometryGroup geometryGroup);
+        [PreserveSig]
         new HRESULT CreateTransformedGeometry(ID2D1Geometry sourceGeometry, D2D1_MATRIX_3X2_F transform, out ID2D1TransformedGeometry transformedGeometry);
+        [PreserveSig]
         new HRESULT CreatePathGeometry(out ID2D1PathGeometry pathGeometry);
-        new ID2D1StrokeStyle CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray)] float[] dashes = null, uint dashesCount = 0);
-        new HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
+        new ID2D1StrokeStyle CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount = 0);
+        [PreserveSig]
+        new HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new HRESULT CreateWicBitmapRenderTarget(IWICBitmap target, D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, out ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         new HRESULT CreateHwndRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref D2D1_HWND_RENDER_TARGET_PROPERTIES hwndRenderTargetProperties, out ID2D1HwndRenderTarget hwndRenderTarget);
+        [PreserveSig]
         new HRESULT CreateDxgiSurfaceRenderTarget(IntPtr dxgiSurface, ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         new HRESULT CreateDCRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1DCRenderTarget dcRenderTarget);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device d2dDevice);
-        new HRESULT CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES1 strokeStyleProperties, float dashes, uint dashesCount, out ID2D1StrokeStyle1 strokeStyle);
+        [PreserveSig]
+        new HRESULT CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES1 strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount, out ID2D1StrokeStyle1 strokeStyle);
+        [PreserveSig]
         new HRESULT CreatePathGeometry(out ID2D1PathGeometry1 pathGeometry);
-        new HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION1 drawingStateDescription, ref IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock1 drawingStateBlock);
+        [PreserveSig]
+        new HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION1 drawingStateDescription, ref IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock1 drawingStateBlock);
+        [PreserveSig]
         new HRESULT CreateGdiMetafile(System.Runtime.InteropServices.ComTypes.IStream metafileStream, out ID2D1GdiMetafile metafile);
+        [PreserveSig]
+        new HRESULT RegisterEffectFromStream([MarshalAs(UnmanagedType.LPStruct)] Guid classId, System.Runtime.InteropServices.ComTypes.IStream propertyXml, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D2D1_PROPERTY_BINDING[] bindings, int bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+        [PreserveSig]
+        new HRESULT RegisterEffectFromString([MarshalAs(UnmanagedType.LPStruct)] Guid classId, [MarshalAs(UnmanagedType.LPWStr)] string propertyXml, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D2D1_PROPERTY_BINDING[] bindings, int bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+        [PreserveSig]
+        new HRESULT UnregisterEffect([MarshalAs(UnmanagedType.LPStruct)] Guid classId);
+        [PreserveSig]
+        new HRESULT GetRegisteredEffects([Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] Guid[] effects, int effectsCount, IntPtr effectsReturned, IntPtr effectsRegistered);
+        [PreserveSig]
+        new HRESULT GetEffectProperties([MarshalAs(UnmanagedType.LPStruct)] Guid effectId, out ID2D1Properties properties);
+
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device1 d2dDevice1);
         #endregion
 
+        [PreserveSig]
         HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device2 d2dDevice2);
     }
 
@@ -9634,35 +11125,67 @@ namespace Direct2D
         #region <ID2D1Factory2>
         #region <ID2D1Factory1>
         #region <ID2D1Factory>
+        [PreserveSig]
         new HRESULT ReloadSystemMetrics();
+        [PreserveSig]
         new HRESULT GetDesktopDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
         new HRESULT CreateRectangleGeometry(ref D2D1_RECT_F rectangle, out ID2D1RectangleGeometry rectangleGeometry);
+        [PreserveSig]
         new HRESULT CreateRoundedRectangleGeometry(ref D2D1_ROUNDED_RECT roundedRectangle, out ID2D1RoundedRectangleGeometry roundedRectangleGeometry);
+        [PreserveSig]
         new HRESULT CreateEllipseGeometry(ref D2D1_ELLIPSE ellipse, out ID2D1EllipseGeometry ellipseGeometry);
+        [PreserveSig]
         new HRESULT CreateGeometryGroup(D2D1_FILL_MODE fillMode, ID2D1Geometry geometries, uint geometriesCount, out ID2D1GeometryGroup geometryGroup);
+        [PreserveSig]
         new HRESULT CreateTransformedGeometry(ID2D1Geometry sourceGeometry, D2D1_MATRIX_3X2_F transform, out ID2D1TransformedGeometry transformedGeometry);
+        [PreserveSig]
         new HRESULT CreatePathGeometry(out ID2D1PathGeometry pathGeometry);
-        new ID2D1StrokeStyle CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray)] float[] dashes = null, uint dashesCount = 0);
-        new HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
+        new ID2D1StrokeStyle CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount = 0);
+        [PreserveSig]
+        new HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new HRESULT CreateWicBitmapRenderTarget(IWICBitmap target, D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, out ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         new HRESULT CreateHwndRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref D2D1_HWND_RENDER_TARGET_PROPERTIES hwndRenderTargetProperties, out ID2D1HwndRenderTarget hwndRenderTarget);
+        [PreserveSig]
         new HRESULT CreateDxgiSurfaceRenderTarget(IntPtr dxgiSurface, ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         new HRESULT CreateDCRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1DCRenderTarget dcRenderTarget);
         #endregion
 
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device d2dDevice);
-        new HRESULT CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES1 strokeStyleProperties, float dashes, uint dashesCount, out ID2D1StrokeStyle1 strokeStyle);
+        [PreserveSig]
+        new HRESULT CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES1 strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount, out ID2D1StrokeStyle1 strokeStyle);
+        [PreserveSig]
         new HRESULT CreatePathGeometry(out ID2D1PathGeometry1 pathGeometry);
-        new HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION1 drawingStateDescription, ref IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock1 drawingStateBlock);
+        [PreserveSig]
+        new HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION1 drawingStateDescription, ref IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock1 drawingStateBlock);
+        [PreserveSig]
         new HRESULT CreateGdiMetafile(System.Runtime.InteropServices.ComTypes.IStream metafileStream, out ID2D1GdiMetafile metafile);
+        [PreserveSig]
+        new HRESULT RegisterEffectFromStream([MarshalAs(UnmanagedType.LPStruct)] Guid classId, System.Runtime.InteropServices.ComTypes.IStream propertyXml, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D2D1_PROPERTY_BINDING[] bindings, int bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+        [PreserveSig]
+        new HRESULT RegisterEffectFromString([MarshalAs(UnmanagedType.LPStruct)] Guid classId, [MarshalAs(UnmanagedType.LPWStr)] string propertyXml, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D2D1_PROPERTY_BINDING[] bindings, int bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+        [PreserveSig]
+        new HRESULT UnregisterEffect([MarshalAs(UnmanagedType.LPStruct)] Guid classId);
+        [PreserveSig]
+        new HRESULT GetRegisteredEffects([Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] Guid[] effects, int effectsCount, IntPtr effectsReturned, IntPtr effectsRegistered);
+        [PreserveSig]
+        new HRESULT GetEffectProperties([MarshalAs(UnmanagedType.LPStruct)] Guid effectId, out ID2D1Properties properties);
+
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device1 d2dDevice1);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device2 d2dDevice2);
         #endregion
 
+        [PreserveSig]
         HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device3 d2dDevice3);
     }
 
@@ -9676,38 +11199,72 @@ namespace Direct2D
         #region <ID2D1Factory2>
         #region <ID2D1Factory1>
         #region <ID2D1Factory>
+        [PreserveSig]
         new HRESULT ReloadSystemMetrics();
+        [PreserveSig]
         new HRESULT GetDesktopDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
         new HRESULT CreateRectangleGeometry(ref D2D1_RECT_F rectangle, out ID2D1RectangleGeometry rectangleGeometry);
+        [PreserveSig]
         new HRESULT CreateRoundedRectangleGeometry(ref D2D1_ROUNDED_RECT roundedRectangle, out ID2D1RoundedRectangleGeometry roundedRectangleGeometry);
+        [PreserveSig]
         new HRESULT CreateEllipseGeometry(ref D2D1_ELLIPSE ellipse, out ID2D1EllipseGeometry ellipseGeometry);
+        [PreserveSig]
         new HRESULT CreateGeometryGroup(D2D1_FILL_MODE fillMode, ID2D1Geometry geometries, uint geometriesCount, out ID2D1GeometryGroup geometryGroup);
+        [PreserveSig]
         new HRESULT CreateTransformedGeometry(ID2D1Geometry sourceGeometry, D2D1_MATRIX_3X2_F transform, out ID2D1TransformedGeometry transformedGeometry);
+        [PreserveSig]
         new HRESULT CreatePathGeometry(out ID2D1PathGeometry pathGeometry);
-        new ID2D1StrokeStyle CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray)] float[] dashes = null, uint dashesCount = 0);
-        new HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
+        new ID2D1StrokeStyle CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount = 0);
+        [PreserveSig]
+        new HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new HRESULT CreateWicBitmapRenderTarget(IWICBitmap target, D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, out ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         new HRESULT CreateHwndRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref D2D1_HWND_RENDER_TARGET_PROPERTIES hwndRenderTargetProperties, out ID2D1HwndRenderTarget hwndRenderTarget);
+        [PreserveSig]
         new HRESULT CreateDxgiSurfaceRenderTarget(IntPtr dxgiSurface, ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         new HRESULT CreateDCRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1DCRenderTarget dcRenderTarget);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device d2dDevice);
-        new HRESULT CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES1 strokeStyleProperties, float dashes, uint dashesCount, out ID2D1StrokeStyle1 strokeStyle);
+        [PreserveSig]
+        new HRESULT CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES1 strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount, out ID2D1StrokeStyle1 strokeStyle);
+        [PreserveSig]
         new HRESULT CreatePathGeometry(out ID2D1PathGeometry1 pathGeometry);
-        new HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION1 drawingStateDescription, ref IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock1 drawingStateBlock);
+        [PreserveSig]
+        new HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION1 drawingStateDescription, ref IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock1 drawingStateBlock);
+        [PreserveSig]
         new HRESULT CreateGdiMetafile(System.Runtime.InteropServices.ComTypes.IStream metafileStream, out ID2D1GdiMetafile metafile);
+        [PreserveSig]
+        new HRESULT RegisterEffectFromStream([MarshalAs(UnmanagedType.LPStruct)] Guid classId, System.Runtime.InteropServices.ComTypes.IStream propertyXml, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D2D1_PROPERTY_BINDING[] bindings, int bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+        [PreserveSig]
+        new HRESULT RegisterEffectFromString([MarshalAs(UnmanagedType.LPStruct)] Guid classId, [MarshalAs(UnmanagedType.LPWStr)] string propertyXml, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D2D1_PROPERTY_BINDING[] bindings, int bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+        [PreserveSig]
+        new HRESULT UnregisterEffect([MarshalAs(UnmanagedType.LPStruct)] Guid classId);
+        [PreserveSig]
+        new HRESULT GetRegisteredEffects([Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] Guid[] effects, int effectsCount, IntPtr effectsReturned, IntPtr effectsRegistered);
+        [PreserveSig]
+        new HRESULT GetEffectProperties([MarshalAs(UnmanagedType.LPStruct)] Guid effectId, out ID2D1Properties properties);
+
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device1 d2dDevice1);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device2 d2dDevice2);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device3 d2dDevice3);
         #endregion
 
+        [PreserveSig]
         HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device4 d2dDevice4);
     }
 
@@ -9722,41 +11279,76 @@ namespace Direct2D
         #region <ID2D1Factory2>
         #region <ID2D1Factory1>
         #region <ID2D1Factory>
+        [PreserveSig]
         new HRESULT ReloadSystemMetrics();
+        [PreserveSig]
         new HRESULT GetDesktopDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
         new HRESULT CreateRectangleGeometry(ref D2D1_RECT_F rectangle, out ID2D1RectangleGeometry rectangleGeometry);
+        [PreserveSig]
         new HRESULT CreateRoundedRectangleGeometry(ref D2D1_ROUNDED_RECT roundedRectangle, out ID2D1RoundedRectangleGeometry roundedRectangleGeometry);
+        [PreserveSig]
         new HRESULT CreateEllipseGeometry(ref D2D1_ELLIPSE ellipse, out ID2D1EllipseGeometry ellipseGeometry);
+        [PreserveSig]
         new HRESULT CreateGeometryGroup(D2D1_FILL_MODE fillMode, ID2D1Geometry geometries, uint geometriesCount, out ID2D1GeometryGroup geometryGroup);
+        [PreserveSig]
         new HRESULT CreateTransformedGeometry(ID2D1Geometry sourceGeometry, D2D1_MATRIX_3X2_F transform, out ID2D1TransformedGeometry transformedGeometry);
+        [PreserveSig]
         new HRESULT CreatePathGeometry(out ID2D1PathGeometry pathGeometry);
-        new ID2D1StrokeStyle CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray)] float[] dashes = null, uint dashesCount = 0);
-        new HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
+        new ID2D1StrokeStyle CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount = 0);
+        [PreserveSig]
+        new HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new HRESULT CreateWicBitmapRenderTarget(IWICBitmap target, D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, out ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         new HRESULT CreateHwndRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref D2D1_HWND_RENDER_TARGET_PROPERTIES hwndRenderTargetProperties, out ID2D1HwndRenderTarget hwndRenderTarget);
+        [PreserveSig]
         new HRESULT CreateDxgiSurfaceRenderTarget(IntPtr dxgiSurface, ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         new HRESULT CreateDCRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1DCRenderTarget dcRenderTarget);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device d2dDevice);
-        new HRESULT CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES1 strokeStyleProperties, float dashes, uint dashesCount, out ID2D1StrokeStyle1 strokeStyle);
+        [PreserveSig]
+        new HRESULT CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES1 strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount, out ID2D1StrokeStyle1 strokeStyle);
+        [PreserveSig]
         new HRESULT CreatePathGeometry(out ID2D1PathGeometry1 pathGeometry);
-        new HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION1 drawingStateDescription, ref IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock1 drawingStateBlock);
+        [PreserveSig]
+        new HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION1 drawingStateDescription, ref IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock1 drawingStateBlock);
+        [PreserveSig]
         new HRESULT CreateGdiMetafile(System.Runtime.InteropServices.ComTypes.IStream metafileStream, out ID2D1GdiMetafile metafile);
+        [PreserveSig]
+        new HRESULT RegisterEffectFromStream([MarshalAs(UnmanagedType.LPStruct)] Guid classId, System.Runtime.InteropServices.ComTypes.IStream propertyXml, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D2D1_PROPERTY_BINDING[] bindings, int bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+        [PreserveSig]
+        new HRESULT RegisterEffectFromString([MarshalAs(UnmanagedType.LPStruct)] Guid classId, [MarshalAs(UnmanagedType.LPWStr)] string propertyXml, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D2D1_PROPERTY_BINDING[] bindings, int bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+        [PreserveSig]
+        new HRESULT UnregisterEffect([MarshalAs(UnmanagedType.LPStruct)] Guid classId);
+        [PreserveSig]
+        new HRESULT GetRegisteredEffects([Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] Guid[] effects, int effectsCount, IntPtr effectsReturned, IntPtr effectsRegistered);
+        [PreserveSig]
+        new HRESULT GetEffectProperties([MarshalAs(UnmanagedType.LPStruct)] Guid effectId, out ID2D1Properties properties);
+
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device1 d2dDevice1);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device2 d2dDevice2);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device3 d2dDevice3);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device4 d2dDevice4);
         #endregion
 
+        [PreserveSig]
         HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device5 d2dDevice5);
     }
 
@@ -9772,44 +11364,80 @@ namespace Direct2D
         #region <ID2D1Factory2>
         #region <ID2D1Factory1>
         #region <ID2D1Factory>
+        [PreserveSig]
         new HRESULT ReloadSystemMetrics();
+        [PreserveSig]
         new HRESULT GetDesktopDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
         new HRESULT CreateRectangleGeometry(ref D2D1_RECT_F rectangle, out ID2D1RectangleGeometry rectangleGeometry);
+        [PreserveSig]
         new HRESULT CreateRoundedRectangleGeometry(ref D2D1_ROUNDED_RECT roundedRectangle, out ID2D1RoundedRectangleGeometry roundedRectangleGeometry);
+        [PreserveSig]
         new HRESULT CreateEllipseGeometry(ref D2D1_ELLIPSE ellipse, out ID2D1EllipseGeometry ellipseGeometry);
+        [PreserveSig]
         new HRESULT CreateGeometryGroup(D2D1_FILL_MODE fillMode, ID2D1Geometry geometries, uint geometriesCount, out ID2D1GeometryGroup geometryGroup);
+        [PreserveSig]
         new HRESULT CreateTransformedGeometry(ID2D1Geometry sourceGeometry, D2D1_MATRIX_3X2_F transform, out ID2D1TransformedGeometry transformedGeometry);
+        [PreserveSig]
         new HRESULT CreatePathGeometry(out ID2D1PathGeometry pathGeometry);
-        new ID2D1StrokeStyle CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray)] float[] dashes = null, uint dashesCount = 0);
-        new HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
+        new ID2D1StrokeStyle CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount = 0);
+        [PreserveSig]
+        new HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new HRESULT CreateWicBitmapRenderTarget(IWICBitmap target, D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, out ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         new HRESULT CreateHwndRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref D2D1_HWND_RENDER_TARGET_PROPERTIES hwndRenderTargetProperties, out ID2D1HwndRenderTarget hwndRenderTarget);
+        [PreserveSig]
         new HRESULT CreateDxgiSurfaceRenderTarget(IntPtr dxgiSurface, ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         new HRESULT CreateDCRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1DCRenderTarget dcRenderTarget);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device d2dDevice);
-        new HRESULT CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES1 strokeStyleProperties, float dashes, uint dashesCount, out ID2D1StrokeStyle1 strokeStyle);
+        [PreserveSig]
+        new HRESULT CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES1 strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount, out ID2D1StrokeStyle1 strokeStyle);
+        [PreserveSig]
         new HRESULT CreatePathGeometry(out ID2D1PathGeometry1 pathGeometry);
-        new HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION1 drawingStateDescription, ref IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock1 drawingStateBlock);
+        [PreserveSig]
+        new HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION1 drawingStateDescription, ref IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock1 drawingStateBlock);
+        [PreserveSig]
         new HRESULT CreateGdiMetafile(System.Runtime.InteropServices.ComTypes.IStream metafileStream, out ID2D1GdiMetafile metafile);
+        [PreserveSig]
+        new HRESULT RegisterEffectFromStream([MarshalAs(UnmanagedType.LPStruct)] Guid classId, System.Runtime.InteropServices.ComTypes.IStream propertyXml, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D2D1_PROPERTY_BINDING[] bindings, int bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+        [PreserveSig]
+        new HRESULT RegisterEffectFromString([MarshalAs(UnmanagedType.LPStruct)] Guid classId, [MarshalAs(UnmanagedType.LPWStr)] string propertyXml, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D2D1_PROPERTY_BINDING[] bindings, int bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+        [PreserveSig]
+        new HRESULT UnregisterEffect([MarshalAs(UnmanagedType.LPStruct)] Guid classId);
+        [PreserveSig]
+        new HRESULT GetRegisteredEffects([Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] Guid[] effects, int effectsCount, IntPtr effectsReturned, IntPtr effectsRegistered);
+        [PreserveSig]
+        new HRESULT GetEffectProperties([MarshalAs(UnmanagedType.LPStruct)] Guid effectId, out ID2D1Properties properties);
+
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device1 d2dDevice1);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device2 d2dDevice2);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device3 d2dDevice3);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device4 d2dDevice4);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device5 d2dDevice5);
         #endregion
 
+        [PreserveSig]
         HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device6 d2dDevice6);
     }
 
@@ -9825,48 +11453,85 @@ namespace Direct2D
         #region <ID2D1Factory2>
         #region <ID2D1Factory1>
         #region <ID2D1Factory>
+        [PreserveSig]
         new HRESULT ReloadSystemMetrics();
+        [PreserveSig]
         new HRESULT GetDesktopDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
         new HRESULT CreateRectangleGeometry(ref D2D1_RECT_F rectangle, out ID2D1RectangleGeometry rectangleGeometry);
+        [PreserveSig]
         new HRESULT CreateRoundedRectangleGeometry(ref D2D1_ROUNDED_RECT roundedRectangle, out ID2D1RoundedRectangleGeometry roundedRectangleGeometry);
+        [PreserveSig]
         new HRESULT CreateEllipseGeometry(ref D2D1_ELLIPSE ellipse, out ID2D1EllipseGeometry ellipseGeometry);
+        [PreserveSig]
         new HRESULT CreateGeometryGroup(D2D1_FILL_MODE fillMode, ID2D1Geometry geometries, uint geometriesCount, out ID2D1GeometryGroup geometryGroup);
+        [PreserveSig]
         new HRESULT CreateTransformedGeometry(ID2D1Geometry sourceGeometry, D2D1_MATRIX_3X2_F transform, out ID2D1TransformedGeometry transformedGeometry);
+        [PreserveSig]
         new HRESULT CreatePathGeometry(out ID2D1PathGeometry pathGeometry);
-        new ID2D1StrokeStyle CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray)] float[] dashes = null, uint dashesCount = 0);
-        new HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
+        new ID2D1StrokeStyle CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount = 0);
+        [PreserveSig]
+        new HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION drawingStateDescription, IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock drawingStateBlock);
+        [PreserveSig]
         new HRESULT CreateWicBitmapRenderTarget(IWICBitmap target, D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, out ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         new HRESULT CreateHwndRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref D2D1_HWND_RENDER_TARGET_PROPERTIES hwndRenderTargetProperties, out ID2D1HwndRenderTarget hwndRenderTarget);
+        [PreserveSig]
         new HRESULT CreateDxgiSurfaceRenderTarget(IntPtr dxgiSurface, ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1RenderTarget renderTarget);
+        [PreserveSig]
         new HRESULT CreateDCRenderTarget(ref D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties, ref ID2D1DCRenderTarget dcRenderTarget);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device d2dDevice);
-        new HRESULT CreateStrokeStyle(D2D1_STROKE_STYLE_PROPERTIES1 strokeStyleProperties, float dashes, uint dashesCount, out ID2D1StrokeStyle1 strokeStyle);
+        [PreserveSig]
+        new HRESULT CreateStrokeStyle(ref D2D1_STROKE_STYLE_PROPERTIES1 strokeStyleProperties, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] float[] dashes, uint dashesCount, out ID2D1StrokeStyle1 strokeStyle);
+        [PreserveSig]
         new HRESULT CreatePathGeometry(out ID2D1PathGeometry1 pathGeometry);
-        new HRESULT CreateDrawingStateBlock(D2D1_DRAWING_STATE_DESCRIPTION1 drawingStateDescription, ref IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock1 drawingStateBlock);
+        [PreserveSig]
+        new HRESULT CreateDrawingStateBlock(ref D2D1_DRAWING_STATE_DESCRIPTION1 drawingStateDescription, ref IDWriteRenderingParams textRenderingParams, out ID2D1DrawingStateBlock1 drawingStateBlock);
+        [PreserveSig]
         new HRESULT CreateGdiMetafile(System.Runtime.InteropServices.ComTypes.IStream metafileStream, out ID2D1GdiMetafile metafile);
+        [PreserveSig]
+        new HRESULT RegisterEffectFromStream([MarshalAs(UnmanagedType.LPStruct)] Guid classId, System.Runtime.InteropServices.ComTypes.IStream propertyXml, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D2D1_PROPERTY_BINDING[] bindings, int bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+        [PreserveSig]
+        new HRESULT RegisterEffectFromString([MarshalAs(UnmanagedType.LPStruct)] Guid classId, [MarshalAs(UnmanagedType.LPWStr)] string propertyXml, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] D2D1_PROPERTY_BINDING[] bindings, int bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+        [PreserveSig]
+        new HRESULT UnregisterEffect([MarshalAs(UnmanagedType.LPStruct)] Guid classId);
+        [PreserveSig]
+        new HRESULT GetRegisteredEffects([Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] Guid[] effects, int effectsCount, IntPtr effectsReturned, IntPtr effectsRegistered);
+        [PreserveSig]
+        new HRESULT GetEffectProperties([MarshalAs(UnmanagedType.LPStruct)] Guid effectId, out ID2D1Properties properties);
+
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device1 d2dDevice1);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device2 d2dDevice2);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device3 d2dDevice3);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device4 d2dDevice4);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device5 d2dDevice5);
         #endregion
 
         #region <ID2D1Factory7>
+        [PreserveSig]
         new HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device6 d2dDevice6);
         #endregion
 
+        [PreserveSig]
         HRESULT CreateDevice(IDXGIDevice dxgiDevice, out ID2D1Device7 d2dDevice7);
     }
 
@@ -9916,11 +11581,15 @@ namespace Direct2D
         new HRESULT PopLayer();
         #endregion
 
+        [PreserveSig]
         new HRESULT SetPrimitiveBlend1(D2D1_PRIMITIVE_BLEND primitiveBlend);
         #endregion
 
+        [PreserveSig]
         HRESULT DrawInk(ID2D1Ink ink,ID2D1Brush brush, ID2D1InkStyle inkStyle);
-        HRESULT DrawGradientMesh(ID2D1GradientMesh gradientMesh); 
+        [PreserveSig]
+        HRESULT DrawGradientMesh(ID2D1GradientMesh gradientMesh);
+        [PreserveSig]
         HRESULT DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_RECT_F destinationRectangle, ref D2D1_RECT_F sourceRectangle);
     }
 
@@ -9971,11 +11640,15 @@ namespace Direct2D
         new HRESULT PopLayer();
         #endregion
 
+        [PreserveSig]
         new HRESULT SetPrimitiveBlend1(D2D1_PRIMITIVE_BLEND primitiveBlend);
         #endregion
 
+        [PreserveSig]
         new HRESULT DrawInk(ID2D1Ink ink, ID2D1Brush brush, ID2D1InkStyle inkStyle);
+        [PreserveSig]
         new HRESULT DrawGradientMesh(ID2D1GradientMesh gradientMesh);
+        [PreserveSig]
         new HRESULT DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_RECT_F destinationRectangle, ref D2D1_RECT_F sourceRectangle);
         #endregion
 
@@ -10032,11 +11705,15 @@ namespace Direct2D
         new HRESULT PopLayer();
         #endregion
 
+        [PreserveSig]
         new HRESULT SetPrimitiveBlend1(D2D1_PRIMITIVE_BLEND primitiveBlend);
         #endregion
 
+        [PreserveSig]
         new HRESULT DrawInk(ID2D1Ink ink, ID2D1Brush brush, ID2D1InkStyle inkStyle);
+        [PreserveSig]
         new HRESULT DrawGradientMesh(ID2D1GradientMesh gradientMesh);
+        [PreserveSig]
         new HRESULT DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_RECT_F destinationRectangle, ref D2D1_RECT_F sourceRectangle);
         #endregion
 
@@ -10045,6 +11722,7 @@ namespace Direct2D
             D2D1_BITMAP_INTERPOLATION_MODE interpolationMode, D2D1_SPRITE_OPTIONS spriteOptions);
         #endregion
 
+        [PreserveSig]
         HRESULT SetPrimitiveBlend2(D2D1_PRIMITIVE_BLEND primitiveBlend);
     }
 
@@ -10100,8 +11778,11 @@ namespace Direct2D
         new HRESULT SetPrimitiveBlend1(D2D1_PRIMITIVE_BLEND primitiveBlend);
         #endregion
 
+        [PreserveSig]
         new HRESULT DrawInk(ID2D1Ink ink, ID2D1Brush brush, ID2D1InkStyle inkStyle);
+        [PreserveSig]
         new HRESULT DrawGradientMesh(ID2D1GradientMesh gradientMesh);
+        [PreserveSig]
         new HRESULT DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, ref D2D1_RECT_F destinationRectangle, ref D2D1_RECT_F sourceRectangle);
         #endregion
 
@@ -10110,9 +11791,11 @@ namespace Direct2D
             D2D1_BITMAP_INTERPOLATION_MODE interpolationMode, D2D1_SPRITE_OPTIONS spriteOptions);
         #endregion
 
+        [PreserveSig]
         new HRESULT SetPrimitiveBlend2(D2D1_PRIMITIVE_BLEND primitiveBlend);
         #endregion
 
+        [PreserveSig]
         HRESULT BlendImage(ID2D1Image image, D2D1_BLEND_MODE blendMode, ref D2D1_POINT_2F targetOffset,
             ref D2D1_RECT_F imageRectangle, D2D1_INTERPOLATION_MODE interpolationMode);
     }
@@ -10128,21 +11811,32 @@ namespace Direct2D
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext deviceContext);
+        [PreserveSig]
         //HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IPrintDocumentPackageTarget documentTarget, D2D1_PRINT_CONTROL_PROPERTIES printControlProperties, out ID2D1PrintControl printControl);
         new HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IntPtr documentTarget, ref D2D1_PRINT_CONTROL_PROPERTIES printControlProperties, out ID2D1PrintControl printControl);
+        [PreserveSig]
         new void SetMaximumTextureMemory(UInt64 maximumInBytes);
+        [PreserveSig]
         new UInt64 GetMaximumTextureMemory();
+        [PreserveSig]
         new void ClearResources(uint millisecondsSinceUse = 0);
         #endregion
 
-        new D2D1_RENDERING_PRIORITY GetRenderingPriority();
+        [PreserveSig]
+        new void GetRenderingPriority(out D2D1_RENDERING_PRIORITY renderingPriority);
+        [PreserveSig]
         new void SetRenderingPriority(D2D1_RENDERING_PRIORITY renderingPriority);
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext1 deviceContext1);
         #endregion
 
+        [PreserveSig]
         HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext2 deviceContext2);
+        [PreserveSig]
         void FlushDeviceContexts(ID2D1Bitmap bitmap);
+        [PreserveSig]
         HRESULT GetDxgiDevice(out IDXGIDevice dxgiDevice);
     }
 
@@ -10155,27 +11849,40 @@ namespace Direct2D
         #region <ID2D1Device1>
         #region <ID2D1Device>
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext deviceContext);
+        [PreserveSig]
         //HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IPrintDocumentPackageTarget documentTarget, D2D1_PRINT_CONTROL_PROPERTIES printControlProperties, out ID2D1PrintControl printControl);
         new HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IntPtr documentTarget, ref D2D1_PRINT_CONTROL_PROPERTIES printControlProperties, out ID2D1PrintControl printControl);
+        [PreserveSig]
         new void SetMaximumTextureMemory(UInt64 maximumInBytes);
+        [PreserveSig]
         new UInt64 GetMaximumTextureMemory();
+        [PreserveSig]
         new void ClearResources(uint millisecondsSinceUse = 0);
         #endregion
 
-        new D2D1_RENDERING_PRIORITY GetRenderingPriority();
+        [PreserveSig]
+        new void GetRenderingPriority(out D2D1_RENDERING_PRIORITY renderingPriority);
+        [PreserveSig]
         new void SetRenderingPriority(D2D1_RENDERING_PRIORITY renderingPriority);
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext1 deviceContext1);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext2 deviceContext2);
+        [PreserveSig]
         new void FlushDeviceContexts(ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT GetDxgiDevice(out IDXGIDevice dxgiDevice);
         #endregion
 
+        [PreserveSig]
         HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext3 deviceContext3);
     }
 
@@ -10192,29 +11899,44 @@ namespace Direct2D
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext deviceContext);
+        [PreserveSig]
         //HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IPrintDocumentPackageTarget documentTarget, D2D1_PRINT_CONTROL_PROPERTIES printControlProperties, out ID2D1PrintControl printControl);
         new HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IntPtr documentTarget, ref D2D1_PRINT_CONTROL_PROPERTIES printControlProperties, out ID2D1PrintControl printControl);
+        [PreserveSig]
         new void SetMaximumTextureMemory(UInt64 maximumInBytes);
+        [PreserveSig]
         new UInt64 GetMaximumTextureMemory();
+        [PreserveSig]
         new void ClearResources(uint millisecondsSinceUse = 0);
         #endregion
 
-        new D2D1_RENDERING_PRIORITY GetRenderingPriority();
+        [PreserveSig]
+        new void GetRenderingPriority(out D2D1_RENDERING_PRIORITY renderingPriority);
+        [PreserveSig]
         new void SetRenderingPriority(D2D1_RENDERING_PRIORITY renderingPriority);
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext1 deviceContext1);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext2 deviceContext2);
+        [PreserveSig]
         new void FlushDeviceContexts(ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT GetDxgiDevice(out IDXGIDevice dxgiDevice);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext3 deviceContext3);
         #endregion
 
+        [PreserveSig]
         HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext4 deviceContext4);
+        [PreserveSig]
         void SetMaximumColorGlyphCacheMemory(UInt64 maximumInBytes);
+        [PreserveSig]
         UInt64 GetMaximumColorGlyphCacheMemory();
     }
 
@@ -10229,35 +11951,52 @@ namespace Direct2D
         #region <ID2D1Device1>
         #region <ID2D1Device>
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext deviceContext);
+        [PreserveSig]
         //HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IPrintDocumentPackageTarget documentTarget, D2D1_PRINT_CONTROL_PROPERTIES printControlProperties, out ID2D1PrintControl printControl);
         new HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IntPtr documentTarget, ref D2D1_PRINT_CONTROL_PROPERTIES printControlProperties, out ID2D1PrintControl printControl);
+        [PreserveSig]
         new void SetMaximumTextureMemory(UInt64 maximumInBytes);
+        [PreserveSig]
         new UInt64 GetMaximumTextureMemory();
+        [PreserveSig]
         new void ClearResources(uint millisecondsSinceUse = 0);
         #endregion
 
-        new D2D1_RENDERING_PRIORITY GetRenderingPriority();
+        [PreserveSig]
+        new void GetRenderingPriority(out D2D1_RENDERING_PRIORITY renderingPriority);
+        [PreserveSig]
         new void SetRenderingPriority(D2D1_RENDERING_PRIORITY renderingPriority);
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext1 deviceContext1);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext2 deviceContext2);
+        [PreserveSig]
         new void FlushDeviceContexts(ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT GetDxgiDevice(out IDXGIDevice dxgiDevice);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext3 deviceContext3);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext4 deviceContext4);
+        [PreserveSig]
         new void SetMaximumColorGlyphCacheMemory(UInt64 maximumInBytes);
+        [PreserveSig]
         new UInt64 GetMaximumColorGlyphCacheMemory();
         #endregion
 
+        [PreserveSig]
         HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext5 deviceContext5);
     }
 
@@ -10273,38 +12012,56 @@ namespace Direct2D
         #region <ID2D1Device1>
         #region <ID2D1Device>
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext deviceContext);
+        [PreserveSig]
         //HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IPrintDocumentPackageTarget documentTarget, D2D1_PRINT_CONTROL_PROPERTIES printControlProperties, out ID2D1PrintControl printControl);
         new HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IntPtr documentTarget, ref D2D1_PRINT_CONTROL_PROPERTIES printControlProperties, out ID2D1PrintControl printControl);
+        [PreserveSig]
         new void SetMaximumTextureMemory(UInt64 maximumInBytes);
+        [PreserveSig]
         new UInt64 GetMaximumTextureMemory();
+        [PreserveSig]
         new void ClearResources(uint millisecondsSinceUse = 0);
         #endregion
 
-        new D2D1_RENDERING_PRIORITY GetRenderingPriority();
+        [PreserveSig]
+        new void GetRenderingPriority(out D2D1_RENDERING_PRIORITY renderingPriority);
+        [PreserveSig]
         new void SetRenderingPriority(D2D1_RENDERING_PRIORITY renderingPriority);
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext1 deviceContext1);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext2 deviceContext2);
+        [PreserveSig]
         new void FlushDeviceContexts(ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT GetDxgiDevice(out IDXGIDevice dxgiDevice);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext3 deviceContext3);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext4 deviceContext4);
+        [PreserveSig]
         new void SetMaximumColorGlyphCacheMemory(UInt64 maximumInBytes);
+        [PreserveSig]
         new UInt64 GetMaximumColorGlyphCacheMemory();
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext5 deviceContext5);
         #endregion
 
+        [PreserveSig]
         HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext6 deviceContext6);
     }
 
@@ -10320,42 +12077,61 @@ namespace Direct2D
         #region <ID2D1Device1>
         #region <ID2D1Device>
         #region <ID2D1Resource>
+        [PreserveSig]
         new void GetFactory(out ID2D1Factory factory);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext deviceContext);
+        [PreserveSig]
         //HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IPrintDocumentPackageTarget documentTarget, D2D1_PRINT_CONTROL_PROPERTIES printControlProperties, out ID2D1PrintControl printControl);
         new HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IntPtr documentTarget, ref D2D1_PRINT_CONTROL_PROPERTIES printControlProperties, out ID2D1PrintControl printControl);
+        [PreserveSig]
         new void SetMaximumTextureMemory(UInt64 maximumInBytes);
+        [PreserveSig]
         new UInt64 GetMaximumTextureMemory();
+        [PreserveSig]
         new void ClearResources(uint millisecondsSinceUse = 0);
         #endregion
 
-        new D2D1_RENDERING_PRIORITY GetRenderingPriority();
+        [PreserveSig]
+        new void GetRenderingPriority(out D2D1_RENDERING_PRIORITY renderingPriority);
+        [PreserveSig]
         new void SetRenderingPriority(D2D1_RENDERING_PRIORITY renderingPriority);
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext1 deviceContext1);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext2 deviceContext2);
+        [PreserveSig]
         new void FlushDeviceContexts(ID2D1Bitmap bitmap);
+        [PreserveSig]
         new HRESULT GetDxgiDevice(out IDXGIDevice dxgiDevice);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext3 deviceContext3);
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext4 deviceContext4);
+        [PreserveSig]
         new void SetMaximumColorGlyphCacheMemory(UInt64 maximumInBytes);
+        [PreserveSig]
         new UInt64 GetMaximumColorGlyphCacheMemory();
         #endregion
 
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext5 deviceContext5);
         #endregion
 
         #region <ID2D1Device6>
+        [PreserveSig]
         new HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext6 deviceContext6);
         #endregion
 
+        [PreserveSig]
         HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, out ID2D1DeviceContext7 deviceContext);
     }
 
@@ -11244,11 +13020,15 @@ namespace Direct2D
         new uint GetInputCount();
         #endregion
 
+        [PreserveSig]
         new HRESULT SetOutputBuffer(D2D1_BUFFER_PRECISION bufferPrecision, D2D1_CHANNEL_DEPTH channelDepth);
+        [PreserveSig]
         new void SetCached(bool isCached);
         #endregion
 
+        [PreserveSig]
         void SetDescription(D2D1_BLEND_DESCRIPTION description);
+        [PreserveSig]
         void GetDescription(out D2D1_BLEND_DESCRIPTION description);
     }
 
@@ -11271,7 +13051,9 @@ namespace Direct2D
         new uint GetInputCount();
         #endregion
 
+        [PreserveSig]
         HRESULT SetOutputBuffer(D2D1_BUFFER_PRECISION bufferPrecision, D2D1_CHANNEL_DEPTH channelDepth);
+        [PreserveSig]
         void SetCached(bool isCached);
     }
 
@@ -11286,16 +13068,20 @@ namespace Direct2D
         new uint GetInputCount();
         #endregion
 
+        [PreserveSig]
         new HRESULT SetOutputBuffer(D2D1_BUFFER_PRECISION bufferPrecision, D2D1_CHANNEL_DEPTH channelDepth);
+        [PreserveSig]
         new void SetCached(bool isCached);
         #endregion
 
+        [PreserveSig]
         void SetExtendModeX(D2D1_EXTEND_MODE extendMode);
+        [PreserveSig]
         void SetExtendModeY(D2D1_EXTEND_MODE extendMode);
         [PreserveSig]
-        D2D1_EXTEND_MODE GetExtendModeX();
+        void GetExtendModeX(out D2D1_EXTEND_MODE extendedModeX);
         [PreserveSig]
-        D2D1_EXTEND_MODE GetExtendModeY();
+        void GetExtendModeY(out D2D1_EXTEND_MODE extendedModeY);
     }
 
     [ComImport]
@@ -11307,8 +13093,10 @@ namespace Direct2D
         [PreserveSig]
         new uint GetInputCount();
         #endregion
-    
+
+        [PreserveSig]
         void SetOutputBounds(ref D2D1_RECT_L outputBounds);
+        [PreserveSig]
         void GetOutputBounds(out D2D1_RECT_L outputBounds);
     }
 
@@ -11333,9 +13121,13 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ID2D1RenderInfo
     {
+        [PreserveSig]
         HRESULT SetInputDescription(uint inputIndex, D2D1_INPUT_DESCRIPTION inputDescription);
+        [PreserveSig]
         HRESULT SetOutputBuffer(D2D1_BUFFER_PRECISION bufferPrecision, D2D1_CHANNEL_DEPTH channelDepth);
+        [PreserveSig]
         void SetCached(bool isCached);
+        [PreserveSig]
         void SetInstructionCountHint(uint instructionCount);
     }
 
@@ -11345,14 +13137,21 @@ namespace Direct2D
     public interface ID2D1ComputeInfo : ID2D1RenderInfo
     {
         #region <ID2D1RenderInfo>
+        [PreserveSig]
         new HRESULT SetInputDescription(uint inputIndex, D2D1_INPUT_DESCRIPTION inputDescription);
+        [PreserveSig]
         new HRESULT SetOutputBuffer(D2D1_BUFFER_PRECISION bufferPrecision, D2D1_CHANNEL_DEPTH channelDepth);
+        [PreserveSig]
         new void SetCached(bool isCached);
+        [PreserveSig]
         new void SetInstructionCountHint(uint instructionCount);
         #endregion
 
-        HRESULT SetComputeShaderConstantBuffer(IntPtr buffer, uint bufferCount);        
+        [PreserveSig]
+        HRESULT SetComputeShaderConstantBuffer(IntPtr buffer, uint bufferCount);
+        [PreserveSig]
         HRESULT SetComputeShader(ref Guid shaderId);
+        [PreserveSig]
         HRESULT SetResourceTexture(uint textureIndex, ID2D1ResourceTexture resourceTexture);
     }
 
@@ -11361,6 +13160,7 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ID2D1ResourceTexture
     {
+        [PreserveSig]
         HRESULT Update(uint minimumExtents, uint maximimumExtents, uint strides, uint dimensions, IntPtr data, uint dataCount);       
     }
 
@@ -11375,13 +13175,18 @@ namespace Direct2D
         new uint GetInputCount();
         #endregion
 
+        [PreserveSig]
         new HRESULT MapOutputRectToInputRects(D2D1_RECT_L outputRect, out D2D1_RECT_L inputRects, uint inputRectsCount);
+        [PreserveSig]
         new HRESULT MapInputRectsToOutputRect(IntPtr inputRects, IntPtr inputOpaqueSubRects, uint inputRectCount,
             out D2D1_RECT_L outputRect, out D2D1_RECT_L outputOpaqueSubRect);
+        [PreserveSig]
         new HRESULT MapInvalidRect(uint inputIndex, D2D1_RECT_L invalidInputRect, out D2D1_RECT_L invalidOutputRect);
         #endregion
 
+        [PreserveSig]
         HRESULT SetRenderInfo(ID2D1RenderInfo renderInfo);
+        [PreserveSig]
         HRESULT Draw(ID2D1Bitmap1 target, ref D2D1_RECT_L drawRect, D2D1_POINT_2U targetOrigin);
     }
 
@@ -11395,9 +13200,12 @@ namespace Direct2D
         new uint GetInputCount();
         #endregion
 
+        [PreserveSig]
         HRESULT MapOutputRectToInputRects(D2D1_RECT_L outputRect, out D2D1_RECT_L inputRects, uint inputRectsCount);
+        [PreserveSig]
         HRESULT MapInputRectsToOutputRect(IntPtr inputRects, IntPtr inputOpaqueSubRects, uint inputRectCount,
-            out D2D1_RECT_L outputRect,out D2D1_RECT_L outputOpaqueSubRect); 
+            out D2D1_RECT_L outputRect,out D2D1_RECT_L outputOpaqueSubRect);
+        [PreserveSig]
         HRESULT MapInvalidRect(uint inputIndex, D2D1_RECT_L invalidInputRect, out D2D1_RECT_L invalidOutputRect);
     }
 
@@ -11408,13 +13216,21 @@ namespace Direct2D
     {
         [PreserveSig]
         uint GetInputCount();
+        [PreserveSig]
         HRESULT SetSingleTransformNode(ID2D1TransformNode node);
-        HRESULT AddNode(ID2D1TransformNode node); 
+        [PreserveSig]
+        HRESULT AddNode(ID2D1TransformNode node);
+        [PreserveSig]
         HRESULT RemoveNode(ID2D1TransformNode node);
+        [PreserveSig]
         HRESULT SetOutputNode(ID2D1TransformNode node);
+        [PreserveSig]
         HRESULT ConnectNode(ID2D1TransformNode fromNode, ID2D1TransformNode toNode, uint toNodeInputIndex);
-        HRESULT ConnectToEffectInput(uint toEffectInputIndex, ID2D1TransformNode node, uint toNodeInputIndex); 
-        void Clear();    
+        [PreserveSig]
+        HRESULT ConnectToEffectInput(uint toEffectInputIndex, ID2D1TransformNode node, uint toNodeInputIndex);
+        [PreserveSig]
+        void Clear();
+        [PreserveSig]
         HRESULT SetPassthroughGraph(uint effectInputIndex);
     }
 
@@ -11424,16 +13240,25 @@ namespace Direct2D
     public interface ID2D1DrawInfo : ID2D1RenderInfo
     {
         #region <ID2D1RenderInfo>
+        [PreserveSig]
         new HRESULT SetInputDescription(uint inputIndex, D2D1_INPUT_DESCRIPTION inputDescription);
+        [PreserveSig]
         new HRESULT SetOutputBuffer(D2D1_BUFFER_PRECISION bufferPrecision, D2D1_CHANNEL_DEPTH channelDepth);
+        [PreserveSig]
         new void SetCached(bool isCached);
+        [PreserveSig]
         new void SetInstructionCountHint(uint instructionCount);
         #endregion
 
+        [PreserveSig]
         HRESULT SetPixelShaderantBuffer(IntPtr buffer, uint bufferCount);
+        [PreserveSig]
         HRESULT SetResourceTexture(uint textureIndex, ID2D1ResourceTexture resourceTexture);
+        [PreserveSig]
         HRESULT SetVertexShaderantBuffer(IntPtr buffer, uint bufferCount);
-        HRESULT SetPixelShader(ref Guid shaderId, D2D1_PIXEL_OPTIONS pixelOptions = D2D1_PIXEL_OPTIONS.D2D1_PIXEL_OPTIONS_NONE); 
+        [PreserveSig]
+        HRESULT SetPixelShader(ref Guid shaderId, D2D1_PIXEL_OPTIONS pixelOptions = D2D1_PIXEL_OPTIONS.D2D1_PIXEL_OPTIONS_NONE);
+        [PreserveSig]
         HRESULT SetVertexProcessing(ID2D1VertexBuffer vertexBuffer, D2D1_VERTEX_OPTIONS vertexOptions, D2D1_BLEND_DESCRIPTION blendDescription,
             D2D1_VERTEX_RANGE vertexRange, ref Guid vertexShader);
     }
@@ -11443,7 +13268,9 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ID2D1VertexBuffer
     {
+        [PreserveSig]
         HRESULT Map(out IntPtr data, uint bufferSize);
+        [PreserveSig]
         HRESULT Unmap();
     }
 
@@ -11452,27 +13279,45 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ID2D1EffectContext
     {
+        [PreserveSig]
         void GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
         HRESULT CreateEffect(ref Guid effectId, out ID2D1Effect effect);
+        [PreserveSig]
         HRESULT GetMaximumSupportedFeatureLevel([MarshalAs(UnmanagedType.LPArray)] int[] featureLevels,
              uint featureLevelsCount, out D3D_FEATURE_LEVEL maximumSupportedFeatureLevel);
+        [PreserveSig]
         HRESULT CreateTransformNodeFromEffect(ID2D1Effect effect, out ID2D1TransformNode transformNode);
+        [PreserveSig]
         HRESULT CreateBlendTransform(uint numInputs, D2D1_BLEND_DESCRIPTION blendDescription, out ID2D1BlendTransform transform);
+        [PreserveSig]
         HRESULT CreateBorderTransform(D2D1_EXTEND_MODE extendModeX, D2D1_EXTEND_MODE extendModeY, out ID2D1BorderTransform transform);
+        [PreserveSig]
         HRESULT CreateOffsetTransform(ref D2D1_POINT_2L offset, out ID2D1OffsetTransform transform);
+        [PreserveSig]
         HRESULT CreateBoundsAdjustmentTransform(ref D2D1_RECT_L outputRectangle, out ID2D1BoundsAdjustmentTransform transform);
+        [PreserveSig]
         HRESULT LoadPixelShader(ref Guid shaderId, IntPtr shaderBuffer, uint shaderBufferCount);
+        [PreserveSig]
         HRESULT LoadVertexShader(ref Guid resourceId, IntPtr shaderBuffer, uint shaderBufferCount);
+        [PreserveSig]
         HRESULT LoadComputeShader(ref Guid resourceId, IntPtr shaderBuffer, uint shaderBufferCount);
         [PreserveSig]
         bool IsShaderLoaded(ref Guid shaderId);
         HRESULT CreateResourceTexture(ref Guid resourceId, ref D2D1_RESOURCE_TEXTURE_PROPERTIES resourceTextureProperties, IntPtr data, uint strides, uint dataSize, out ID2D1ResourceTexture resourceTexture);
+        [PreserveSig]
         HRESULT FindResourceTexture(ref Guid resourceId, out ID2D1ResourceTexture resourceTexture);
+        [PreserveSig]
         HRESULT CreateVertexBuffer(ref D2D1_VERTEX_BUFFER_PROPERTIES vertexBufferProperties, ref Guid resourceId, ref D2D1_CUSTOM_VERTEX_BUFFER_PROPERTIES customVertexBufferProperties, out ID2D1VertexBuffer buffer);
+        [PreserveSig]
         HRESULT FindVertexBuffer(ref Guid resourceId, out ID2D1VertexBuffer buffer);
+        [PreserveSig]
         HRESULT CreateColorContext(D2D1_COLOR_SPACE space, IntPtr profile, uint profileSize, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         HRESULT CreateColorContextFromFilename(string filename, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         HRESULT CreateColorContextFromWicColorContext(IWICColorContext wicColorContext, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         HRESULT CheckFeatureSupport(D2D1_FEATURE feature, out IntPtr featureSupportData, uint featureSupportDataSize);
         [PreserveSig]
         bool IsBufferPrecisionSupported(D2D1_BUFFER_PRECISION bufferPrecision);        
@@ -11483,32 +13328,52 @@ namespace Direct2D
     public interface ID2D1EffectContext1 : ID2D1EffectContext
     {
         #region <ID2D1EffectContext>
+        [PreserveSig]
         new void GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
         new HRESULT CreateEffect(ref Guid effectId, out ID2D1Effect effect);
+        [PreserveSig]
         new HRESULT GetMaximumSupportedFeatureLevel([MarshalAs(UnmanagedType.LPArray)] int[] featureLevels,
              uint featureLevelsCount, out D3D_FEATURE_LEVEL maximumSupportedFeatureLevel);
+        [PreserveSig]
         new HRESULT CreateTransformNodeFromEffect(ID2D1Effect effect, out ID2D1TransformNode transformNode);
+        [PreserveSig]
         new HRESULT CreateBlendTransform(uint numInputs, D2D1_BLEND_DESCRIPTION blendDescription, out ID2D1BlendTransform transform);
+        [PreserveSig]
         new HRESULT CreateBorderTransform(D2D1_EXTEND_MODE extendModeX, D2D1_EXTEND_MODE extendModeY, out ID2D1BorderTransform transform);
+        [PreserveSig]
         new HRESULT CreateOffsetTransform(ref D2D1_POINT_2L offset, out ID2D1OffsetTransform transform);
+        [PreserveSig]
         new HRESULT CreateBoundsAdjustmentTransform(ref D2D1_RECT_L outputRectangle, out ID2D1BoundsAdjustmentTransform transform);
+        [PreserveSig]
         new HRESULT LoadPixelShader(ref Guid shaderId, IntPtr shaderBuffer, uint shaderBufferCount);
+        [PreserveSig]
         new HRESULT LoadVertexShader(ref Guid resourceId, IntPtr shaderBuffer, uint shaderBufferCount);
+        [PreserveSig]
         new HRESULT LoadComputeShader(ref Guid resourceId, IntPtr shaderBuffer, uint shaderBufferCount);
         [PreserveSig]
         new bool IsShaderLoaded(ref Guid shaderId);
+        [PreserveSig]
         new HRESULT CreateResourceTexture(ref Guid resourceId, ref D2D1_RESOURCE_TEXTURE_PROPERTIES resourceTextureProperties, IntPtr data, uint strides, uint dataSize, out ID2D1ResourceTexture resourceTexture);
+        [PreserveSig]
         new HRESULT FindResourceTexture(ref Guid resourceId, out ID2D1ResourceTexture resourceTexture);
+        [PreserveSig]
         new HRESULT CreateVertexBuffer(ref D2D1_VERTEX_BUFFER_PROPERTIES vertexBufferProperties, ref Guid resourceId, ref D2D1_CUSTOM_VERTEX_BUFFER_PROPERTIES customVertexBufferProperties, out ID2D1VertexBuffer buffer);
+        [PreserveSig]
         new HRESULT FindVertexBuffer(ref Guid resourceId, out ID2D1VertexBuffer buffer);
+        [PreserveSig]
         new HRESULT CreateColorContext(D2D1_COLOR_SPACE space, IntPtr profile, uint profileSize, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromFilename(string filename, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromWicColorContext(IWICColorContext wicColorContext, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CheckFeatureSupport(D2D1_FEATURE feature, out IntPtr featureSupportData, uint featureSupportDataSize);
         [PreserveSig]
         new bool IsBufferPrecisionSupported(D2D1_BUFFER_PRECISION bufferPrecision);
         #endregion
-       
+
+        [PreserveSig]
         HRESULT CreateLookupTable3D(D2D1_BUFFER_PRECISION precision,  [MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] uint[] extents,
             [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] byte[] data, uint dataCount, 
             [MarshalAs(UnmanagedType.LPArray, SizeConst = 2)] uint[] strides, out ID2D1LookupTable3D lookupTable);
@@ -11519,39 +13384,61 @@ namespace Direct2D
     public interface ID2D1EffectContext2 : ID2D1EffectContext1
     {
         #region <ID2D1EffectContext>
+        [PreserveSig]
         new void GetDpi(out float dpiX, out float dpiY);
+        [PreserveSig]
         new HRESULT CreateEffect(ref Guid effectId, out ID2D1Effect effect);
+        [PreserveSig]
         new HRESULT GetMaximumSupportedFeatureLevel([MarshalAs(UnmanagedType.LPArray)] int[] featureLevels,
              uint featureLevelsCount, out D3D_FEATURE_LEVEL maximumSupportedFeatureLevel);
+        [PreserveSig]
         new HRESULT CreateTransformNodeFromEffect(ID2D1Effect effect, out ID2D1TransformNode transformNode);
+        [PreserveSig]
         new HRESULT CreateBlendTransform(uint numInputs, D2D1_BLEND_DESCRIPTION blendDescription, out ID2D1BlendTransform transform);
+        [PreserveSig]
         new HRESULT CreateBorderTransform(D2D1_EXTEND_MODE extendModeX, D2D1_EXTEND_MODE extendModeY, out ID2D1BorderTransform transform);
+        [PreserveSig]
         new HRESULT CreateOffsetTransform(ref D2D1_POINT_2L offset, out ID2D1OffsetTransform transform);
+        [PreserveSig]
         new HRESULT CreateBoundsAdjustmentTransform(ref D2D1_RECT_L outputRectangle, out ID2D1BoundsAdjustmentTransform transform);
+        [PreserveSig]
         new HRESULT LoadPixelShader(ref Guid shaderId, IntPtr shaderBuffer, uint shaderBufferCount);
+        [PreserveSig]
         new HRESULT LoadVertexShader(ref Guid resourceId, IntPtr shaderBuffer, uint shaderBufferCount);
+        [PreserveSig]
         new HRESULT LoadComputeShader(ref Guid resourceId, IntPtr shaderBuffer, uint shaderBufferCount);
         [PreserveSig]
         new bool IsShaderLoaded(ref Guid shaderId);
+        [PreserveSig]
         new HRESULT CreateResourceTexture(ref Guid resourceId, ref D2D1_RESOURCE_TEXTURE_PROPERTIES resourceTextureProperties, IntPtr data, uint strides, uint dataSize, out ID2D1ResourceTexture resourceTexture);
+        [PreserveSig]
         new HRESULT FindResourceTexture(ref Guid resourceId, out ID2D1ResourceTexture resourceTexture);
+        [PreserveSig]
         new HRESULT CreateVertexBuffer(ref D2D1_VERTEX_BUFFER_PROPERTIES vertexBufferProperties, ref Guid resourceId, ref D2D1_CUSTOM_VERTEX_BUFFER_PROPERTIES customVertexBufferProperties, out ID2D1VertexBuffer buffer);
+        [PreserveSig]
         new HRESULT FindVertexBuffer(ref Guid resourceId, out ID2D1VertexBuffer buffer);
+        [PreserveSig]
         new HRESULT CreateColorContext(D2D1_COLOR_SPACE space, IntPtr profile, uint profileSize, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromFilename(string filename, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CreateColorContextFromWicColorContext(IWICColorContext wicColorContext, out ID2D1ColorContext colorContext);
+        [PreserveSig]
         new HRESULT CheckFeatureSupport(D2D1_FEATURE feature, out IntPtr featureSupportData, uint featureSupportDataSize);
         [PreserveSig]
         new bool IsBufferPrecisionSupported(D2D1_BUFFER_PRECISION bufferPrecision);
         #endregion
 
         #region <ID2D1EffectContext1>
+        [PreserveSig]
         new HRESULT CreateLookupTable3D(D2D1_BUFFER_PRECISION precision, [MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] uint[] extents,
             [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] byte[] data, uint dataCount,
             [MarshalAs(UnmanagedType.LPArray, SizeConst = 2)] uint[] strides, out ID2D1LookupTable3D lookupTable);
         #endregion
-       
+
+        [PreserveSig]
         HRESULT CreateColorContextFromDxgiColorSpace(DXGI_COLOR_SPACE_TYPE colorSpace, out ID2D1ColorContext1 colorContext);
+        [PreserveSig]
         HRESULT CreateColorContextFromSimpleColorProfile(ref D2D1_SIMPLE_COLOR_PROFILE simpleProfile, out ID2D1ColorContext1 colorContext);
     }
 
@@ -11578,8 +13465,10 @@ namespace Direct2D
         new uint GetInputCount();
         #endregion
 
+        [PreserveSig]
         void SetOffset(D2D1_POINT_2L offset);
-        D2D1_POINT_2L GetOffset();
+        [PreserveSig]
+        void GetOffset(out D2D1_POINT_2L offset);
     }
 
 #if !DWRITE
@@ -11595,9 +13484,9 @@ namespace Direct2D
         [PreserveSig]
         float GetClearTypeLevel();
         [PreserveSig]
-        DWRITE_PIXEL_GEOMETRY GetPixelGeometry();
+        void GetPixelGeometry(out DWRITE_PIXEL_GEOMETRY pixelGeometry);
         [PreserveSig]
-        DWRITE_RENDERING_MODE GetRenderingMode();
+        void GetRenderingMode(out DWRITE_RENDERING_MODE renderingMode);
     }
 
     public enum DWRITE_PIXEL_GEOMETRY
@@ -11677,42 +13566,55 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IDWriteTextFormat
     {
+        [PreserveSig]
         HRESULT SetTextAlignment(DWRITE_TEXT_ALIGNMENT textAlignment);
+        [PreserveSig]
         HRESULT SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT paragraphAlignment);
+        [PreserveSig]
         HRESULT SetWordWrapping(DWRITE_WORD_WRAPPING wordWrapping);
+        [PreserveSig]
         HRESULT SetReadingDirection(DWRITE_READING_DIRECTION readingDirection);
+        [PreserveSig]
         HRESULT SetFlowDirection(DWRITE_FLOW_DIRECTION flowDirection);
+        [PreserveSig]
         HRESULT SetIncrementalTabStop(float incrementalTabStop);
+        [PreserveSig]
         HRESULT SetTrimming(DWRITE_TRIMMING trimmingOptions, IDWriteInlineObject trimmingSign);
+        [PreserveSig]
         HRESULT SetLineSpacing(DWRITE_LINE_SPACING_METHOD lineSpacingMethod, float lineSpacing, float baseline);
         [PreserveSig]
-        DWRITE_TEXT_ALIGNMENT GetTextAlignment();
+        void GetTextAlignment(out DWRITE_TEXT_ALIGNMENT textAlignment);
         [PreserveSig]
-        DWRITE_PARAGRAPH_ALIGNMENT GetParagraphAlignment();
+        void GetParagraphAlignment(out DWRITE_PARAGRAPH_ALIGNMENT paragraphAlignment);
         [PreserveSig]
-        DWRITE_WORD_WRAPPING GetWordWrapping();
+        void GetWordWrapping(out DWRITE_WORD_WRAPPING wordWrapping);
         [PreserveSig]
-        DWRITE_READING_DIRECTION GetReadingDirection();
+        void GetReadingDirection(out DWRITE_READING_DIRECTION readingDirection);
         [PreserveSig]
-        DWRITE_FLOW_DIRECTION GetFlowDirection();
+        void GetFlowDirection(out DWRITE_FLOW_DIRECTION flowDirection);
         [PreserveSig]
         float GetIncrementalTabStop();
+        [PreserveSig]
         HRESULT GetTrimming(out DWRITE_TRIMMING trimmingOptions, out IDWriteInlineObject trimmingSign);
+        [PreserveSig]
         HRESULT GetLineSpacing(out DWRITE_LINE_SPACING_METHOD lineSpacingMethod, out float lineSpacing, out float baseline);
+        [PreserveSig]
         HRESULT GetFontCollection(out IDWriteFontCollection fontCollection);
         [PreserveSig]
         uint GetFontFamilyNameLength();
+        [PreserveSig]
         HRESULT GetFontFamilyName(out string fontFamilyName, uint nameSize);
         [PreserveSig]
-        DWRITE_FONT_WEIGHT GetFontWeight();
+        void GetFontWeight(out DWRITE_FONT_WEIGHT fontWeight);
         [PreserveSig]
-        DWRITE_FONT_STYLE GetFontStyle();
+        void GetFontStyle(out DWRITE_FONT_STYLE fontStyle);
         [PreserveSig]
-        DWRITE_FONT_STRETCH GetFontStretch();
+        void GetFontStretch(out DWRITE_FONT_STRETCH fontStretch);
         [PreserveSig]
         float GetFontSize();
         [PreserveSig]
         uint GetLocaleNameLength();
+        [PreserveSig]
         HRESULT GetLocaleName(out string localeName, uint nameSize);
     }
 
@@ -11949,10 +13851,13 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IDWriteInlineObject
     {
-        //HRESULT Draw(IntPtr clientDrawingContext, IDWriteTextRenderer renderer, float originX, float originY, bool isSideways, bool isRightToLeft, IUnknown* clientDrawingEffect);
+        [PreserveSig]
         HRESULT Draw(IntPtr clientDrawingContext, IDWriteTextRenderer renderer, float originX, float originY, bool isSideways, bool isRightToLeft, IntPtr clientDrawingEffect);
+        [PreserveSig]
         HRESULT GetMetrics(out DWRITE_INLINE_OBJECT_METRICS metrics);
+        [PreserveSig]
         HRESULT GetOverhangMetrics(out DWRITE_OVERHANG_METRICS overhangs);
+        [PreserveSig]
         HRESULT GetBreakConditions(out DWRITE_BREAK_CONDITION breakConditionBefore, out DWRITE_BREAK_CONDITION breakConditionAfter);
     }
 
@@ -12187,8 +14092,11 @@ namespace Direct2D
         //[return: MarshalAs(UnmanagedType.U4)]
         [PreserveSig]
         uint GetFontFamilyCount();
+        [PreserveSig]
         HRESULT GetFontFamily(uint index, out IDWriteFontFamily fontFamily);
+        [PreserveSig]
         HRESULT FindFamilyName(string familyName, out uint index, out bool exists);
+        [PreserveSig]
         HRESULT GetFontFromFontFace(IDWriteFontFace fontFace, out IDWriteFont font);
     }
 
@@ -12197,9 +14105,11 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IDWriteFontList
     {
+        [PreserveSig]
         HRESULT GetFontCollection(out IDWriteFontCollection fontCollection);
         [PreserveSig]
         int GetFontCount();
+        [PreserveSig]
         HRESULT GetFont(int index, out IDWriteFont font);
     }
 
@@ -12251,14 +14161,19 @@ namespace Direct2D
     public interface IDWriteFontFamily : IDWriteFontList
     {
         #region IDWriteFontList
+        [PreserveSig]
         new HRESULT GetFontCollection(out IDWriteFontCollection fontCollection);
         [PreserveSig]
         new int GetFontCount();
+        [PreserveSig]
         new HRESULT GetFont(int index, out IDWriteFont font);
         #endregion
 
+        [PreserveSig]
         HRESULT GetFamilyNames(out IDWriteLocalizedStrings names);
+        [PreserveSig]
         HRESULT GetFirstMatchingFont(DWRITE_FONT_WEIGHT weight, DWRITE_FONT_STRETCH stretch, DWRITE_FONT_STYLE style, out IDWriteFont matchingFont);
+        [PreserveSig]
         HRESULT GetMatchingFonts(DWRITE_FONT_WEIGHT weight, DWRITE_FONT_STRETCH stretch, DWRITE_FONT_STYLE style, out IDWriteFontList matchingFonts);
     }
 
@@ -12267,20 +14182,25 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IDWriteFont
     {
+        [PreserveSig]
         HRESULT GetFontFamily(out IDWriteFontFamily fontFamily);
         [PreserveSig]
-        DWRITE_FONT_WEIGHT GetWeight();
+        void GetWeight(out DWRITE_FONT_WEIGHT fontWeight);
         [PreserveSig]
-        DWRITE_FONT_STRETCH GetStretch();
+        void GetStretch(out DWRITE_FONT_STRETCH fontStretch);
         [PreserveSig]
-        DWRITE_FONT_STYLE GetStyle();
+        void GetStyle(out DWRITE_FONT_STYLE fontStyle);
         [PreserveSig]
         bool IsSymbolFont();
+        [PreserveSig]
         HRESULT GetFaceNames(out IDWriteLocalizedStrings names);
+        [PreserveSig]
         HRESULT GetInformationalStrings(DWRITE_INFORMATIONAL_STRING_ID informationalStringID, out IDWriteLocalizedStrings informationalStrings, out bool exists);
         [PreserveSig]
-        DWRITE_FONT_SIMULATIONS GetSimulations();
+        void GetSimulations(out DWRITE_FONT_SIMULATIONS fontSimulations);
+        [PreserveSig]
         void GetMetrics(out DWRITE_FONT_METRICS fontMetrics);
+        [PreserveSig]
         HRESULT HasCharacter(int unicodeValue, out bool exists);
         [PreserveSig]
         HRESULT CreateFontFace(out IDWriteFontFace fontFace);
@@ -12390,10 +14310,15 @@ namespace Direct2D
     {
         [PreserveSig]
         int GetCount();
+        [PreserveSig]
         HRESULT FindLocaleName(string localeName, out uint index, out bool exists);
+        [PreserveSig]
         HRESULT GetLocaleNameLength(uint index, out uint length);
+        [PreserveSig]
         HRESULT GetLocaleName(uint index, out string localeName, uint size);
+        [PreserveSig]
         HRESULT GetStringLength(uint index, out uint length);
+        [PreserveSig]
         HRESULT GetString(uint index, System.Text.StringBuilder stringBuffer, uint size);
     }
 
@@ -12472,25 +14397,34 @@ namespace Direct2D
     public interface IDWriteFontFace
     {
         [PreserveSig]
-        DWRITE_FONT_FACE_TYPE GetType();
+        void GetType(out DWRITE_FONT_FACE_TYPE fontFaceType);
+        [PreserveSig]
         HRESULT GetFiles([In, Out] ref uint numberOfFiles, [Out, MarshalAs(UnmanagedType.LPArray)] IDWriteFontFile[] fontFiles);
         [PreserveSig]
         int GetIndex();
         [PreserveSig]
-        DWRITE_FONT_SIMULATIONS GetSimulations();
+        void GetSimulations(out DWRITE_FONT_SIMULATIONS fontSimulations);
         [PreserveSig]
         bool IsSymbolFont();
+        [PreserveSig]
         void GetMetrics(out DWRITE_FONT_METRICS fontFaceMetrics);
         [PreserveSig]
         UInt16 GetGlyphCount();
+        [PreserveSig]
         HRESULT GetDesignGlyphMetrics([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] ushort[] glyphIndices, int glyphCount, [Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] DWRITE_GLYPH_METRICS[] glyphMetrics, bool isSideways = false);
         [PreserveSig]
         HRESULT GetGlyphIndices([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] uint[] codePoints, int codePointCount, [Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] ushort[] glyphIndices);
+        [PreserveSig]
         HRESULT TryGetFontTable(int openTypeTableTag, out IntPtr tableData, out int tableSize, out IntPtr tableContext, out bool exists);
+        [PreserveSig]
         void ReleaseFontTable(IntPtr tableContext);
+        [PreserveSig]
         HRESULT GetGlyphRunOutline(float emSize, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 4)] ushort[] glyphIndices, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 4)] float[] glyphAdvances, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 4)] DWRITE_GLYPH_OFFSET[] glyphOffsets, int glyphCount, bool isSideways, bool isRightToLeft, ID2D1SimplifiedGeometrySink geometrySink);
+        [PreserveSig]
         HRESULT GetRecommendedRenderingMode(float emSize, float pixelsPerDip, DWRITE_MEASURING_MODE measuringMode, IDWriteRenderingParams renderingParams, out DWRITE_RENDERING_MODE renderingMode);
+        [PreserveSig]
         HRESULT GetGdiCompatibleMetrics(float emSize, float pixelsPerDip, DWRITE_MATRIX transform, out DWRITE_FONT_METRICS fontFaceMetrics);
+        [PreserveSig]
         HRESULT GetGdiCompatibleGlyphMetrics(float emSize, float pixelsPerDip, DWRITE_MATRIX transform, bool useGdiNatural, UInt16 glyphIndices, int glyphCount, out DWRITE_GLYPH_METRICS glyphMetrics, bool isSideways = false);
     }
 
@@ -12679,88 +14613,135 @@ namespace Direct2D
     public interface IDWriteTextLayout : IDWriteTextFormat
     {
         #region IDWriteTextFormat
+        [PreserveSig]
         new HRESULT SetTextAlignment(DWRITE_TEXT_ALIGNMENT textAlignment);
+        [PreserveSig]
         new HRESULT SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT paragraphAlignment);
+        [PreserveSig]
         new HRESULT SetWordWrapping(DWRITE_WORD_WRAPPING wordWrapping);
+        [PreserveSig]
         new HRESULT SetReadingDirection(DWRITE_READING_DIRECTION readingDirection);
+        [PreserveSig]
         new HRESULT SetFlowDirection(DWRITE_FLOW_DIRECTION flowDirection);
+        [PreserveSig]
         new HRESULT SetIncrementalTabStop(float incrementalTabStop);
+        [PreserveSig]
         new HRESULT SetTrimming(DWRITE_TRIMMING trimmingOptions, IDWriteInlineObject trimmingSign);
+        [PreserveSig]
         new HRESULT SetLineSpacing(DWRITE_LINE_SPACING_METHOD lineSpacingMethod, float lineSpacing, float baseline);
         [PreserveSig]
-        new DWRITE_TEXT_ALIGNMENT GetTextAlignment();
+        new void GetTextAlignment(out DWRITE_TEXT_ALIGNMENT textAlignment);
         [PreserveSig]
-        new DWRITE_PARAGRAPH_ALIGNMENT GetParagraphAlignment();
+        new void GetParagraphAlignment(out DWRITE_PARAGRAPH_ALIGNMENT paragraphAlignment);
         [PreserveSig]
-        new DWRITE_WORD_WRAPPING GetWordWrapping();
+        new void GetWordWrapping(out DWRITE_WORD_WRAPPING wordWrapping);
         [PreserveSig]
-        new DWRITE_READING_DIRECTION GetReadingDirection();
+        new void GetReadingDirection(out DWRITE_READING_DIRECTION readingDirection);
         [PreserveSig]
-        new DWRITE_FLOW_DIRECTION GetFlowDirection();
+        new void GetFlowDirection(out DWRITE_FLOW_DIRECTION flowDirection);
         [PreserveSig]
         new float GetIncrementalTabStop();
+        [PreserveSig]
         new HRESULT GetTrimming(out DWRITE_TRIMMING trimmingOptions, out IDWriteInlineObject trimmingSign);
+        [PreserveSig]
         new HRESULT GetLineSpacing(out DWRITE_LINE_SPACING_METHOD lineSpacingMethod, out float lineSpacing, out float baseline);
+        [PreserveSig]
         new HRESULT GetFontCollection(out IDWriteFontCollection fontCollection);
         [PreserveSig]
         new uint GetFontFamilyNameLength();
+        [PreserveSig]
         new HRESULT GetFontFamilyName(out string fontFamilyName, uint nameSize);
         [PreserveSig]
-        new DWRITE_FONT_WEIGHT GetFontWeight();
+        new void GetFontWeight(out DWRITE_FONT_WEIGHT fontWeight);
         [PreserveSig]
-        new DWRITE_FONT_STYLE GetFontStyle();
+        new void GetFontStyle(out DWRITE_FONT_STYLE fontStyle);
         [PreserveSig]
-        new DWRITE_FONT_STRETCH GetFontStretch();
+        new void GetFontStretch(out DWRITE_FONT_STRETCH fontStretch);
         [PreserveSig]
         new float GetFontSize();
         [PreserveSig]
         new uint GetLocaleNameLength();
+        [PreserveSig]
         new HRESULT GetLocaleName(out string localeName, uint nameSize);
         #endregion
 
+        [PreserveSig]
         HRESULT SetMaxWidth(float maxWidth);
+        [PreserveSig]
         HRESULT SetMaxHeight(float maxHeight);
+        [PreserveSig]
         HRESULT SetFontCollection(IDWriteFontCollection fontCollection, DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT SetFontFamilyName(string fontFamilyName, DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT SetFontWeight(DWRITE_FONT_WEIGHT fontWeight, DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT SetFontStyle(DWRITE_FONT_STYLE fontStyle, DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT SetFontStretch(DWRITE_FONT_STRETCH fontStretch, DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT SetFontSize(float fontSize, DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT SetUnderline(bool hasUnderline, DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT SetStrikethrough(bool hasStrikethrough, DWRITE_TEXT_RANGE textRange);
-        //HRESULT SetDrawingEffect(IUnknown drawingEffect, DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT SetDrawingEffect(IntPtr drawingEffect, DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT SetInlineObject(IDWriteInlineObject inlineObject, DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT SetTypography(IDWriteTypography typography, DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT SetLocaleName(string localeName, DWRITE_TEXT_RANGE textRange);
         [PreserveSig]
         float GetMaxWidth();
         [PreserveSig]
         float GetMaxHeight();
+        [PreserveSig]
         HRESULT GetFontCollection(uint currentPosition, out IDWriteFontCollection fontCollection, out DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT GetFontFamilyNameLength(uint currentPosition, out uint nameLength, out DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT GetFontFamilyName(uint currentPosition, out string fontFamilyName, uint nameSize, out DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT GetFontWeight(uint currentPosition, out DWRITE_FONT_WEIGHT fontWeight, out DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT GetFontStyle(uint currentPosition, out DWRITE_FONT_STYLE fontStyle, out DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT GetFontStretch(uint currentPosition, out DWRITE_FONT_STRETCH fontStretch, out DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT GetFontSize(uint currentPosition, out float fontSize, out DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT GetUnderline(uint currentPosition, out bool hasUnderline, out DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT GetStrikethrough(uint currentPosition, out bool hasStrikethrough, out DWRITE_TEXT_RANGE textRange);
-        //HRESULT GetDrawingEffect(uint currentPosition, out IUnknown drawingEffect, out DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT GetDrawingEffect(uint currentPosition, out IntPtr drawingEffect, out DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT GetInlineObject(uint currentPosition, out IDWriteInlineObject inlineObject, out DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT GetTypography(uint currentPosition, out IDWriteTypography typography, out DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT GetLocaleNameLength(uint currentPosition, out uint nameLength, out DWRITE_TEXT_RANGE textRange);
+        [PreserveSig]
         HRESULT GetLocaleName(uint currentPosition, out string localeName, uint nameSize, out DWRITE_TEXT_RANGE textRange);
         [PreserveSig]
         HRESULT Draw(IntPtr clientDrawingContext, IDWriteTextRenderer renderer, float originX, float originY);
+        [PreserveSig]
         HRESULT GetLineMetrics(out DWRITE_LINE_METRICS lineMetrics, uint maxLineCount, out uint actualLineCount);
+        [PreserveSig]
         HRESULT GetMetrics(out DWRITE_TEXT_METRICS textMetrics);
+        [PreserveSig]
         HRESULT GetOverhangMetrics(out DWRITE_OVERHANG_METRICS overhangs);
+        [PreserveSig]
         HRESULT GetClusterMetrics(out DWRITE_CLUSTER_METRICS clusterMetrics, uint maxClusterCount, out uint actualClusterCount);
+        [PreserveSig]
         HRESULT DetermineMinWidth(out float minWidth);
+        [PreserveSig]
         HRESULT HitTestPoint(float pointX, float pointY, out bool isTrailingHit, out bool isInside, out DWRITE_HIT_TEST_METRICS hitTestMetrics);
+        [PreserveSig]
         HRESULT HitTestTextPosition(uint textPosition, bool isTrailingHit, out float pointX, out float pointY, out DWRITE_HIT_TEST_METRICS hitTestMetrics);
+        [PreserveSig]
         HRESULT HitTestTextRange(uint textPosition, uint textLength, float originX, float originY, out DWRITE_HIT_TEST_METRICS hitTestMetrics, uint maxHitTestMetricsCount, out uint actualHitTestMetricsCount);
     }
 
@@ -12952,9 +14933,11 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IDWriteTypography
     {
+        [PreserveSig]
         HRESULT AddFontFeature(DWRITE_FONT_FEATURE fontFeature);
         [PreserveSig]
         uint GetFontFeatureCount();
+        [PreserveSig]
         HRESULT GetFontFeature(uint fontFeatureIndex, out DWRITE_FONT_FEATURE fontFeature);
     }
 
@@ -13098,8 +15081,11 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IDWriteFontFile
     {
+        [PreserveSig]
         HRESULT GetReferenceKey(out IntPtr fontFileReferenceKey, out int fontFileReferenceKeySize);
+        [PreserveSig]
         HRESULT GetLoader(out IDWriteFontFileLoader fontFileLoader);
+        [PreserveSig]
         HRESULT Analyze(out bool isSupportedFontType, out DWRITE_FONT_FILE_TYPE fontFileType, out DWRITE_FONT_FACE_TYPE fontFaceType, out int numberOfFaces);
     }
 
@@ -13108,9 +15094,13 @@ namespace Direct2D
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IDWriteFontFileStream
     {
+        [PreserveSig]
         HRESULT ReadFileFragment(out IntPtr fragmentStart, UInt64 fileOffset, UInt64 fragmentSize, out IntPtr fragmentContext);
+        [PreserveSig]
         void ReleaseFileFragment(IntPtr fragmentContext);
+        [PreserveSig]
         HRESULT GetFileSize(out UInt64 fileSize);
+        [PreserveSig]
         HRESULT GetLastWriteTime(out UInt64 lastWriteTime);
     }
 
